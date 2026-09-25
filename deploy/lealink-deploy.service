@@ -1,0 +1,7 @@
+[Unit]
+Description=LeaLink auto-deploy (pull from GitHub and rebuild)
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/flock -n /run/lealink-deploy.lock /bin/bash /opt/lealink/scripts/auto-deploy.sh

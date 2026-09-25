@@ -16,6 +16,10 @@ git fetch origin main
 git reset --hard origin/main
 docker compose up -d --build
 
+cp deploy/lealink-deploy.service deploy/lealink-deploy.timer /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable --now lealink-deploy.timer
+
 ufw allow OpenSSH
 ufw allow 80/tcp
 ufw allow 443/tcp
