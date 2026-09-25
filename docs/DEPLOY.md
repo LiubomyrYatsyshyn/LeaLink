@@ -19,4 +19,4 @@ Settings -> Secrets and variables -> Actions:
 
 - `SERVER_HOST` - server IP or domain
 - `SERVER_USER` - SSH user on the server
-- `SERVER_SSH_KEY` - private key of a dedicated deploy key (its public key is in the server's `~/.ssh/authorized_keys`)
+- `SERVER_SSH_KEY_B64` - private deploy key as ONE line of base64 (`base64 < ~/.ssh/lealink_deploy | tr -d '\n'`); its public key is in the server's `~/.ssh/authorized_keys`

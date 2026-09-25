@@ -12,12 +12,12 @@ jobs:
     env:
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
       SERVER_USER: ${{ secrets.SERVER_USER }}
-      SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+      SERVER_SSH_KEY_B64: ${{ secrets.SERVER_SSH_KEY_B64 }}
     steps:
       - name: Check server config
         id: check
         run: |
-          if [ -n "$SERVER_HOST" ] && [ -n "$SERVER_USER" ] && [ -n "$SERVER_SSH_KEY" ]; then
+          if [ -n "$SERVER_HOST" ] && [ -n "$SERVER_USER" ] && [ -n "$SERVER_SSH_KEY_B64" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "Server secrets are not set yet - skipping deploy."
@@ -27,7 +27,7 @@ jobs:
         if: steps.check.outputs.ready == 'true'
         run: |
           install -m 700 -d ~/.ssh
-          printf '%s\n' "$SERVER_SSH_KEY" > ~/.ssh/id_ed25519
+          printf '%s' "$SERVER_SSH_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts
 
