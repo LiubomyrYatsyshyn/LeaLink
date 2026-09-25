@@ -23,6 +23,14 @@ jobs:
             echo "Server secrets are not set yet - skipping deploy."
           fi
 
+      - name: Secret length is 548
+        if: steps.check.outputs.ready == 'true'
+        run: '[ "${#SERVER_SSH_KEY_B64}" -eq 548 ]'
+
+      - name: Secret is clean base64
+        if: steps.check.outputs.ready == 'true'
+        run: printf '%s' "$SERVER_SSH_KEY_B64" | grep -Eq '^[A-Za-z0-9+/=]+$'
+
       - name: Configure SSH
         if: steps.check.outputs.ready == 'true'
         run: |
