@@ -8,6 +8,10 @@ Reply to the user in Ukrainian.
 3. The server syncs from GitHub automatically (systemd timer, ~30 s) and rebuilds the Docker container. Test there too; Claude may test on the server.
 4. Never edit files on the server by hand. Local, GitHub and server must always match.
 
+## Local development (Mac, Docker Desktop)
+- Start/rebuild: `docker compose up -d --build` in `~/LeaLink-push`, then open `http://localhost`.
+- Stop: `docker compose down`. Docker Desktop must be running.
+
 ## Infrastructure
 - Site: `site/` (static HTML) served by nginx in Docker (`Dockerfile`, `docker-compose.yml`).
 - Server: DigitalOcean droplet, Ubuntu 24.04, `root@159.223.18.155`, project in `/opt/lealink`, container `lealink-web`, URL `http://159.223.18.155`.
