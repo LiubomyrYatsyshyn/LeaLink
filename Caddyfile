@@ -1,0 +1,8 @@
+# SITE_ADDRESS comes from the environment (docker-compose.yml).
+# Not set   -> ":80": plain HTTP on any address (works by IP).
+# A domain  -> Caddy serves it and gets an HTTPS certificate automatically.
+{$SITE_ADDRESS::80} {
+	root * /srv
+	encode gzip zstd
+	file_server
+}

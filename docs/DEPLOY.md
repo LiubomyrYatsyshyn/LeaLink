@@ -19,6 +19,17 @@ ssh root@<server> 'bash -s' < scripts/server-setup.sh
 The script installs Docker, clones the repo to `/opt/lealink`, starts the
 container, enables the deploy timer and opens ports 22, 80 and 443.
 
+## Domain and HTTPS (Caddy)
+
+The container runs Caddy (`Caddyfile`). Without a domain it serves plain HTTP
+on the server IP. To enable HTTPS for a domain:
+
+1. At the registrar, create DNS records: `A @ -> <server IP>` and `A www -> <server IP>`.
+2. On the server create `/opt/lealink/.env` (untracked, survives deploys):
+   `SITE_ADDRESS=example.com, www.example.com`
+3. `cd /opt/lealink && docker compose up -d` - Caddy gets a Let's Encrypt
+   certificate automatically. Certificates are kept in the `caddy_data` volume.
+
 ## Useful commands on the server
 
 ```bash

@@ -23,4 +23,5 @@ systemctl enable --now lealink-deploy.timer
 ufw allow OpenSSH
 ufw allow 80/tcp
 ufw allow 443/tcp
+ufw allow 443/udp
 ufw --force enable

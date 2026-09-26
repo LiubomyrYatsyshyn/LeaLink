@@ -13,8 +13,9 @@ Reply to the user in Ukrainian.
 - Stop: `docker compose down`. Docker Desktop must be running.
 
 ## Infrastructure
-- Site: `site/` (static HTML) served by nginx in Docker (`Dockerfile`, `docker-compose.yml`).
+- Site: `site/` (static HTML) served by Caddy in Docker (`Dockerfile`, `docker-compose.yml`).
 - Server: DigitalOcean droplet, Ubuntu 24.04, `root@159.223.18.155`, project in `/opt/lealink`, container `lealink-web`, URL `http://159.223.18.155`.
+- HTTPS/domain: set `SITE_ADDRESS` in `/opt/lealink/.env` on the server (see `docs/DEPLOY.md`); without it the site is plain HTTP on the IP.
 - Auto-deploy: `deploy/lealink-deploy.timer` runs `scripts/auto-deploy.sh` every 30 s. Details in `docs/DEPLOY.md`.
 - Design reference: `design-reference/LeaLink-D3-final-screens.pdf` (D3 "Split": green = learner, blue = teacher, Inter, English UI).
 
