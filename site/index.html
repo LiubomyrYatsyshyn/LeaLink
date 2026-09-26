@@ -3,23 +3,121 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LeaLink · Find a teacher or learners</title>
+<title>LeaLink · Learning Network</title>
 <meta name="description" content="LeaLink connects learners and teachers. Lessons and payments are arranged directly between you.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/lealink.css">
 <script src="assets/js/lealink.js" defer></script>
 </head>
 <body>
-<header class="site-header" data-header="guest"></header>
+
+<section class="hero" aria-label="LeaLink">
+  <div class="hero-bg anim-fade-in" aria-hidden="true"><span class="blob blob-l"></span><span class="blob blob-t"></span><span class="blob blob-m"></span></div>
+
+  <div class="hero-layer">
+    <nav class="hero-nav" aria-label="Main">
+      <div class="hero-nav-left">
+        <a class="logo anim-fade-up" style="animation-delay:200ms" href="index.html" aria-label="LeaLink home" data-logo></a>
+        <div class="hero-links">
+          <a class="nav-item l anim-fade-up" style="animation-delay:350ms" href="search.html"><span class="num">01.</span>Find a teacher</a>
+          <a class="nav-item t anim-fade-up" style="animation-delay:450ms" href="wizard.html"><span class="num">02.</span>Teach on LeaLink</a>
+          <a class="nav-item anim-fade-up" style="animation-delay:550ms" href="#how"><span class="num">03.</span>How it works</a>
+        </div>
+      </div>
+      <div class="hero-right anim-slide-right" style="animation-delay:600ms">
+        <span class="hero-fact"><i data-i="clock" data-size="14"></i>Replies within 72 hours</span>
+        <span class="hero-chip">FREE</span>
+        <a class="btn btn-secondary" href="login.html">Log in</a>
+        <a class="btn btn-dark" href="signup.html">Sign up</a>
+      </div>
+      <button class="hamburger anim-fade-in" style="animation-delay:400ms" type="button" aria-label="Toggle menu" aria-expanded="false" data-hero-menu>
+        <span class="hb-open"><i data-i="menu" data-size="22"></i></span>
+        <span class="hb-close"><i data-i="x" data-size="22"></i></span>
+      </button>
+    </nav>
+
+    <div class="hero-menu">
+      <div class="hero-menu-backdrop" data-hero-menu-close></div>
+      <div class="hero-menu-panel">
+        <button class="hero-menu-close" type="button" aria-label="Close menu" data-hero-menu-close><i data-i="x" data-size="22"></i></button>
+        <nav class="hero-menu-list" aria-label="Mobile">
+          <a class="l" style="--i:0" href="search.html"><span class="num">01.</span><span class="lbl">Find a teacher</span></a>
+          <a class="t" style="--i:1" href="wizard.html"><span class="num">02.</span><span class="lbl">Teach on LeaLink</span></a>
+          <a style="--i:2" href="#how"><span class="num">03.</span><span class="lbl">How it works</span></a>
+          <a style="--i:3" href="login.html"><span class="num">04.</span><span class="lbl">Log in</span></a>
+        </nav>
+        <div class="hero-menu-foot">
+          <div class="row" style="--gap:10px"><i data-i="clock" data-size="14"></i><span class="t-small">Replies within 72 hours</span><span class="hero-chip">FREE</span></div>
+          <div class="row" style="--gap:8px"><span class="t-small muted">No payments on LeaLink — you agree directly.</span></div>
+          <a class="btn btn-dark btn-lg btn-block" href="signup.html">Sign up</a>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="hero-title anim-fade-up" style="animation-delay:400ms">We connect <span class="l">learners</span> and <span class="t">teachers.</span></h1>
+    <p class="hero-sub anim-fade-up" style="animation-delay:550ms"><span>Learning Network</span></p>
+
+    <div class="deco" aria-hidden="true" data-grid-v="12.6%,37.5%,61.9%,86.2%" data-grid-h="32.7%,71.4%" data-grid-delay="600"></div>
+
+    <div class="network" aria-hidden="true">
+      <div class="network-3d">
+        <!-- request flow: learners -> LeaLink -> teachers -->
+        <svg class="net-line anim-fade-in" style="animation-delay:2200ms"><line x1="38%" y1="64%" x2="62%" y2="44%" stroke="rgba(21,128,61,.28)" stroke-width="1" vector-effect="non-scaling-stroke"/><line x1="50%" y1="80%" x2="62%" y2="44%" stroke="rgba(21,128,61,.28)" stroke-width="1" vector-effect="non-scaling-stroke"/><line x1="62%" y1="44%" x2="78%" y2="20%" stroke="rgba(37,99,235,.28)" stroke-width="1" vector-effect="non-scaling-stroke"/><line x1="62%" y1="44%" x2="87%" y2="50%" stroke="rgba(37,99,235,.28)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+        <!-- label connectors: horizontal run, then diagonal into the node -->
+        <svg class="net-line anim-fade-in" style="animation-delay:1200ms"><line x1="26%" y1="69%" x2="31%" y2="69%" stroke="rgba(55,53,47,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+        <svg class="net-line anim-fade-in" style="animation-delay:1400ms"><line x1="31%" y1="69%" x2="38%" y2="64%" stroke="rgba(55,53,47,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+        <svg class="net-line anim-fade-in" style="animation-delay:1500ms"><line x1="62%" y1="10%" x2="70%" y2="10%" stroke="rgba(55,53,47,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+        <svg class="net-line anim-fade-in" style="animation-delay:1700ms"><line x1="70%" y1="10%" x2="78%" y2="20%" stroke="rgba(55,53,47,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+        <svg class="net-line anim-fade-in" style="animation-delay:1800ms"><line x1="66%" y1="61%" x2="63.5%" y2="61%" stroke="rgba(55,53,47,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+        <svg class="net-line anim-fade-in" style="animation-delay:2000ms"><line x1="63.5%" y1="61%" x2="62%" y2="44%" stroke="rgba(55,53,47,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+
+        <div class="node role-learner" style="left:38%;top:64%;--z:30px"><div class="node-float" style="--fd:-1s"><div class="node-in anim-node-in" style="animation-delay:1500ms"><span class="sq-depth"></span><span class="sq"></span></div></div></div>
+        <div class="node role-learner" style="left:50%;top:80%;--z:20px"><div class="node-float" style="--fd:-4s"><div class="node-in anim-node-in" style="animation-delay:1650ms"><span class="sq-depth"></span><span class="sq"></span></div></div></div>
+        <div class="node role-teacher" style="left:78%;top:20%;--z:30px"><div class="node-float" style="--fd:-2s"><div class="node-in anim-node-in" style="animation-delay:1800ms"><span class="sq-depth"></span><span class="sq"></span></div></div></div>
+        <div class="node role-teacher" style="left:87%;top:50%;--z:20px"><div class="node-float" style="--fd:-5s"><div class="node-in anim-node-in" style="animation-delay:1950ms"><span class="sq-depth"></span><span class="sq"></span></div></div></div>
+        <div class="node hub" style="left:62%;top:44%;--z:60px"><div class="node-float" style="--fd:-3s"><div class="node-in anim-node-in" style="animation-delay:2100ms">
+          <div class="cube-wrap"><div class="cube">
+            <span class="face f-front" data-mark></span><span class="face f-back" data-mark></span>
+            <span class="face f-right"><small>LEARNING</small></span><span class="face f-left"><small>NETWORK</small></span>
+            <span class="face f-top"></span><span class="face f-bottom"></span>
+          </div></div>
+        </div></div></div>
+
+        <span class="flow-dot l" style="--x1:38%;--y1:64%;--x2:62%;--y2:44%;animation-delay:2.4s"></span>
+        <span class="flow-dot l" style="--x1:50%;--y1:80%;--x2:62%;--y2:44%;animation-delay:4.3s"></span>
+        <span class="flow-dot t" style="--x1:62%;--y1:44%;--x2:78%;--y2:20%;animation-delay:3.3s"></span>
+        <span class="flow-dot t" style="--x1:62%;--y1:44%;--x2:87%;--y2:50%;animation-delay:5.2s"></span>
+
+        <div class="net-label" style="left:8%;top:68%"><div class="anim-slide-left" style="animation-delay:1100ms"><b class="l">[ LEARNERS ]</b><p>Filter by subject, level, goal, format and budget.</p></div></div>
+        <div class="net-label" style="left:50%;top:9%"><div class="anim-slide-left" style="animation-delay:1300ms"><b class="t">[ TEACHERS ]</b><p>Create a profile — we review it before publishing.</p></div></div>
+        <div class="net-label" style="left:67%;top:60%"><div class="anim-slide-right" style="animation-delay:1700ms"><b>[ MATCH ]</b><p>Teachers accept or decline within 72 hours. Chat opens right after.</p></div></div>
+      </div>
+    </div>
+
+    <div class="hero-bottom">
+      <div class="hero-ctas">
+        <a class="btn btn-learner hero-cta anim-fade-up" style="animation-delay:900ms" href="search.html"><span class="star" aria-hidden="true">&#10022;</span>I want to learn</a>
+        <a class="btn btn-teacher hero-cta anim-fade-up" style="animation-delay:1000ms" href="wizard.html"><span class="star" aria-hidden="true">&#10022;</span>I want to teach</a>
+      </div>
+      <div class="info-card anim-slide-right" style="animation-delay:1100ms">
+        <span class="info-badge">NO PAYMENTS — YOU AGREE DIRECTLY</span>
+        <div class="info-body">
+          <p>Send up to 5 requests at a time. Teachers reply within 72 hours, and a chat opens as soon as they accept.</p>
+          <a class="info-link" href="#how">SEE HOW IT WORKS →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <main>
-  <section class="hero">
-    <div class="hero-half learner role-learner">
+  <section class="duo">
+    <div class="duo-half learner role-learner">
       <p class="eyebrow">For learners</p>
-      <h1 class="t-display">I want to learn</h1>
+      <h2 class="t-display">I want to learn</h2>
       <ul class="checklist">
         <li><i data-i="check"></i>Filter by subject, level, goal, format and budget</li>
         <li><i data-i="check"></i>No sign-up until you send a request</li>
@@ -28,9 +126,9 @@
       <a class="btn btn-primary btn-lg" href="search.html">Find a teacher <i data-i="arrow" data-size="14"></i></a>
     </div>
     <div class="or-badge">or</div>
-    <div class="hero-half teacher role-teacher">
+    <div class="duo-half teacher role-teacher">
       <p class="eyebrow">For teachers</p>
-      <h1 class="t-display">I want to teach</h1>
+      <h2 class="t-display">I want to teach</h2>
       <ul class="checklist">
         <li><i data-i="check"></i>Create a profile — we review it before publishing</li>
         <li><i data-i="check"></i>Get requests that match your subjects</li>
@@ -40,9 +138,10 @@
     </div>
   </section>
 
-  <section class="how">
+  <section class="how" id="how">
+    <div class="deco" aria-hidden="true" data-grid-v="12.6%,37.5%,61.9%,86.2%" data-grid-h="0%" data-grid-delay="100"></div>
     <div class="row-between">
-      <h2 class="t-h1">How it works</h2>
+      <h2 class="t-h1 how-title">How it works</h2>
       <p class="muted">Two sides, one simple flow</p>
     </div>
     <div class="how-grid">
@@ -75,8 +174,11 @@
 </main>
 
 <footer class="site-footer">
-  <span>© 2026 LeaLink</span>
-  <span>We connect learners and teachers. Lessons and payments are arranged directly between you.</span>
+  <div>
+    <span class="logo" data-logo data-tagline></span>
+    <p style="margin-top:12px">© 2026 LeaLink</p>
+  </div>
+  <span style="align-self:flex-end">We connect learners and teachers. Lessons and payments are arranged directly between you.</span>
 </footer>
 </body>
 </html>

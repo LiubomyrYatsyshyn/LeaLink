@@ -20,6 +20,12 @@ Reply to the user in Ukrainian.
 - Mobile (frames 35-41) is the same pages below 900 px, not separate files.
 - Buttons without a designed destination use `data-demo` (shows a "not connected yet" toast).
 
+## Brand and motion (added 2026-09-26)
+- Logo: vector mark in `site/assets/logo-mark.svg` (recreated from the user's image; swap in the original file if the user provides it). In pages use `data-logo` / `data-mark`; JS injects the SVG and the gradient wordmark. Montserrat is used only for the wordmark and the home hero title; UI stays Inter.
+- Home hero follows the "grid + nodes" brief: 20/35 px gutter, grid lines with plus marks, numbered nav, staggered entrance (expo-out), chamfered info card, 3D network (spinning hub cube, pointer parallax, request dots). No video; light palette only.
+- Other pages get band grid lines + plus marks and staggered reveal automatically from `lealink.js`.
+- `prefers-reduced-motion` turns animation off. To review motion anyway open any page with `?motion=1` (remembered; `?motion=0` resets).
+
 ## Infrastructure
 - Site: `site/` (static HTML) served by Caddy in Docker (`Dockerfile`, `docker-compose.yml`).
 - Server: DigitalOcean droplet, Ubuntu 24.04, `root@159.223.18.155`, project in `/opt/lealink`, container `lealink-web`, URL `https://lealink.159.223.18.155.nip.io` (free nip.io name pointing at the server IP; sslip.io also works but the user's home router DNS cannot resolve it; set via `SITE_ADDRESS` in `/opt/lealink/.env`; the bare IP now redirects to https and does not work).

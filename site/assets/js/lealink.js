@@ -59,6 +59,137 @@
   }
   window.LeaLink = { icon: icon, renderIcons: renderIcons };
 
+  /* ---------- Brand logo (vector version of the LeaLink mark) ---------- */
+  var MARK = '<svg class="logo-mark" viewBox="0 0 62 92" aria-hidden="true">' +
+    '<path fill="url(#ll-stem)" d="M6 26A20 20 0 0 1 26 6V66L37 86A31 20 0 0 1 6 66Z"/>' +
+    '<path fill="url(#ll-foot)" d="M26 66H40A16 20 0 0 1 56 86H37A11 20 0 0 1 26 66Z"/></svg>';
+  function logoInner(tagline) {
+    var word = '<span class="logo-word">LeaLink</span>';
+    return MARK + (tagline ? '<span class="logo-lockup">' + word + '<span class="logo-tagline">Learning Network</span></span>' : word);
+  }
+  function brandDefs() {
+    if (document.getElementById("ll-defs")) return;
+    var d = document.createElement("div");
+    d.id = "ll-defs";
+    d.setAttribute("aria-hidden", "true");
+    d.style.cssText = "position:absolute;width:0;height:0;overflow:hidden";
+    d.innerHTML = '<svg width="0" height="0"><defs>' +
+      '<linearGradient id="ll-stem" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A37B5"/><stop offset=".32" stop-color="#3F5DAA"/><stop offset=".62" stop-color="#6F9B97"/><stop offset=".86" stop-color="#9CC68D"/><stop offset="1" stop-color="#B5DA8E"/></linearGradient>' +
+      '<linearGradient id="ll-foot" x1="0" y1="0" x2="1" y2=".35"><stop offset="0" stop-color="#5F8A58"/><stop offset=".45" stop-color="#8DBF7E"/><stop offset="1" stop-color="#B8DE93"/></linearGradient>' +
+      '</defs></svg>';
+    document.body.insertBefore(d, document.body.firstChild);
+  }
+  function renderLogos() {
+    document.querySelectorAll("[data-logo]").forEach(function (el) { el.innerHTML = logoInner(el.hasAttribute("data-tagline")); });
+    document.querySelectorAll("[data-mark]").forEach(function (el) { el.innerHTML = MARK; });
+  }
+
+  var forceMotion = /[?&]motion=1/.test(location.search);
+  try {
+    if (forceMotion) localStorage.setItem("ll-motion", "1");
+    else if (/[?&]motion=0/.test(location.search)) localStorage.removeItem("ll-motion");
+    else forceMotion = localStorage.getItem("ll-motion") === "1";
+  } catch (e) { /* storage unavailable */ }
+  if (forceMotion) document.documentElement.classList.add("force-motion");
+  var reduceMotion = !forceMotion && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Grid lines + plus marks ---------- */
+  function buildGrid(el) {
+    var v = (el.getAttribute("data-grid-v") || "").split(",").filter(Boolean);
+    var h = (el.getAttribute("data-grid-h") || "").split(",").filter(Boolean);
+    var base = +(el.getAttribute("data-grid-delay") || 600);
+    var html = "";
+    v.forEach(function (x, i) { html += '<span class="gl-v anim-grid-v" style="left:' + x + ';animation-delay:' + (base + i * 100) + 'ms"></span>'; });
+    h.forEach(function (y, i) { html += '<span class="gl-h anim-grid-h" style="top:' + y + ';animation-delay:' + (base + 200 + i * 150) + 'ms"></span>'; });
+    h.forEach(function (y, hi) {
+      v.forEach(function (x, vi) {
+        html += '<span class="plus anim-scale-in" style="top:' + y + ';left:' + x + ';animation-delay:' + (base + 400 + (hi * v.length + vi) * 80) + 'ms"></span>';
+      });
+    });
+    el.insertAdjacentHTML("afterbegin", html);
+  }
+  function decorateBands() {
+    document.querySelectorAll(".band, .wizard-band").forEach(function (b) {
+      if (b.querySelector(":scope > .deco")) return;
+      var d = document.createElement("div");
+      d.className = "deco";
+      d.setAttribute("aria-hidden", "true");
+      d.setAttribute("data-grid-v", "12.6%,37.5%,61.9%,86.2%");
+      d.setAttribute("data-grid-h", "100%");
+      d.setAttribute("data-grid-delay", "150");
+      b.insertBefore(d, b.firstChild);
+    });
+    document.querySelectorAll("[data-grid-v]").forEach(buildGrid);
+  }
+
+  /* ---------- Staggered reveal (load + scroll) ---------- */
+  var REVEAL = [
+    ".band .container > *", ".wizard-band .container > *", ".home-aside > *", ".home-main > *",
+    ".auth > *", ".status-card > *", ".cards > *", ".list > *", ".list-sm > *", ".split > aside",
+    ".split-results > aside", ".steps .step", ".wizard-panel > *", ".side-nav a", ".chat-list .conv",
+    ".thread > *", ".tp-section", ".profile-head", ".duo-half > *", ".how .row-between", ".how-card",
+    ".screens-group", ".sg-section", ".site-footer > *"
+  ].join(",");
+  function initReveal() {
+    if (reduceMotion || !("IntersectionObserver" in window)) return;
+    var els = Array.prototype.slice.call(document.querySelectorAll(REVEAL)).filter(function (el) {
+      return !el.closest(".hero") && !el.closest("dialog") && !el.classList.contains("reveal");
+    });
+    var io = new IntersectionObserver(function (entries) {
+      var batch = 0;
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        el.style.setProperty("--rd", Math.min(batch * 70, 560) + "ms");
+        el.classList.add("is-in");
+        batch++;
+        io.unobserve(el);
+        setTimeout(function () { el.classList.remove("reveal", "is-in"); el.style.removeProperty("--rd"); }, 1600 + Math.min(batch * 70, 560));
+      });
+    }, { rootMargin: "0px 0px -6% 0px" });
+    els.forEach(function (el) { el.classList.add("reveal"); io.observe(el); });
+  }
+
+  /* ---------- Hero: mobile menu + 3D parallax ---------- */
+  function initHero() {
+    var hero = document.querySelector(".hero");
+    if (!hero) return;
+    function setMenu(open) {
+      hero.classList.toggle("menu-open", open);
+      document.body.classList.toggle("menu-lock", open);
+      hero.querySelectorAll("[data-hero-menu]").forEach(function (b) { b.setAttribute("aria-expanded", String(open)); });
+    }
+    hero.addEventListener("click", function (e) {
+      if (e.target.closest("[data-hero-menu]")) { setMenu(!hero.classList.contains("menu-open")); return; }
+      if (e.target.closest("[data-hero-menu-close]") || e.target.closest(".hero-menu-list a")) setMenu(false);
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+
+    var net = hero.querySelector(".network-3d");
+    if (!net || reduceMotion) return;
+    var tx = 0, ty = 0, cx = 0, cy = 0, pointer = false, visible = true, raf = 0;
+    hero.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      var r = hero.getBoundingClientRect();
+      tx = (e.clientX - r.left) / r.width - .5;
+      ty = (e.clientY - r.top) / r.height - .5;
+      pointer = true;
+    });
+    hero.addEventListener("pointerleave", function () { pointer = false; });
+    function loop(t) {
+      if (!pointer) { tx = Math.sin(t / 5200) * .22; ty = Math.cos(t / 6800) * .16; }
+      cx += (tx - cx) * .05; cy += (ty - cy) * .05;
+      net.style.transform = "rotateX(" + (-cy * 5).toFixed(3) + "deg) rotateY(" + (cx * 8).toFixed(3) + "deg)";
+      raf = visible ? requestAnimationFrame(loop) : 0;
+    }
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (en) {
+        visible = en[0].isIntersecting;
+        if (visible && !raf) raf = requestAnimationFrame(loop);
+      }).observe(hero);
+    } else raf = requestAnimationFrame(loop);
+  }
+
   /* ---------- Header ---------- */
   var NAV = {
     learner: [["find", "Find teachers", "search.html"], ["requests", "My requests", "learner.html"], ["chats", "Chats", "chat.html"]],
@@ -74,7 +205,7 @@
     if (!h) return;
     var v = h.getAttribute("data-header");
     var active = h.getAttribute("data-active") || "";
-    var logo = '<a class="logo" href="index.html"><span class="logo-mark">L</span>LeaLink</a>';
+    var logo = '<a class="logo" href="index.html" aria-label="LeaLink home">' + logoInner() + "</a>";
     var html = logo;
     h.classList.add("site-header");
 
@@ -366,9 +497,14 @@
 
   /* ---------- Boot ---------- */
   document.addEventListener("DOMContentLoaded", function () {
+    brandDefs();
     renderHeader();
+    renderLogos();
     applyState();
+    decorateBands();
     renderIcons();
+    initHero();
+    initReveal();
 
     document.querySelectorAll("[data-range]").forEach(initRange);
     document.querySelectorAll("[data-counter]").forEach(initCounter);
