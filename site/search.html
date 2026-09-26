@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find a teacher · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body data-role="learner" class="has-mobile-bar">
+<header class="site-header" data-header="guest"></header>
+
+<section class="band">
+  <div class="container">
+    <p class="eyebrow">Learning · Step 1 of 3</p>
+    <h1 class="t-h1">Find a teacher</h1>
+    <p class="lead">Tell us what you need. Only the subject is required — every other filter improves your matches.</p>
+  </div>
+</section>
+
+<main class="container page">
+  <div class="split">
+    <div class="cards">
+      <section class="card">
+        <h2 class="card-title">What do you want to learn?</h2>
+        <div class="fields">
+          <div class="grid-2">
+            <div class="field">
+              <label class="label" for="subject">Subject <span class="req">*</span></label>
+              <select class="input" id="subject"><option>English</option><option>Math</option><option>Python</option><option>Guitar</option><option>IELTS</option></select>
+              <p class="helper">The only required filter.</p>
+            </div>
+            <div class="field">
+              <span class="label">Topic <span class="opt">(optional)</span></span>
+              <div class="chips">
+                <span class="tag-chip">Speaking<button class="x" type="button" aria-label="Remove Speaking"><i data-i="x" data-size="12"></i></button></span>
+                <span class="tag-chip">Job interviews<button class="x" type="button" aria-label="Remove Job interviews"><i data-i="x" data-size="12"></i></button></span>
+                <button class="add-chip" type="button" data-demo><i data-i="plus"></i>Add topic</button>
+              </div>
+            </div>
+            <div class="field">
+              <span class="label">Looking for</span>
+              <div class="seg"><button type="button" class="is-active">Myself</button><button type="button">My child</button></div>
+            </div>
+            <div class="field">
+              <label class="label" for="level">Level</label>
+              <select class="input" id="level"><option>Beginner (A1)</option><option>Elementary (A2)</option><option selected>Intermediate (B1)</option><option>Upper-intermediate (B2)</option><option>Advanced (C1)</option></select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="goal">Goal</label>
+            <select class="input" id="goal"><option>Job interviews</option><option>Work</option><option>Travel</option><option>Exam preparation</option><option>Everyday conversation</option></select>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">How and where</h2>
+        <div class="fields">
+          <div class="field">
+            <span class="label">Format</span>
+            <div class="seg" data-controls="#city-fields"><button type="button">Online</button><button type="button" data-reveal>Offline</button><button type="button" class="is-active" data-reveal>Both</button></div>
+            <p class="helper">City and radius appear when Offline or Both is selected.</p>
+          </div>
+          <div class="grid-2" id="city-fields">
+            <div class="field">
+              <label class="label" for="city">City</label>
+              <div class="input-icon"><i data-i="pin"></i><select class="input" id="city"><option>Kyiv</option><option>Lviv</option><option>Odesa</option></select></div>
+            </div>
+            <div class="field">
+              <label class="label" for="radius">Radius</label>
+              <select class="input" id="radius"><option>Within 2 km</option><option selected>Within 5 km</option><option>Within 10 km</option></select>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label class="label" for="lang">Lesson language</label>
+              <select class="input" id="lang"><option>English</option><option>Ukrainian</option></select>
+            </div>
+            <div class="field">
+              <span class="label">Lesson type</span>
+              <div class="seg"><button type="button" class="is-active">Individual</button><button type="button">Group</button><button type="button">Any</button></div>
+            </div>
+            <div class="field">
+              <label class="label" for="per-week">Lessons per week</label>
+              <select class="input" id="per-week"><option>1 lesson</option><option selected>2 lessons</option><option>3 lessons</option></select>
+            </div>
+            <div class="field">
+              <label class="label" for="exp">Min. experience</label>
+              <select class="input" id="exp"><option>Any</option><option>1+ years</option><option selected>3+ years</option><option>5+ years</option></select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Budget and schedule</h2>
+        <div class="fields">
+          <div class="budget">
+            <div class="field">
+              <div class="range-head"><span class="label">Budget per lesson</span><span class="range-value" id="budget-out">$15 – $35</span></div>
+              <div class="range" data-range data-min="5" data-max="60" data-from="15" data-to="35" data-output="#budget-out">
+                <div class="range-track"></div><div class="range-fill"></div><span class="range-thumb"></span><span class="range-thumb"></span>
+              </div>
+              <div class="range-labels"><span>$5</span><span>$60+</span></div>
+            </div>
+            <select class="input" aria-label="Currency" style="margin-bottom:22px"><option>USD</option><option>EUR</option><option>UAH</option></select>
+          </div>
+          <div class="field">
+            <span class="label">Preferred time</span>
+            <div class="chips"><button class="chip" type="button">Morning</button><button class="chip" type="button">Afternoon</button><button class="chip is-selected" type="button">Evening</button></div>
+            <div class="chips"><button class="chip is-selected" type="button">Weekdays</button><button class="chip" type="button">Weekends</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Teacher quality</h2>
+        <div class="fields">
+          <div class="field">
+            <span class="label">Min. rating</span>
+            <div class="chips" data-single><button class="chip" type="button">Any</button><button class="chip" type="button">4.0+</button><button class="chip is-selected" type="button">4.5+</button></div>
+          </div>
+          <div class="options">
+            <label class="check"><input type="checkbox"><span>Free trial only</span></label>
+            <label class="check"><input type="checkbox"><span>Verified only</span></label>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="card card-sm sticky hide-mobile" style="padding:24px">
+      <h2 class="t-h2" style="font-weight:700">Your search</h2>
+      <div class="tags" style="margin-top:16px">
+        <span class="tag">English</span><span class="tag">Speaking</span><span class="tag">Job interviews</span><span class="tag">Myself</span><span class="tag">B1</span><span class="tag">Online or Kyiv 5 km</span><span class="tag">$15–$35</span><span class="tag">Weekday evenings</span><span class="tag">2 / week</span><span class="tag">Individual</span><span class="tag">3+ years</span><span class="tag">4.5+</span>
+      </div>
+      <hr class="divider" style="margin:20px 0">
+      <div class="row-between"><span class="muted">Matching teachers</span><b style="font-size:22px">6</b></div>
+      <a class="btn btn-primary btn-lg btn-block" href="results.html" style="margin-top:16px">Show 6 teachers</a>
+      <button class="btn btn-ghost btn-lg btn-block" type="button" style="margin-top:8px" data-toast="Filters reset.">Reset filters</button>
+      <p class="t-micro muted" style="margin-top:20px">No account needed to browse. You’ll sign up when you send your first request.</p>
+    </aside>
+  </div>
+</main>
+
+<div class="mobile-bar">
+  <span class="muted t-small"><b style="color:var(--text);font-size:18px">6</b> matching teachers</span>
+  <a class="btn btn-primary btn-lg" href="results.html">Show 6 teachers</a>
+</div>
+</body>
+</html>

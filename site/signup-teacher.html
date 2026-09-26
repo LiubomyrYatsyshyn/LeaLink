@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create an account to submit your profile · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body class="bg-surface" data-role="teacher">
+<header class="site-header" data-header="auth"></header>
+
+<main class="auth">
+  <form class="auth-card" data-href="under-review.html" novalidate>
+    <span class="badge badge-role">Last step</span>
+    <h1 style="margin-top:16px">Create an account to submit your profile</h1>
+    <p class="sub">Your profile is saved. Create an account and we’ll send it for review.</p>
+    <div class="fields">
+      <button class="btn btn-secondary btn-lg btn-block" type="button" data-demo><span class="g-mark">G</span> Continue with Google</button>
+      <div class="or-divider">or</div>
+      <div class="field">
+        <div class="label-row"><label class="label" for="name">Full name <span class="req">*</span></label><span class="from"><i data-i="spark" data-size="12"></i>From your profile</span></div>
+        <input class="input" id="name" autocomplete="name" value="Olena Kovalenko">
+      </div>
+      <div class="field">
+        <label class="label" for="email">Email <span class="req">*</span></label>
+        <input class="input" id="email" type="email" autocomplete="email" value="olena.kovalenko@example.com">
+      </div>
+      <div class="field">
+        <label class="label" for="password">Password <span class="req">*</span></label>
+        <input class="input" id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+        <p class="helper">Use 8 or more characters.</p>
+      </div>
+      <label class="check"><input type="checkbox" checked><span>Email me about new requests</span></label>
+      <button class="btn btn-primary btn-lg btn-block" type="submit">Create account and submit</button>
+      <p class="auth-foot">Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+  </form>
+
+  <aside class="summary-card">
+    <h2>Your profile</h2>
+    <div class="row" style="margin-top:16px"><span class="avatar av-40">OK</span><div><div class="t-small">Olena Kovalenko</div><div class="t-caption muted" style="font-weight:400">English, Business English · $22 / lesson</div></div></div>
+    <hr class="divider" style="margin:16px 0">
+    <div class="row-between"><span class="muted">Profile completeness</span><span>85%</span></div>
+    <div class="progress" style="margin-top:12px"><span style="width:85%"></span></div>
+    <p class="t-caption muted" style="font-weight:400;margin-top:16px">Add a certificate or intro video later to reach 100%.</p>
+  </aside>
+</main>
+</body>
+</html>

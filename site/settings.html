@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account settings · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body data-role="learner">
+<header class="site-header" data-header="learner"></header>
+
+<section class="band">
+  <div class="container">
+    <p class="eyebrow">Learning</p>
+    <h1 class="t-h1">Account settings</h1>
+  </div>
+</section>
+
+<div class="container settings">
+  <nav class="side-nav" aria-label="Settings sections">
+    <a class="is-active" href="#profile">Profile</a>
+    <a href="#notifications">Notifications</a>
+    <a href="#role">Role</a>
+    <a href="#account">Account</a>
+  </nav>
+
+  <main class="cards">
+    <section class="card" id="profile">
+      <h2 class="card-title">Profile</h2>
+      <div class="fields">
+        <div class="field">
+          <span class="label">Photo</span>
+          <div class="row" style="--gap:16px;align-items:flex-start">
+            <span class="avatar av-72">AP</span>
+            <div>
+              <div class="row"><label class="btn btn-secondary btn-sm"><input type="file" accept="image/*" hidden><i data-i="camera"></i>Upload photo</label><button class="btn btn-ghost btn-sm" type="button" data-demo>Remove</button></div>
+              <p class="helper" style="margin-top:8px">JPG or PNG, at least 400 × 400 px.</p>
+            </div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field"><label class="label" for="s-name">Full name <span class="req">*</span></label><input class="input" id="s-name" value="Anna Petrenko"></div>
+          <div class="field"><label class="label" for="s-email">Email <span class="req">*</span></label><input class="input" id="s-email" type="email" value="anna.petrenko@example.com"><p class="helper">Used to log in and for notifications.</p></div>
+          <div class="field"><label class="label" for="s-tz">Time zone <span class="req">*</span></label><div class="input-icon"><i data-i="globe"></i><select class="input" id="s-tz"><option>Kyiv (UTC+3)</option><option>Lisbon (UTC+1)</option></select></div><p class="helper">Teachers’ availability is shown in this time zone.</p></div>
+          <div class="field"><label class="label" for="s-country">Country</label><select class="input" id="s-country"><option>Ukraine</option><option>Poland</option><option>Portugal</option></select></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" type="button" data-toast="Changes saved.">Save changes</button></div>
+      </div>
+    </section>
+
+    <section class="card" id="notifications">
+      <h2 class="card-title">Email notifications</h2>
+      <div class="options" style="gap:16px">
+        <label class="toggle"><input type="checkbox" checked><span>A teacher accepts or declines my request</span></label>
+        <label class="toggle"><input type="checkbox" checked><span>New message in chat</span></label>
+        <label class="toggle"><input type="checkbox" checked><span>My request is about to expire<span class="sub">12 hours before the 72-hour limit.</span></span></label>
+        <label class="toggle"><input type="checkbox"><span>A matching teacher joins<span class="sub">For searches where you chose “Notify me”.</span></span></label>
+      </div>
+    </section>
+
+    <section class="card" id="role">
+      <h2 class="card-title">Role</h2>
+      <p class="muted" style="margin:16px 0">Use LeaLink as a learner, a teacher, or both. Your requests and chats are kept separately for each role.</p>
+      <div class="role-cards">
+        <div class="role-box is-current">
+          <div class="row-between"><span>Learner</span><span class="badge badge-accepted">Current</span></div>
+          <p class="t-small muted" style="margin-top:8px">Find teachers and send requests.</p>
+        </div>
+        <div class="role-box">
+          <span>Teacher</span>
+          <p class="t-small muted" style="margin-top:4px">You don’t have a teacher profile yet.</p>
+          <a class="btn btn-secondary btn-sm" href="wizard.html" style="margin-top:10px"><i data-i="swap"></i>Create teacher profile</a>
+        </div>
+      </div>
+      <p class="helper" style="margin-top:16px">Tip: you can also switch roles with the Learning / Teaching switch in the header.</p>
+    </section>
+
+    <section class="card" id="account">
+      <h2 class="card-title">Account</h2>
+      <div style="margin-top:8px">
+        <div class="setting-row"><div><strong>Password</strong><span>Last changed Sep 2, 2026</span></div><button class="btn btn-secondary btn-sm" type="button" data-demo>Change password</button></div>
+        <div class="setting-row"><div><strong>Log out</strong><span>You’ll need to log in again on this device.</span></div><a class="btn btn-secondary btn-sm" href="index.html">Log out</a></div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

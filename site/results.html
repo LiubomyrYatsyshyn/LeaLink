@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English teachers · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body data-role="learner">
+<header class="site-header" data-header="guest"></header>
+
+<section class="band">
+  <div class="container band-row">
+    <div>
+      <a class="back-link" href="search.html"><i data-i="back"></i>Edit search</a>
+      <p class="eyebrow">Learning · Step 2 of 3</p>
+      <h1 class="t-h1">English teachers</h1>
+      <p class="lead" data-show-state="default">6 teachers match your filters<span class="hide-mobile"> · No sign-up needed to browse</span></p>
+      <p class="lead" data-show-state="empty" hidden>0 teachers match your filters</p>
+      <p class="lead" data-show-state="error" hidden>Results unavailable</p>
+    </div>
+    <div class="sort hide-mobile">
+      <span class="muted t-small">Sort by</span>
+      <div style="position:relative">
+        <button class="input select-btn" type="button" data-menu-trigger><span data-menu-label>Best match</span><i data-i="chev-up"></i></button>
+        <div class="menu" id="sort-menu">
+          <button class="menu-item is-selected" type="button">Best match<i data-i="check" class="check-mark"></i></button>
+          <button class="menu-item" type="button">Price: low to high<i data-i="check" class="check-mark"></i></button>
+          <button class="menu-item" type="button">Price: high to low<i data-i="check" class="check-mark"></i></button>
+          <button class="menu-item" type="button">Rating<i data-i="check" class="check-mark"></i></button>
+          <button class="menu-item" type="button">Experience<i data-i="check" class="check-mark"></i></button>
+          <button class="menu-item" type="button">Fastest response<i data-i="check" class="check-mark"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="container page">
+  <div class="results-tools" style="margin-bottom:12px">
+    <button class="btn btn-secondary" type="button" data-sheet="#filters"><i data-i="sliders"></i>Filters · 12</button>
+    <div style="position:relative">
+      <button class="input select-btn" type="button" data-menu-trigger style="width:100%"><span data-menu-label>Best match</span><i data-i="chev"></i></button>
+      <div class="menu" style="width:100%">
+        <button class="menu-item is-selected" type="button">Best match<i data-i="check" class="check-mark"></i></button>
+        <button class="menu-item" type="button">Price: low to high<i data-i="check" class="check-mark"></i></button>
+        <button class="menu-item" type="button">Price: high to low<i data-i="check" class="check-mark"></i></button>
+        <button class="menu-item" type="button">Rating<i data-i="check" class="check-mark"></i></button>
+        <button class="menu-item" type="button">Experience<i data-i="check" class="check-mark"></i></button>
+        <button class="menu-item" type="button">Fastest response<i data-i="check" class="check-mark"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="chips show-mobile" style="margin-bottom:16px">
+    <span class="tag-chip">B1<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+    <span class="tag-chip">Job interviews<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+    <span class="tag-chip">$15–$35<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+    <button class="chip" type="button" data-sheet="#filters">+ 9 more</button>
+  </div>
+
+  <div class="split-results">
+    <aside class="card filters-panel" id="filters" style="padding:24px">
+      <div class="row-between">
+        <h2 class="t-h2" style="font-weight:700">Filters</h2>
+        <button class="link" type="button" data-toast="Filters reset.">Reset</button>
+      </div>
+      <div class="fields" style="margin-top:20px">
+        <div class="field">
+          <label class="label" for="f-subject">Subject <span class="req">*</span></label>
+          <select class="input" id="f-subject"><option>English</option><option>Math</option><option>Python</option></select>
+        </div>
+        <div class="field">
+          <span class="label">Topic</span>
+          <div class="chips">
+            <span class="tag-chip">Speaking<button class="x" type="button" aria-label="Remove Speaking"><i data-i="x" data-size="12"></i></button></span>
+            <span class="tag-chip">Job interviews<button class="x" type="button" aria-label="Remove Job interviews"><i data-i="x" data-size="12"></i></button></span>
+            <button class="add-chip" type="button" data-demo><i data-i="plus"></i>Add topic</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="label">Looking for</span>
+          <div class="seg"><button type="button" class="is-active">Myself</button><button type="button">My child</button></div>
+        </div>
+        <div class="field">
+          <label class="label" for="f-level">Level</label>
+          <select class="input" id="f-level"><option>Elementary (A2)</option><option selected>Intermediate (B1)</option><option>Upper-intermediate (B2)</option></select>
+        </div>
+        <div class="field">
+          <label class="label" for="f-goal">Goal</label>
+          <select class="input" id="f-goal"><option>Job interviews</option><option>Travel</option><option>Exam preparation</option></select>
+        </div>
+        <div class="field">
+          <span class="label">Format</span>
+          <div class="seg" data-controls="#f-city"><button type="button">Online</button><button type="button" data-reveal>Offline</button><button type="button" class="is-active" data-reveal>Both</button></div>
+        </div>
+        <div class="fields" id="f-city">
+          <div class="field">
+            <label class="label" for="f-city-in">City</label>
+            <div class="input-icon"><i data-i="pin"></i><select class="input" id="f-city-in"><option>Kyiv</option><option>Lviv</option></select></div>
+          </div>
+          <div class="field">
+            <label class="label" for="f-radius">Radius</label>
+            <select class="input" id="f-radius"><option selected>Within 5 km</option><option>Within 10 km</option></select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="f-lang">Lesson language</label>
+          <select class="input" id="f-lang"><option>English</option><option>Ukrainian</option></select>
+        </div>
+        <div class="field">
+          <div class="range-head"><span class="label">Budget per lesson</span><span class="range-value" id="f-budget">$15 – $35</span></div>
+          <div class="range" data-range data-min="5" data-max="60" data-from="15" data-to="35" data-output="#f-budget">
+            <div class="range-track"></div><div class="range-fill"></div><span class="range-thumb"></span><span class="range-thumb"></span>
+          </div>
+          <div class="range-labels"><span>$5</span><span>$60+</span></div>
+          <div class="row-between"><span class="t-caption muted" style="font-weight:400">Currency</span><select class="input" aria-label="Currency" style="width:96px"><option>USD</option><option>EUR</option></select></div>
+        </div>
+        <div class="field">
+          <span class="label">Preferred time</span>
+          <div class="chips"><button class="chip" type="button">Morning</button><button class="chip" type="button">Afternoon</button><button class="chip is-selected" type="button">Evening</button><button class="chip is-selected" type="button">Weekdays</button><button class="chip" type="button">Weekends</button></div>
+        </div>
+        <div class="field">
+          <label class="label" for="f-week">Lessons per week</label>
+          <select class="input" id="f-week"><option>1 lesson</option><option selected>2 lessons</option><option>3 lessons</option></select>
+        </div>
+        <div class="field">
+          <span class="label">Lesson type</span>
+          <div class="seg"><button type="button" class="is-active">Individual</button><button type="button">Group</button><button type="button">Any</button></div>
+        </div>
+        <div class="field">
+          <label class="label" for="f-exp">Min. experience</label>
+          <select class="input" id="f-exp"><option>Any</option><option selected>3+ years</option><option>5+ years</option></select>
+        </div>
+        <div class="field">
+          <span class="label">Min. rating</span>
+          <div class="chips" data-single><button class="chip" type="button">Any</button><button class="chip" type="button">4.0+</button><button class="chip is-selected" type="button">4.5+</button></div>
+        </div>
+        <div class="options">
+          <label class="check"><input type="checkbox"><span>Free trial only</span></label>
+          <label class="check"><input type="checkbox"><span>Verified only</span></label>
+        </div>
+        <button class="btn btn-primary btn-lg btn-block filters-close" type="button" data-sheet="#filters">Show 6 teachers</button>
+      </div>
+    </aside>
+
+    <section>
+      <div class="list" data-show-state="default">
+        <article class="tcard">
+          <div class="tcard-main">
+            <span class="avatar av-72">OK</span>
+            <div class="tcard-body">
+              <div class="tcard-name"><h3><a href="teacher.html">Olena Kovalenko</a></h3><span class="badge badge-trial">Free trial</span><span class="badge badge-verified"><i data-i="check" data-size="12"></i>Verified</span></div>
+              <div class="tcard-rest">
+                <p class="tcard-headline">Conversational English for professionals and travellers</p>
+                <div class="tags"><span class="tag">English</span><span class="tag">Speaking</span><span class="tag">Business English</span></div>
+                <div class="meta"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.9</b> (128)</span><span>7 years experience</span><span>Online · In person</span><span>Replies in ~12h</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="tcard-side">
+            <div class="row-between side-top"><span class="badge badge-match">94% match</span><button class="link" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button></div>
+            <div class="price-row"><span class="price">$22<small>/ lesson</small></span><span class="badge badge-match show-mobile">94% match</span></div>
+            <a class="btn btn-primary btn-block" href="request.html">Send request</a>
+            <a class="btn btn-secondary btn-block" href="teacher.html">View profile</a>
+            <button class="link link-muted mobile-report" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button>
+          </div>
+        </article>
+
+        <article class="tcard">
+          <div class="tcard-main">
+            <span class="avatar av-72">SL</span>
+            <div class="tcard-body">
+              <div class="tcard-name"><h3><a href="teacher.html">Sophie Laurent</a></h3><span class="badge badge-verified"><i data-i="check" data-size="12"></i>Verified</span></div>
+              <div class="tcard-rest">
+                <p class="tcard-headline">IELTS Academic coach — a structured path to band 7.0+</p>
+                <div class="tags"><span class="tag">IELTS</span><span class="tag">Writing</span><span class="tag">Speaking</span></div>
+                <div class="meta"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.9</b> (104)</span><span>9 years experience</span><span>Online</span><span>Replies in ~24h</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="tcard-side">
+            <div class="row-between side-top"><span class="badge badge-match">92% match</span><button class="link" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button></div>
+            <div class="price-row"><span class="price">$32<small>/ lesson</small></span><span class="badge badge-match show-mobile">92% match</span></div>
+            <a class="btn btn-primary btn-block" href="request.html">Send request</a>
+            <a class="btn btn-secondary btn-block" href="teacher.html">View profile</a>
+            <button class="link link-muted mobile-report" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button>
+          </div>
+        </article>
+
+        <article class="tcard">
+          <div class="tcard-main">
+            <span class="avatar av-72">ML</span>
+            <div class="tcard-body">
+              <div class="tcard-name"><h3><a href="teacher.html">Mei Lin</a></h3><span class="badge badge-trial">Free trial</span></div>
+              <div class="tcard-rest">
+                <p class="tcard-headline">Clear pronunciation and fluency for confident speaking</p>
+                <div class="tags"><span class="tag">English</span><span class="tag">Pronunciation</span></div>
+                <div class="meta"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.8</b> (67)</span><span>5 years experience</span><span>Online</span><span>Replies in ~6h</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="tcard-side">
+            <div class="row-between side-top"><span class="badge badge-match">88% match</span><button class="link" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button></div>
+            <div class="price-row"><span class="price">$26<small>/ lesson</small></span><span class="badge badge-match show-mobile">88% match</span></div>
+            <a class="btn btn-primary btn-block" href="request.html">Send request</a>
+            <a class="btn btn-secondary btn-block" href="teacher.html">View profile</a>
+            <button class="link link-muted mobile-report" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button>
+          </div>
+        </article>
+
+        <article class="tcard">
+          <div class="tcard-main">
+            <span class="avatar av-72">HW</span>
+            <div class="tcard-body">
+              <div class="tcard-name"><h3><a href="teacher.html">Hannah Weber</a></h3><span class="badge badge-trial">Free trial</span><span class="badge badge-verified"><i data-i="check" data-size="12"></i>Verified</span></div>
+              <div class="tcard-rest">
+                <p class="tcard-headline">Business English, emails and job interview practice</p>
+                <div class="tags"><span class="tag">English</span><span class="tag">Business</span><span class="tag">Interviews</span></div>
+                <div class="meta"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.7</b> (39)</span><span>6 years experience</span><span>Online · In person</span><span>Replies in ~24h</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="tcard-side">
+            <div class="row-between side-top"><span class="badge badge-match">85% match</span><button class="link" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button></div>
+            <div class="price-row"><span class="price">$27<small>/ lesson</small></span><span class="badge badge-match show-mobile">85% match</span></div>
+            <a class="btn btn-primary btn-block" href="request.html">Send request</a>
+            <a class="btn btn-secondary btn-block" href="teacher.html">View profile</a>
+            <button class="link link-muted mobile-report" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button>
+          </div>
+        </article>
+
+        <article class="tcard">
+          <div class="tcard-main">
+            <span class="avatar av-72">JO</span>
+            <div class="tcard-body">
+              <div class="tcard-name"><h3><a href="teacher.html">James Okafor</a></h3><span class="badge badge-trial">Free trial</span></div>
+              <div class="tcard-rest">
+                <p class="tcard-headline">Relaxed English conversation for adults at any level</p>
+                <div class="tags"><span class="tag">English</span><span class="tag">Conversation</span></div>
+                <div class="meta"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.6</b> (22)</span><span>3 years experience</span><span>Online</span><span>Replies in ~48h</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="tcard-side">
+            <div class="row-between side-top"><span class="badge badge-match">80% match</span><button class="link" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button></div>
+            <div class="price-row"><span class="price">$18<small>/ lesson</small></span><span class="badge badge-match show-mobile">80% match</span></div>
+            <a class="btn btn-primary btn-block" href="request.html">Send request</a>
+            <a class="btn btn-secondary btn-block" href="teacher.html">View profile</a>
+            <button class="link link-muted mobile-report" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button>
+          </div>
+        </article>
+
+        <article class="tcard">
+          <div class="tcard-main">
+            <span class="avatar av-72">LF</span>
+            <div class="tcard-body">
+              <div class="tcard-name"><h3><a href="teacher.html">Lucía Fernández</a></h3><span class="badge badge-verified"><i data-i="check" data-size="12"></i>Verified</span></div>
+              <div class="tcard-rest">
+                <p class="tcard-headline">Grammar made simple — English for exams and school</p>
+                <div class="tags"><span class="tag">English</span><span class="tag">Grammar</span><span class="tag">Exams</span></div>
+                <div class="meta"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.8</b> (51)</span><span>8 years experience</span><span>Online</span><span>Replies in ~12h</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="tcard-side">
+            <div class="row-between side-top"><span class="badge badge-match">77% match</span><button class="link" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button></div>
+            <div class="price-row"><span class="price">$20<small>/ lesson</small></span><span class="badge badge-match show-mobile">77% match</span></div>
+            <a class="btn btn-primary btn-block" href="request.html">Send request</a>
+            <a class="btn btn-secondary btn-block" href="teacher.html">View profile</a>
+            <button class="link link-muted mobile-report" type="button" data-demo><i data-i="flag" data-size="14"></i>Report</button>
+          </div>
+        </article>
+
+        <p class="center muted" style="padding-top:12px">Showing all 6 teachers</p>
+      </div>
+
+      <div class="empty" data-show-state="empty" hidden>
+        <div class="empty-icon"><i data-i="search" data-size="20"></i></div>
+        <h3>No teachers found</h3>
+        <p>No English teachers match all of your filters right now. Relax a few filters, or we’ll email you when a matching teacher joins.</p>
+        <div class="chips">
+          <span class="tag-chip">Offline · Kyiv 5 km<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+          <span class="tag-chip">$15–$35<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+          <span class="tag-chip">Weekday evenings<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+          <span class="tag-chip">Verified only<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+          <span class="tag-chip">4.5+<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+          <span class="tag-chip">3+ years<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+        </div>
+        <div class="empty-actions">
+          <a class="btn btn-primary" href="results.html">Relax filters</a>
+          <button class="btn btn-secondary" type="button" data-toast="We’ll email you when a matching teacher joins."><i data-i="bell"></i>Notify me</button>
+        </div>
+      </div>
+
+      <div class="empty" data-show-state="error" hidden>
+        <div class="empty-icon"><i data-i="refresh" data-size="20"></i></div>
+        <h3>We couldn’t load teachers</h3>
+        <p>Something went wrong on our side. Check your connection and try again — your filters are saved.</p>
+        <div class="empty-actions"><a class="btn btn-secondary" href="results.html"><i data-i="refresh"></i>Try again</a></div>
+      </div>
+    </section>
+  </div>
+</main>
+</body>
+</html>

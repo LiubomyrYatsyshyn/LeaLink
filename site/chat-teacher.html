@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chats · Teaching · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body data-role="teacher" class="chat-page">
+<header class="site-header" data-header="teacher" data-active="chats"></header>
+
+<main class="chat">
+  <aside class="chat-list">
+    <div class="chat-list-head">
+      <h2>Chats</h2>
+      <div class="input-icon"><i data-i="search"></i><input class="input" type="search" placeholder="Search conversations" aria-label="Search conversations"></div>
+    </div>
+    <button class="conv is-active" type="button"><span class="avatar av-40">LW</span><span class="conv-body"><span class="conv-top"><b>Liam Walsh</b><time>11:05</time></span><span class="conv-bottom"><span>Please send me the job description…</span></span></span></button>
+    <button class="conv" type="button"><span class="avatar av-40">SR</span><span class="conv-body"><span class="conv-top"><b>Sofia Ricci</b><time>Sep 17</time></span><span class="conv-bottom"><span>Thanks, see you Friday.</span><span class="unread">2</span></span></span></button>
+    <button class="conv" type="button"><span class="avatar av-40">CM</span><span class="conv-body"><span class="conv-top"><b>Carlos Mendes</b><time>Sep 12</time></span><span class="conv-bottom"><span>You: Great progress today!</span></span></span></button>
+    <button class="conv" type="button"><span class="avatar av-40">EN</span><span class="conv-body"><span class="conv-top"><b>Emma Novak</b><time>Aug 30</time></span><span class="conv-bottom"><span>Thank you for everything!</span></span></span></button>
+  </aside>
+
+  <section class="chat-main">
+    <div class="chat-head">
+      <div class="row">
+        <button class="icon-btn back" type="button" data-chat-back aria-label="Back to chats"><i data-i="back"></i></button>
+        <span class="avatar av-44">LW</span>
+        <div class="grow"><h2>Liam Walsh</h2><p class="t-small muted">For himself · Accepted Sep 23</p></div>
+        <div class="row head-actions" style="--gap:12px">
+          <button class="btn btn-secondary btn-sm" type="button" data-toast="Thanks! We’ll ask Liam to confirm too."><i data-i="check"></i>We started lessons</button>
+          <button class="btn btn-secondary btn-sm" type="button" data-demo>View request</button>
+          <button class="icon-btn" type="button" aria-label="Report" data-demo><i data-i="flag"></i></button>
+        </div>
+        <button class="icon-btn more" type="button" aria-label="More actions" data-demo><i data-i="more"></i></button>
+      </div>
+      <div class="req-summary"><b>Request</b><span>English</span><span>Job interviews</span><span>Upper-intermediate (B2)</span><span>1 × 60 min / week</span><span>Evenings</span><span>Online</span><span>$20–30</span></div>
+      <button class="btn btn-secondary btn-sm btn-block mobile-started" type="button" data-toast="Thanks! We’ll ask Liam to confirm too."><i data-i="check"></i>We started lessons</button>
+      <p class="contact-line"><i data-i="lock" data-size="14"></i>Liam can now see your contact: Telegram @olena_english</p>
+    </div>
+
+    <div class="thread">
+      <p class="contact-line"><i data-i="lock" data-size="14"></i>Liam can now see your contact: Telegram @olena_english</p>
+      <p class="sys"><i data-i="check" data-size="14"></i>You accepted Liam’s request · Sep 23, 10:20</p>
+      <div class="msg"><div class="bubble">Hi Olena, thank you for accepting! My first interview is on October 9. Can we start this week?</div><time>10:34</time></div>
+      <div class="msg me"><div class="bubble">Hi Liam! Yes — how about Wednesday at 18:00 your time for the free trial? We’ll do a mock interview and set a plan.</div><time>10:50</time></div>
+      <div class="msg"><div class="bubble">Perfect. Should I prepare anything?</div><time>11:02</time></div>
+      <div class="msg me"><div class="bubble">Please send me the job description and your CV in English. I’ll prepare questions based on them.</div><time>11:05</time></div>
+    </div>
+
+    <form class="composer" data-composer>
+      <input class="input" placeholder="Write a message…" aria-label="Write a message" autocomplete="off">
+      <button class="btn btn-primary" type="submit" aria-label="Send"><i data-i="send"></i><span class="lbl">Send</span></button>
+    </form>
+  </section>
+</main>
+</body>
+</html>

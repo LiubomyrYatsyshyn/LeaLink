@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Send a request to Olena · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body data-role="learner" class="has-mobile-bar">
+<header class="site-header" data-header="guest"></header>
+
+<section class="band">
+  <div class="container">
+    <a class="back-link" href="teacher.html"><i data-i="back"></i>Back to Olena’s profile</a>
+    <p class="eyebrow">Learning · Step 3 of 3</p>
+    <h1 class="t-h1">Send a request to Olena</h1>
+    <p class="lead">Most fields are prefilled from your search. Fields marked * are required.</p>
+  </div>
+</section>
+
+<main class="container page">
+  <div class="split">
+    <div class="cards">
+      <div class="error-summary" data-show-state="errors" hidden>
+        <i data-i="alert" data-size="18"></i>
+        <div><strong>Please fix 3 fields before sending</strong><span>Parent contact · Preferred schedule · Message to Olena</span></div>
+      </div>
+
+      <section class="card">
+        <h2 class="card-title">About you</h2>
+        <div class="fields">
+          <div class="field">
+            <label class="label" for="r-name">Your name <span class="req">*</span></label>
+            <input class="input" id="r-name" autocomplete="name" value="Anna Petrenko" data-err-value="Kateryna Bondar">
+          </div>
+          <div class="field">
+            <span class="label">For whom <span class="req">*</span></span>
+            <div class="seg" data-controls="#child-fields"><button type="button" class="is-active">Myself</button><button type="button" data-reveal data-err-active>My child</button></div>
+          </div>
+          <div class="grid-2" id="child-fields" hidden>
+            <div class="field">
+              <label class="label" for="r-age">Child’s age <span class="req">*</span></label>
+              <div class="input-group"><input id="r-age" inputmode="numeric" value="14"><span class="affix">years</span></div>
+            </div>
+            <div class="field" data-err-class="is-error">
+              <label class="label" for="r-parent">Parent contact <span class="req">*</span></label>
+              <input class="input" id="r-parent" placeholder="Phone or email">
+              <p class="error-msg" data-show-state="errors" hidden><i data-i="alert" data-size="12"></i>Add a phone number or email so the teacher can reach a parent.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">What you want to learn</h2>
+        <div class="fields">
+          <div class="grid-2">
+            <div class="field">
+              <div class="label-row"><label class="label" for="r-subject">Subject</label><span class="from"><i data-i="spark" data-size="12"></i>From your search</span></div>
+              <input class="input" id="r-subject" value="English">
+            </div>
+            <div class="field">
+              <div class="label-row"><label class="label" for="r-topic">Topic</label><span class="from"><i data-i="spark" data-size="12"></i>From your search</span></div>
+              <input class="input" id="r-topic" value="Speaking, Job interviews" data-err-value="Speaking, Grammar">
+            </div>
+            <div class="field">
+              <div class="label-row"><label class="label" for="r-level">Level</label><span class="from"><i data-i="spark" data-size="12"></i>From your search</span></div>
+              <select class="input" id="r-level"><option>Elementary (A2)</option><option selected>Intermediate (B1)</option><option>Upper-intermediate (B2)</option></select>
+            </div>
+            <div class="field">
+              <div class="label-row"><label class="label" for="r-goal">Goal <span class="req">*</span></label><span class="from"><i data-i="spark" data-size="12"></i>From your search</span></div>
+              <select class="input" id="r-goal" data-err-value="Exam preparation"><option>Job interviews</option><option>Work</option><option>Travel</option><option>Exam preparation</option><option>Everyday conversation</option></select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="r-details">Goal details <span class="opt">(optional)</span></label>
+            <textarea class="input" id="r-details" rows="2" style="min-height:66px" data-err-placeholder="What exactly do you want to achieve?">Two interviews for data analyst roles in October. I want to talk about my projects clearly and answer behavioural questions.</textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Schedule and format</h2>
+        <div class="fields">
+          <div class="grid-2">
+            <div class="field">
+              <div class="label-row"><label class="label" for="r-week">Lessons per week <span class="req">*</span></label><span class="from"><i data-i="spark" data-size="12"></i>From your search</span></div>
+              <select class="input" id="r-week"><option>1 lesson</option><option selected>2 lessons</option><option>3 lessons</option></select>
+            </div>
+            <div class="field">
+              <label class="label" for="r-duration">Lesson duration <span class="req">*</span></label>
+              <select class="input" id="r-duration"><option>45 min</option><option selected>60 min</option></select>
+            </div>
+          </div>
+          <div class="field" data-err-class="is-error">
+            <span class="label">Preferred schedule <span class="req">*</span></span>
+            <div class="chip-box" data-err-unselect>
+              <div class="chips"><button class="chip" type="button">Morning</button><button class="chip" type="button">Afternoon</button><button class="chip is-selected" type="button">Evening</button></div>
+              <div class="chips"><button class="chip is-selected" type="button">Weekdays</button><button class="chip" type="button">Weekends</button></div>
+            </div>
+            <p class="helper" data-show-state="default">Times are in your time zone: Kyiv (UTC+3).</p>
+            <p class="error-msg" data-show-state="errors" hidden><i data-i="alert" data-size="12"></i>Choose at least one time of day.</p>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <span class="label">Start date <span class="req">*</span></span>
+              <div class="seg"><button type="button" class="is-active">As soon as possible</button><button type="button">Pick a date</button></div>
+            </div>
+            <div class="field">
+              <label class="label" for="r-planned">Planned duration <span class="opt">(optional)</span></label>
+              <select class="input" id="r-planned"><option>1 month</option><option selected>2–3 months</option><option>6 months</option><option>Not sure yet</option></select>
+            </div>
+            <div class="field">
+              <div class="label-row"><span class="label">Format</span><span class="from"><i data-i="spark" data-size="12"></i>From your search</span></div>
+              <div class="seg"><button type="button" class="is-active">Online</button><button type="button">Offline</button><button type="button">Both</button></div>
+            </div>
+            <div class="field">
+              <div class="label-row"><span class="label">Budget per lesson</span><span class="from"><i data-i="spark" data-size="12"></i>From your search</span></div>
+              <span class="range-value" id="r-budget">$15 – $35 USD</span>
+              <div class="range" data-range data-min="5" data-max="60" data-from="15" data-to="35" data-output="#r-budget" data-suffix=" USD">
+                <div class="range-track"></div><div class="range-fill"></div><span class="range-thumb"></span><span class="range-thumb"></span>
+              </div>
+              <div class="range-labels"><span>$5</span><span>$60+</span></div>
+              <div class="row-between"><span class="t-caption muted" style="font-weight:400">Currency</span><select class="input" aria-label="Currency" style="width:96px"><option>USD</option><option>EUR</option></select></div>
+            </div>
+          </div>
+          <label class="check"><input type="checkbox" checked><span>I’d like a free trial lesson<span class="sub">Olena offers a free 30-minute trial.</span></span></label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Questions and message</h2>
+        <p class="muted" style="margin-top:16px">Olena asks every learner these questions.</p>
+        <div class="fields" style="margin-top:20px">
+          <div class="field">
+            <div class="label-row"><label class="label" for="r-q1">What would you like to be able to do after 3 months?</label><span class="from-pill">From Olena</span></div>
+            <input class="input" id="r-q1" value="Answer interview questions confidently and talk about my projects." data-err-value="Pass the school English exam in May with a good grade.">
+          </div>
+          <div class="field">
+            <div class="label-row"><label class="label" for="r-q2">Have you taken English lessons before?</label><span class="from-pill">From Olena</span></div>
+            <input class="input" id="r-q2" value="Yes, group courses at university, nothing recent." data-err-value="Only at school.">
+          </div>
+          <div class="field" data-err-class="is-error">
+            <label class="label" for="r-msg">Message to Olena <span class="req">*</span></label>
+            <textarea class="input" id="r-msg" rows="4" style="min-height:110px" data-counter="#r-msg-count" data-min="50" data-err-value="Hi! My son needs help with exams.">Hi Olena! I have job interviews in English next month and want to practise talking about my experience as a data analyst. I can do evenings on weekdays.</textarea>
+            <div class="helper">
+              <span data-show-state="default">Introduce yourself and what you want to achieve.</span>
+              <span class="error-msg" data-show-state="errors" hidden><i data-i="alert" data-size="12"></i>Write at least 50 characters so Olena understands your needs.</span>
+              <span class="count" id="r-msg-count"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="row-between form-footer">
+        <p class="muted">Next, you’ll create an account. Your request is sent right after.</p>
+        <a class="btn btn-primary btn-lg" href="signup-learner.html">Send request <i data-i="arrow" data-size="14"></i></a>
+      </div>
+    </div>
+
+    <aside class="card sticky hide-mobile" style="padding:24px">
+      <div class="row"><span class="avatar av-48">OK</span><div><h2 class="t-h3" style="font-size:17px;font-weight:700">Olena Kovalenko</h2><p class="t-caption muted" style="font-weight:400">English · $22 / lesson</p></div></div>
+      <hr class="divider" style="margin:16px 0">
+      <ul class="feature-list" style="gap:10px;color:var(--text-2)">
+        <li><i data-i="clock"></i>Olena has 72 hours to accept or decline.</li>
+        <li><i data-i="chat"></i>Chat opens as soon as she accepts.</li>
+        <li><i data-i="inbox"></i>This will be 3 of your 5 active requests.</li>
+        <li style="align-items:flex-start"><i data-i="lock" style="margin-top:4px"></i>No payments on LeaLink — you agree on them directly.</li>
+      </ul>
+    </aside>
+  </div>
+</main>
+
+<div class="mobile-bar">
+  <a class="btn btn-primary btn-lg" href="signup-learner.html">Send request <i data-i="arrow" data-size="14"></i></a>
+</div>
+</body>
+</html>

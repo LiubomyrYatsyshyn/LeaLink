@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My requests · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body data-role="learner">
+<header class="site-header" data-header="learner" data-active="requests"></header>
+<span hidden data-toast-id="sent">Request sent to Olena Kovalenko. She has 72 hours to reply.</span>
+
+<main class="home-layout">
+  <aside class="home-aside">
+    <p class="eyebrow">Learning</p>
+    <h1 class="t-h1 page-hello">Hi, Anna</h1>
+    <div class="limit-card" style="margin:24px 0 32px">
+      <div data-show-state="default empty">
+        <div class="row-between"><span class="muted">Active requests</span><span class="limit-num"><b data-show-state="default">2</b><b data-show-state="empty" hidden>0</b> / 5</span></div>
+        <div class="progress" style="margin:12px 0 16px;height:4px"><span data-show-state="default" style="width:40%"></span></div>
+      </div>
+      <p class="muted" data-show-state="error" hidden style="margin-bottom:10px">Request limit unavailable</p>
+      <p class="t-small muted">5 active requests max. Teachers have 72 hours to reply; expired, withdrawn and declined requests free a slot.</p>
+    </div>
+    <a class="btn btn-primary btn-lg btn-block" href="search.html"><i data-i="search"></i>Find teachers</a>
+  </aside>
+
+  <section class="home-main" data-tabs-scope>
+    <h2 class="t-h2" style="font-size:22px;font-weight:700;margin-bottom:20px">My requests</h2>
+    <div class="tabs fill" role="tablist" style="margin-bottom:24px">
+      <button class="tab is-active" type="button" data-tab="sent">Sent <span class="count"><span data-show-state="default">3</span><span data-show-state="empty" hidden>0</span><span data-show-state="error" hidden>–</span></span></button>
+      <button class="tab" type="button" data-tab="accepted">Accepted <span class="count"><span data-show-state="default">3</span><span data-show-state="empty" hidden>0</span><span data-show-state="error" hidden>–</span></span></button>
+      <button class="tab" type="button" data-tab="declined">Declined <span class="count"><span data-show-state="default">2</span><span data-show-state="empty" hidden>0</span><span data-show-state="error" hidden>–</span></span></button>
+    </div>
+
+    <div data-panel="sent">
+      <div class="list" data-show-state="default">
+        <article class="rcard">
+          <div class="rcard-row">
+            <span class="avatar av-48">OK</span>
+            <div class="rcard-info">
+              <div class="rcard-title"><h3>Olena Kovalenko</h3><span class="badge badge-pending">Pending</span></div>
+              <p class="rcard-sub">English · Job interviews · Sent Sep 22</p>
+            </div>
+            <div class="rcard-actions">
+              <div class="timer"><span class="timer-label"><i data-i="clock" data-size="14"></i>51h left</span><span class="timer-bar"><span style="width:71%"></span></span></div>
+              <button class="btn btn-secondary" type="button" data-open="withdraw">Withdraw</button>
+            </div>
+          </div>
+        </article>
+        <article class="rcard">
+          <div class="rcard-row">
+            <span class="avatar av-48">SL</span>
+            <div class="rcard-info">
+              <div class="rcard-title"><h3>Sophie Laurent</h3><span class="badge badge-pending">Pending</span></div>
+              <p class="rcard-sub">IELTS · Exam preparation · Sent Sep 23</p>
+            </div>
+            <div class="rcard-actions">
+              <div class="timer"><span class="timer-label"><i data-i="clock" data-size="14"></i>68h left</span><span class="timer-bar"><span style="width:94%"></span></span></div>
+              <button class="btn btn-secondary" type="button" data-open="withdraw">Withdraw</button>
+            </div>
+          </div>
+        </article>
+        <article class="rcard">
+          <div class="rcard-row">
+            <span class="avatar av-48">MR</span>
+            <div class="rcard-info">
+              <div class="rcard-title"><h3>Marco Rossi</h3><span class="badge badge-declined">Expired</span></div>
+              <p class="rcard-sub">Guitar · Hobby · Sent Sep 18</p>
+            </div>
+          </div>
+          <p class="note"><i data-i="alert" data-size="14"></i>The teacher didn’t reply within 72 hours. This request no longer counts toward your limit.</p>
+        </article>
+      </div>
+    </div>
+
+    <div data-panel="accepted" hidden>
+      <div class="list" data-show-state="default">
+        <article class="rcard">
+          <div class="rcard-row">
+            <span class="avatar av-48">PN</span>
+            <div class="rcard-info">
+              <div class="rcard-title"><h3>Priya Nair</h3><span class="badge badge-accepted">Accepted</span></div>
+              <p class="rcard-sub">Python · Data analysis · Accepted Sep 20</p>
+            </div>
+            <div class="rcard-actions">
+              <button class="btn btn-secondary btn-sm" type="button" data-toast="Thanks! We’ll ask Priya to confirm too."><i data-i="check"></i>We started lessons</button>
+              <a class="btn btn-primary btn-sm" href="chat.html"><i data-i="chat"></i>Open chat</a>
+            </div>
+          </div>
+          <p class="note"><i data-i="alert" data-size="14"></i>Agree on the details in chat. When your first lesson happens, confirm it here.</p>
+        </article>
+        <article class="rcard">
+          <div class="rcard-row">
+            <span class="avatar av-48">ML</span>
+            <div class="rcard-info">
+              <div class="rcard-title"><h3>Mei Lin</h3><span class="badge badge-accepted">Accepted</span></div>
+              <p class="rcard-sub">English · Pronunciation · Accepted Sep 12</p>
+            </div>
+            <div class="rcard-actions">
+              <a class="btn btn-primary btn-sm" href="chat.html"><i data-i="chat"></i>Open chat</a>
+            </div>
+          </div>
+          <p class="note"><i data-i="check" data-size="14"></i>You confirmed lessons started. Waiting for Mei to confirm.</p>
+        </article>
+        <article class="rcard">
+          <div class="rcard-row">
+            <span class="avatar av-48">DB</span>
+            <div class="rcard-info">
+              <div class="rcard-title"><h3>Daniel Brooks</h3><span class="badge badge-accepted">Accepted</span></div>
+              <p class="rcard-sub">Math · Exam preparation · Accepted Sep 5</p>
+            </div>
+            <div class="rcard-actions">
+              <a class="btn btn-secondary btn-sm" href="chat.html"><i data-i="chat"></i>Open chat</a>
+              <button class="btn btn-primary btn-sm" type="button" data-open="review"><i data-i="edit"></i>Leave review</button>
+            </div>
+          </div>
+          <p class="note"><i data-i="check" data-size="14"></i>You both confirmed lessons started. Share how it’s going.</p>
+        </article>
+      </div>
+    </div>
+
+    <div data-panel="declined" hidden>
+      <div class="list" data-show-state="default">
+        <article class="rcard">
+          <div class="rcard-row">
+            <span class="avatar av-48">AM</span>
+            <div class="rcard-info">
+              <div class="rcard-title"><h3>Andriy Melnyk</h3><span class="badge badge-declined">Declined</span></div>
+              <p class="rcard-sub">Math · Olympiad prep · Declined Sep 19</p>
+            </div>
+          </div>
+          <p class="note"><i data-i="alert" data-size="14"></i>Reason: My schedule is full</p>
+        </article>
+        <article class="rcard">
+          <div class="rcard-row">
+            <span class="avatar av-48">JO</span>
+            <div class="rcard-info">
+              <div class="rcard-title"><h3>James Okafor</h3><span class="badge badge-declined">Declined</span></div>
+              <p class="rcard-sub">English · Speaking · Declined Sep 10</p>
+            </div>
+          </div>
+          <p class="note"><i data-i="alert" data-size="14"></i>Reason: Not accepting new students right now</p>
+        </article>
+        <p class="muted">Declined requests don’t count toward your limit. You can send a request to another teacher at any time.</p>
+      </div>
+    </div>
+
+    <div class="empty" data-show-state="empty" hidden>
+      <div class="empty-icon"><i data-i="inbox" data-size="20"></i></div>
+      <h3>No requests yet</h3>
+      <p>Find a teacher who fits your goals and send a request. You can have up to 5 active requests at a time.</p>
+      <div class="empty-actions"><a class="btn btn-primary" href="search.html"><i data-i="search"></i>Find a teacher</a></div>
+    </div>
+    <div class="empty" data-show-state="error" hidden>
+      <div class="empty-icon"><i data-i="refresh" data-size="20"></i></div>
+      <h3>We couldn’t load your requests</h3>
+      <p>Something went wrong on our side. Your requests are safe — please try again in a moment.</p>
+      <div class="empty-actions"><a class="btn btn-secondary" href="learner.html"><i data-i="refresh"></i>Try again</a></div>
+    </div>
+  </section>
+</main>
+
+<dialog class="dialog" id="withdraw" aria-labelledby="withdraw-title">
+  <div class="dialog-head"><h2 id="withdraw-title">Withdraw request?</h2><button class="icon-btn" type="button" data-close aria-label="Close"><i data-i="x"></i></button></div>
+  <div class="dialog-body"><p class="muted">Olena won’t see your request anymore, and a slot frees up in your limit.</p></div>
+  <div class="dialog-foot"><button class="btn btn-secondary" type="button" data-close>Cancel</button><button class="btn btn-primary" type="button" data-close data-toast="Request withdrawn." data-undo>Withdraw</button></div>
+</dialog>
+
+<dialog class="dialog" id="review" aria-labelledby="review-title">
+  <div class="dialog-head">
+    <div><h2 id="review-title">Leave a review</h2><p>Reviews can be left once you both confirmed that lessons started.</p></div>
+    <button class="icon-btn" type="button" data-close aria-label="Close"><i data-i="x"></i></button>
+  </div>
+  <div class="dialog-body fields" style="gap:16px">
+    <div class="row"><span class="avatar av-44">DB</span><div><div class="strong" style="font-size:17px">Daniel Brooks</div><div class="t-caption muted" style="font-weight:400">Math · lessons since Sep 2026</div></div></div>
+    <div class="field">
+      <span class="label">Your rating <span class="req">*</span></span>
+      <div class="star-input" data-stars data-value="4">
+        <button type="button" aria-label="1 star"><i data-i="star" data-size="24"></i></button><button type="button" aria-label="2 stars"><i data-i="star" data-size="24"></i></button><button type="button" aria-label="3 stars"><i data-i="star" data-size="24"></i></button><button type="button" aria-label="4 stars"><i data-i="star" data-size="24"></i></button><button type="button" aria-label="5 stars"><i data-i="star" data-size="24"></i></button>
+        <span class="star-label"></span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label" for="rv-text">Your review <span class="req">*</span></label>
+      <textarea class="input" id="rv-text" rows="4" style="min-height:110px" data-counter="#rv-count" data-max="1000" data-min="20">Daniel explains calculus step by step and always checks that I really understood. Our lessons are well structured and I feel ready for the exam.</textarea>
+      <div class="helper"><span>Visible on Daniel’s profile.</span><span class="count" id="rv-count"></span></div>
+    </div>
+    <p class="helper">You can edit your review within 14 days.</p>
+  </div>
+  <div class="dialog-foot"><button class="btn btn-secondary" type="button" data-close>Cancel</button><button class="btn btn-primary" type="button" data-close data-toast="Review published. Thank you!">Publish review</button></div>
+</dialog>
+</body>
+</html>

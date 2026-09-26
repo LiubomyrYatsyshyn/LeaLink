@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body class="bg-surface">
+<header class="site-header" data-header="auth"></header>
+
+<main class="auth">
+  <form class="auth-card" data-href="learner.html" novalidate>
+    <h1>Log in to LeaLink</h1>
+    <p class="sub">Welcome back. Log in to see your requests and chats.</p>
+    <div class="fields">
+      <button class="btn btn-secondary btn-lg btn-block" type="button" data-demo><span class="g-mark">G</span> Continue with Google</button>
+      <div class="or-divider">or</div>
+      <div class="field">
+        <label class="label" for="email">Email <span class="req">*</span></label>
+        <input class="input" id="email" type="email" autocomplete="email" placeholder="you@example.com" value="anna.petrenko@example.com">
+      </div>
+      <div class="field">
+        <label class="label" for="password">Password <span class="req">*</span></label>
+        <input class="input" id="password" type="password" autocomplete="current-password" placeholder="Your password" value="prototype1">
+      </div>
+      <button class="btn btn-dark btn-lg btn-block" type="submit">Log in</button>
+      <p class="auth-foot">New to LeaLink? <a href="signup.html">Create an account</a></p>
+    </div>
+  </form>
+</main>
+</body>
+</html>

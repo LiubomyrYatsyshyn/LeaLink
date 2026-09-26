@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Style guide · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body>
+<main class="container page">
+  <div class="row" style="--gap:12px"><span class="logo"><span class="logo-mark">L</span>LeaLink</span><span class="tag">Direction D3 · Split</span></div>
+  <h1 class="t-display" style="margin-top:8px">Style guide</h1>
+  <p class="lead" style="margin:12px 0 40px">Source of truth for every LeaLink screen. Build components once from this sheet; every screen reuses them unchanged. Values in px. <a class="link" href="screens.html">All screens →</a></p>
+
+  <section class="sg-section">
+    <h2>Colour tokens</h2>
+    <p class="muted">Use exactly these values. Role colour appears only as accents on that role’s screens; everything else stays neutral.</p>
+    <p class="sg-label">Neutrals</p>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-chip" style="background:#FFFFFF"></div><b>bg</b><code>#FFFFFF</code><span>Page background</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#F7F7F5"></div><b>surface</b><code>#F7F7F5</code><span>Panels, action areas, chat</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#E9E9E7"></div><b>border</b><code>#E9E9E7</code><span>All 1px borders, dividers</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#37352F"></div><b>text-primary</b><code>#37352F</code><span>Headings, body</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#787774"></div><b>text-secondary</b><code>#787774</code><span>Meta, helper text</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#9B9A97"></div><b>text-tertiary</b><code>#9B9A97</code><span>Placeholders, counts</span></div>
+    </div>
+    <p class="sg-label">Learner (green) — only on learner screens</p>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-chip" style="background:#15803D"></div><b>learner-600</b><code>#15803D</code><span>Primary buttons, active tabs, links</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#166534"></div><b>learner-700</b><code>#166534</code><span>Hover, badge text</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#DCFCE7"></div><b>learner-100</b><code>#DCFCE7</code><span>Badges, borders of tinted blocks</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#F0FDF4"></div><b>learner-50</b><code>#F0FDF4</code><span>Tinted blocks, bands, chips</span></div>
+    </div>
+    <p class="sg-label">Teacher (blue) — only on teacher screens</p>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-chip" style="background:#2563EB"></div><b>teacher-600</b><code>#2563EB</code><span>Primary buttons, active tabs, links</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#1D4ED8"></div><b>teacher-700</b><code>#1D4ED8</code><span>Hover, badge text</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#DBEAFE"></div><b>teacher-100</b><code>#DBEAFE</code><span>Badges, borders of tinted blocks</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#EFF6FF"></div><b>teacher-50</b><code>#EFF6FF</code><span>Tinted blocks, bands, chips</span></div>
+    </div>
+    <p class="sg-label">Status &amp; system</p>
+    <div class="swatches eight">
+      <div class="swatch"><div class="swatch-chip" style="background:#B45309"></div><b>pending-text</b><code>#B45309</code><span>Pending, Under review, urgent timer</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#FEF3C7"></div><b>pending-bg</b><code>#FEF3C7</code><span>Pending badge fill</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#15803D"></div><b>accepted-text</b><code>#15803D</code><span>Accepted badge</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#DCFCE7"></div><b>accepted-bg</b><code>#DCFCE7</code><span>Accepted badge fill</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#787774"></div><b>declined-text</b><code>#787774</code><span>Declined / Expired badge</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#F1F1EF"></div><b>declined-bg</b><code>#F1F1EF</code><span>Declined / Expired fill</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#DC2626"></div><b>error</b><code>#DC2626</code><span>Form errors only</span></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#F59E0B"></div><b>star</b><code>#F59E0B</code><span>Rating stars only</span></div>
+    </div>
+    <p class="t-micro muted">Overlay behind dialogs: text-primary #37352F at 40% opacity. Shadows (dialogs, menus, toast only): #37352F at 8–16% opacity, 0 4–8px, 16–32px blur. No gradients.</p>
+  </section>
+
+  <section class="sg-section">
+    <h2>Typography</h2>
+    <p class="muted">Inter everywhere. Sizes are font-size / line-height in px.</p>
+    <div class="type-row"><b>Display</b><code>56 / 60 · 700 · −3%</code><span class="t-display">I want to learn</span></div>
+    <div class="type-row"><b>H1</b><code>32 / 40 · 700 · −2%</code><span class="t-h1">English teachers</span></div>
+    <div class="type-row"><b>H2</b><code>20 / 28 · 600 · −1%</code><span class="t-h2">Incoming requests</span></div>
+    <div class="type-row"><b>H3</b><code>16 / 24 · 600</code><span class="t-h3">Olena Kovalenko</span></div>
+    <div class="type-row"><b>Body</b><code>15 / 24 · 400</code><span class="t-body">Conversational English for professionals and travellers</span></div>
+    <div class="type-row"><b>Small</b><code>14 / 20 · 400</code><span class="t-small">Buttons, inputs, card text</span></div>
+    <div class="type-row"><b>Caption</b><code>13 / 18 · 500</code><span class="t-caption">Field labels, meta</span></div>
+    <div class="type-row"><b>Micro</b><code>12 / 16 · 400</code><span class="t-micro">Helper text, counters, badges (500)</span></div>
+    <div class="type-row"><b>Eyebrow</b><code>12 / 16 · 600 · +6% · uppercase</code><span class="eyebrow role-learner">For learners</span></div>
+    <p class="t-micro muted" style="margin-top:16px">Mobile (375): Display 36/40, H1 24/32; all other sizes unchanged.</p>
+  </section>
+
+  <section class="sg-section">
+    <h2>Spacing, radius, layout</h2>
+    <p class="muted">8px base grid with 4px half-steps.</p>
+    <p class="t-small">Spacing: 4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 64 · 80. Radius: 4 badges and segmented tabs · 6 buttons, inputs, chips row, tabs · 8 cards, panels, dialogs, toast · 999 avatars, chips, toggle.</p>
+    <p class="t-small muted" style="margin-top:8px">Desktop frame 1440 · header 64 · page side padding 64 (home 112) · sidebar/panel 296–400 · card padding 24 (mobile 16) · gaps 12/16/24/32. Mobile frame 375 · header 56 · side padding 16.</p>
+  </section>
+
+  <section class="sg-section">
+    <h2>Buttons</h2>
+    <p class="muted">One component, five variants, three sizes. Hover darkens role buttons to 700; secondary and ghost hover to surface.</p>
+    <div class="btn-table">
+      <span class="sg-label">Variant</span><span class="sg-label">Default</span><span class="sg-label">Hover (try it)</span><span class="sg-label">Disabled</span>
+      <b>Primary · learner</b><span><button class="btn btn-learner" type="button">Send request</button></span><span><button class="btn btn-learner" type="button" style="background:var(--l700)">Send request</button></span><span><button class="btn btn-learner" type="button" disabled>Send request</button></span>
+      <b>Primary · teacher</b><span><button class="btn btn-teacher" type="button">Accept</button></span><span><button class="btn btn-teacher" type="button" style="background:var(--t700)">Accept</button></span><span><button class="btn btn-teacher" type="button" disabled>Accept</button></span>
+      <b>Primary · neutral (auth)</b><span><button class="btn btn-dark" type="button">Log in</button></span><span><button class="btn btn-dark" type="button" style="background:var(--text-2)">Log in</button></span><span><button class="btn btn-dark" type="button" disabled>Log in</button></span>
+      <b>Secondary</b><span><button class="btn btn-secondary" type="button">Withdraw</button></span><span><button class="btn btn-secondary" type="button" style="background:var(--surface)">Withdraw</button></span><span><button class="btn btn-secondary" type="button" disabled>Withdraw</button></span>
+      <b>Ghost</b><span><button class="btn btn-ghost" type="button">Cancel</button></span><span><button class="btn btn-ghost" type="button" style="background:var(--surface);color:var(--text)">Cancel</button></span><span><button class="btn btn-ghost" type="button" disabled>Cancel</button></span>
+    </div>
+    <div class="sg-grid role-learner" style="margin-top:32px">
+      <div><p class="sg-label">Sizes: sm 32 · md 40 · lg 48</p><div class="row wrap"><button class="btn btn-primary btn-sm" type="button">Small</button><button class="btn btn-primary" type="button">Medium</button><button class="btn btn-primary btn-lg" type="button">Large</button></div></div>
+      <div><p class="sg-label">With icon / icon-only</p><div class="row wrap"><button class="btn btn-primary" type="button"><i data-i="chat"></i>Open chat</button><button class="btn btn-primary" type="button">Find a teacher <i data-i="arrow" data-size="14"></i></button><button class="btn btn-secondary btn-icon" type="button" aria-label="Report"><i data-i="flag"></i></button><button class="icon-btn" type="button" aria-label="Close"><i data-i="x"></i></button></div></div>
+      <div><p class="sg-label">Link</p><div class="row wrap" style="--gap:20px"><button class="link" type="button">Reset</button><button class="link role-teacher" type="button"><i data-i="edit" data-size="14"></i>Edit</button><a class="back-link" href="results.html"><i data-i="back"></i>Back to results</a></div></div>
+    </div>
+  </section>
+
+  <section class="sg-section role-learner">
+    <h2>Inputs and selects</h2>
+    <p class="muted">Height 40, radius 6, 1px border. Focus: role-600 border + 3px role-100 ring. Error: #DC2626 border + message with icon. Required fields show * after the label.</p>
+    <div class="sg-grid-4">
+      <div class="field"><p class="sg-label">Input · default</p><label class="label">Email <span class="req">*</span></label><input class="input" placeholder="you@example.com"></div>
+      <div class="field"><p class="sg-label">Input · focus (learner)</p><label class="label">Email <span class="req">*</span></label><input class="input" value="anna.petrenko@" style="border-color:var(--l600);box-shadow:0 0 0 3px var(--l100)"></div>
+      <div class="field role-teacher"><p class="sg-label">Input · focus (teacher)</p><label class="label">Headline <span class="req">*</span></label><input class="input" value="Conversational English" style="border-color:var(--t600);box-shadow:0 0 0 3px var(--t100)"><p class="helper"><span class="count">21 / 80</span></p></div>
+      <div class="field is-error"><p class="sg-label">Input · error</p><label class="label">Parent contact <span class="req">*</span></label><input class="input" placeholder="Phone or email"><p class="error-msg"><i data-i="alert" data-size="12"></i>Add a phone number or email.</p></div>
+      <div class="field"><p class="sg-label">Input · filled</p><label class="label">Full name <span class="req">*</span></label><input class="input" value="Anna Petrenko"></div>
+      <div class="field"><p class="sg-label">Input · prefilled</p><div class="label-row"><label class="label">Subject</label><span class="from"><i data-i="spark" data-size="12"></i>From your search</span></div><input class="input" value="English"></div>
+      <div class="field"><p class="sg-label">Input · disabled</p><label class="label">Email</label><input class="input" value="anna.petrenko@example.com" disabled></div>
+      <div class="field"><p class="sg-label">Input · prefix / suffix</p><label class="label">Price per lesson</label><div class="input-group"><span class="affix">$</span><input value="22" aria-label="Price"><span class="affix">per lesson</span></div></div>
+      <div class="field"><p class="sg-label">Textarea · counter</p><label class="label">Message to Olena <span class="req">*</span></label><textarea class="input" data-counter="#sg-c1" data-min="50">Hi Olena! I have job interviews in English next month and want to practise.</textarea><p class="helper"><span class="count" id="sg-c1"></span></p></div>
+      <div class="field is-error"><p class="sg-label">Textarea · error</p><label class="label">Message to Olena <span class="req">*</span></label><textarea class="input" data-counter="#sg-c2" data-min="50">Hi! My son needs help with exams.</textarea><div class="helper"><span class="error-msg"><i data-i="alert" data-size="12"></i>Write at least 50 characters.</span><span class="count" id="sg-c2"></span></div></div>
+      <div class="field"><p class="sg-label">Select · default / filled</p><label class="label">Level</label><select class="input"><option>Select level</option><option>Intermediate (B1)</option></select><label class="label">Goal</label><select class="input"><option>Job interviews</option></select></div>
+      <div class="field"><p class="sg-label">Select · menu</p><label class="label">Sort by</label>
+        <div style="position:relative"><button class="input select-btn" type="button" data-menu-trigger style="width:100%"><span data-menu-label>Best match</span><i data-i="chev"></i></button>
+          <div class="menu" style="width:100%"><button class="menu-item is-selected" type="button">Best match<i data-i="check" class="check-mark"></i></button><button class="menu-item" type="button">Price: low to high<i data-i="check" class="check-mark"></i></button><button class="menu-item" type="button">Rating<i data-i="check" class="check-mark"></i></button></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sg-section role-learner">
+    <h2>Selection controls</h2>
+    <p class="muted">Chips are pills (height 32). Selected = role-50 fill, role-600 border, role-700 text with check.</p>
+    <div class="sg-grid">
+      <div><p class="sg-label">Multiselect chips · learner</p><div class="chips"><button class="chip" type="button">Morning</button><button class="chip" type="button">Afternoon</button><button class="chip is-selected" type="button">Evening</button></div></div>
+      <div class="role-teacher"><p class="sg-label">Multiselect chips · teacher</p><div class="chips"><button class="chip" type="button">Kids 6–12</button><button class="chip is-selected" type="button">Teens 13–17</button><button class="chip is-selected" type="button">Adults 18+</button></div></div>
+      <div><p class="sg-label">Tag chips (removable) + add</p><div class="chips"><span class="tag-chip">Speaking<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span><span class="tag-chip">Job interviews<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span><button class="add-chip" type="button"><i data-i="plus"></i>Add topic</button></div></div>
+      <div class="field is-error"><p class="sg-label">Chips · error</p><div class="chips"><button class="chip" type="button">Weekdays</button><button class="chip" type="button">Weekends</button></div><p class="error-msg"><i data-i="alert" data-size="12"></i>Choose at least one.</p></div>
+      <div><p class="sg-label">Segmented control</p><div class="seg"><button type="button" class="is-active">Online</button><button type="button">Offline</button><button type="button">Both</button></div></div>
+      <div class="options"><p class="sg-label">Toggle · on learner / on teacher</p><label class="toggle"><input type="checkbox" checked><span>New message in chat</span></label><label class="toggle role-teacher"><input type="checkbox" checked><span>Accepting new students</span></label></div>
+      <div class="options"><p class="sg-label">Toggle · off / disabled</p><label class="toggle"><input type="checkbox"><span>A matching teacher joins</span></label><label class="toggle"><input type="checkbox" disabled><span>Accepting new students</span></label></div>
+      <div class="options"><p class="sg-label">Checkbox · off / on / on teacher / disabled</p><label class="check"><input type="checkbox"><span>Free trial only</span></label><label class="check"><input type="checkbox" checked><span>Verified only</span></label><label class="check role-teacher"><input type="checkbox" checked><span>Email me about new requests</span></label><label class="check"><input type="checkbox" disabled><span>Unavailable option</span></label></div>
+      <div class="options role-teacher"><p class="sg-label">Radio</p><label class="radio"><input type="radio" name="sg-r" checked><span>My schedule is full</span></label><label class="radio"><input type="radio" name="sg-r"><span>The level isn’t a good fit</span></label></div>
+      <div class="field"><p class="sg-label">Slider + currency (budget)</p>
+        <div class="budget"><div class="field"><div class="range-head"><span class="label">Budget per lesson</span><span class="range-value" id="sg-budget"></span></div><div class="range" data-range data-min="5" data-max="60" data-from="15" data-to="35" data-output="#sg-budget"><div class="range-track"></div><div class="range-fill"></div><span class="range-thumb"></span><span class="range-thumb"></span></div><div class="range-labels"><span>$5</span><span>$60+</span></div></div><select class="input" aria-label="Currency" style="margin-bottom:22px"><option>USD</option></select></div>
+      </div>
+      <div class="role-teacher"><p class="sg-label">Upload tile</p><label class="upload"><input type="file" hidden><span class="upload-icon"><i data-i="upload"></i></span><span><strong>Upload a certificate</strong><span>PDF, JPG or PNG, up to 10 MB</span></span></label></div>
+      <div><p class="sg-label">Disclosure · collapsed / expanded</p>
+        <details class="disclosure"><summary><div><strong>Add more details (optional)</strong><span>Intro video link</span></div><i data-i="chev" class="chev"></i></summary><div class="disclosure-body"><div class="field"><label class="label">Intro video link <span class="opt">(optional)</span></label><input class="input" placeholder="https://youtube.com/..."></div></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sg-section">
+    <h2>Tabs and navigation</h2>
+    <p class="muted">Tabs use the role colour on role screens.</p>
+    <div class="sg-grid">
+      <div class="role-learner" data-tabs-scope><p class="sg-label">Tabs · learner (active = filled 600)</p><div class="tabs"><button class="tab is-active" type="button" data-tab="a">Sent <span class="count">3</span></button><button class="tab" type="button" data-tab="b">Accepted <span class="count">3</span></button><button class="tab" type="button" data-tab="c">Declined <span class="count">2</span></button></div></div>
+      <div class="role-teacher" data-tabs-scope><p class="sg-label">Tabs · teacher</p><div class="tabs"><button class="tab is-active" type="button" data-tab="a">Incoming <span class="count">3</span></button><button class="tab" type="button" data-tab="b">Students <span class="count">4</span></button></div></div>
+      <div><p class="sg-label">Header role switch</p><div class="role-switch" style="position:static;transform:none;display:inline-flex"><a class="learning is-active" href="learner.html">Learning</a><a class="teaching" href="teacher-home.html">Teaching</a></div></div>
+    </div>
+  </section>
+
+  <section class="sg-section">
+    <h2>Badges, timer, avatar, rating</h2>
+    <p class="muted">Badges are never interactive.</p>
+    <div class="sg-grid">
+      <div><p class="sg-label">Request status (radius 4, height 22, 12px 500)</p><div class="row wrap" style="--gap:8px"><span class="badge badge-pending">Pending</span><span class="badge badge-accepted">Accepted</span><span class="badge badge-declined">Declined</span><span class="badge badge-declined">Expired</span></div></div>
+      <div><p class="sg-label">Profile status</p><div class="row wrap" style="--gap:8px"><span class="badge badge-pending">Under review</span><span class="badge badge-active">Active</span><span class="badge badge-declined">Draft</span></div></div>
+      <div><p class="sg-label">Teacher card badges</p><div class="row wrap" style="--gap:8px"><span class="badge badge-match">94% match</span><span class="badge badge-trial">Free trial</span><span class="badge badge-verified"><i data-i="check" data-size="12"></i>Verified</span><span class="tag">English</span><span class="tag">Speaking</span></div></div>
+      <div><p class="sg-label">Timer (72h) · normal / urgent &lt; 12h</p><div class="row" style="--gap:32px"><div class="timer"><span class="timer-label"><i data-i="clock" data-size="14"></i>51h left</span><span class="timer-bar"><span style="width:71%"></span></span></div><div class="timer is-urgent"><span class="timer-label"><i data-i="clock" data-size="14"></i>9h left</span><span class="timer-bar"><span style="width:12%"></span></span></div></div></div>
+      <div><p class="sg-label">Avatar 32 · 40 · 48 · 72 · 112</p><div class="row" style="--gap:12px;align-items:flex-end"><span class="avatar av-32">AP</span><span class="avatar av-40">AP</span><span class="avatar av-48">AP</span><span class="avatar av-72">AP</span><span class="avatar av-112">AP</span></div></div>
+      <div><p class="sg-label">Rating</p><div class="row" style="--gap:24px"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.9</b> (128)</span><span class="stars"><i data-i="star" data-size="16"></i><i data-i="star" data-size="16"></i><i data-i="star" data-size="16"></i><i data-i="star" data-size="16"></i><i data-i="star" data-size="16" class="off"></i></span></div></div>
+    </div>
+  </section>
+
+  <section class="sg-section">
+    <h2>Cards</h2>
+    <p class="muted">Cards: 1px border, radius 8, no shadow. Teacher card has a surface action column on the right (248px).</p>
+    <p class="sg-label">Teacher card · desktop (results, preview)</p>
+    <article class="tcard role-learner">
+      <div class="tcard-main"><span class="avatar av-72">OK</span><div class="tcard-body">
+        <div class="tcard-name"><h3>Olena Kovalenko</h3><span class="badge badge-trial">Free trial</span><span class="badge badge-verified"><i data-i="check" data-size="12"></i>Verified</span></div>
+        <div class="tcard-rest"><p class="tcard-headline">Conversational English for professionals and travellers</p><div class="tags"><span class="tag">English</span><span class="tag">Speaking</span><span class="tag">Business English</span></div><div class="meta"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.9</b> (128)</span><span>7 years experience</span><span>Online · In person</span><span>Replies in ~12h</span></div></div>
+      </div></div>
+      <div class="tcard-side"><div class="row-between side-top"><span class="badge badge-match">94% match</span><button class="link" type="button"><i data-i="flag" data-size="14"></i>Report</button></div><div class="price-row"><span class="price">$22<small>/ lesson</small></span></div><a class="btn btn-primary btn-block" href="request.html">Send request</a><a class="btn btn-secondary btn-block" href="teacher.html">View profile</a></div>
+    </article>
+    <div class="grid-2" style="margin-top:24px;gap:24px">
+      <div class="role-learner"><p class="sg-label">Request card · learner · Pending</p><article class="rcard"><div class="rcard-row"><span class="avatar av-48">OK</span><div class="rcard-info"><div class="rcard-title"><h3>Olena Kovalenko</h3><span class="badge badge-pending">Pending</span></div><p class="rcard-sub">English · Job interviews · Sent Sep 22</p></div><div class="rcard-actions"><div class="timer" style="width:120px"><span class="timer-label"><i data-i="clock" data-size="14"></i>51h left</span><span class="timer-bar"><span style="width:71%"></span></span></div><button class="btn btn-secondary" type="button">Withdraw</button></div></div></article></div>
+      <div class="role-learner"><p class="sg-label">Request card · learner · Accepted → Leave review</p><article class="rcard"><div class="rcard-row"><span class="avatar av-48">DB</span><div class="rcard-info"><div class="rcard-title"><h3>Daniel Brooks</h3><span class="badge badge-accepted">Accepted</span></div><p class="rcard-sub">Math · Exam preparation</p></div><div class="rcard-actions"><button class="btn btn-secondary btn-sm" type="button"><i data-i="chat"></i>Open chat</button><button class="btn btn-primary btn-sm" type="button"><i data-i="edit"></i>Leave review</button></div></div><p class="note"><i data-i="check" data-size="14"></i>You both confirmed lessons started. Share how it’s going.</p></article></div>
+      <div class="role-teacher"><p class="sg-label">Request card · teacher · Incoming</p><article class="rcard inreq"><div class="rcard-row"><span class="avatar av-44">YT</span><div class="rcard-info"><div class="rcard-title"><h3>Yuki Tanaka</h3></div><p class="rcard-sub">For herself · Sent Sep 21</p></div><div class="timer is-urgent"><span class="timer-label"><i data-i="clock" data-size="14"></i>9h left</span><span class="timer-bar"><span style="width:12%"></span></span></div></div><div class="tags"><span class="tag">Upper-intermediate (B2)</span><span class="tag">Online</span><span class="tag">$20–30</span></div><p class="message">I read a lot in English but freeze when I need to speak.</p><div class="inreq-actions"><button class="btn btn-ghost" type="button">View full request</button><button class="btn btn-secondary" type="button">Decline</button><button class="btn btn-primary" type="button">Accept</button></div></article></div>
+      <div class="role-teacher"><p class="sg-label">Student card · new / lessons started</p><div class="list-sm"><article class="scard"><span class="avatar av-40">LW</span><div class="rcard-info"><h3>Liam Walsh</h3><p class="rcard-sub">Job interviews · Accepted Sep 23</p></div><div class="rcard-actions"><button class="btn btn-secondary btn-sm" type="button"><i data-i="check"></i>We started lessons</button><button class="btn btn-primary btn-sm" type="button"><i data-i="chat"></i>Open chat</button></div></article><article class="scard"><span class="avatar av-40">CM</span><div class="rcard-info"><h3>Carlos Mendes</h3><p class="rcard-sub">Speaking, B2 · Lessons started</p></div><div class="rcard-actions"><button class="btn btn-secondary btn-sm" type="button"><i data-i="chat"></i>Open chat</button><button class="btn btn-primary btn-sm" type="button"><i data-i="edit"></i>Leave review</button></div></article></div></div>
+    </div>
+  </section>
+
+  <section class="sg-section role-learner">
+    <h2>Feedback</h2>
+    <p class="muted">Error red is used only for form validation.</p>
+    <div class="grid-2" style="gap:24px">
+      <div><p class="sg-label">Empty state</p><div class="empty" style="padding:40px 24px"><div class="empty-icon"><i data-i="inbox" data-size="20"></i></div><h3>No requests yet</h3><p>Find a teacher who fits your goals and send a request.</p><div class="empty-actions"><a class="btn btn-primary" href="search.html"><i data-i="search"></i>Find a teacher</a></div></div></div>
+      <div><p class="sg-label">Error state (load failure — neutral, never red)</p><div class="empty" style="padding:40px 24px"><div class="empty-icon"><i data-i="refresh" data-size="20"></i></div><h3>We couldn’t load teachers</h3><p>Check your connection and try again.</p><div class="empty-actions"><button class="btn btn-secondary" type="button"><i data-i="refresh"></i>Try again</button></div></div></div>
+      <div><p class="sg-label">Toast (bottom centre, 32px from edge, auto-hide 5s)</p><div class="row wrap"><button class="btn btn-secondary" type="button" data-toast="Request sent to Olena Kovalenko.">Show toast</button><button class="btn btn-secondary" type="button" data-toast="Request withdrawn." data-undo>Show toast with Undo</button></div></div>
+      <div><p class="sg-label">Form error summary</p><div class="error-summary"><i data-i="alert" data-size="18"></i><div><strong>Please fix 3 fields before sending</strong><span>Parent contact · Preferred schedule · Message</span></div></div></div>
+      <div><p class="sg-label">Dialog (width 520, radius 8, overlay #37352F 40%)</p><button class="btn btn-secondary" type="button" data-open="sg-dialog">Open dialog</button></div>
+    </div>
+  </section>
+
+  <section class="sg-section">
+    <h2>Layout parts</h2>
+    <p class="muted">Shared across all screens.</p>
+    <p class="sg-label">Header · guest</p>
+    <div class="card" style="padding:0;overflow:hidden"><div class="site-header" style="border:0"><span class="logo"><span class="logo-mark">L</span>LeaLink</span><div class="header-right"><span class="btn btn-secondary">Log in</span></div></div></div>
+    <p class="sg-label" style="margin-top:20px">Role band (top of role pages): 50 fill, 100 bottom border, eyebrow in 700</p>
+    <div class="band role-learner" style="border-radius:8px"><div class="container" style="padding-left:40px"><a class="back-link" href="search.html"><i data-i="back"></i>Edit search</a><p class="eyebrow">Learning · Step 2 of 3</p><h3 class="t-h1">English teachers</h3><p class="lead">6 teachers match your filters</p></div></div>
+  </section>
+
+  <section class="sg-section">
+    <h2>Icons</h2>
+    <p class="muted">Inline stroke icons, 1.75px stroke, 16px default (12/14/18/20/24 where noted), colour inherits.</p>
+    <div class="icon-grid">
+      <div><i data-i="search" data-size="18"></i>search</div><div><i data-i="flag" data-size="18"></i>flag</div><div><i data-i="clock" data-size="18"></i>clock</div><div><i data-i="check" data-size="18"></i>check</div><div><i data-i="chat" data-size="18"></i>chat</div><div><i data-i="send" data-size="18"></i>send</div><div><i data-i="edit" data-size="18"></i>edit</div><div><i data-i="plus" data-size="18"></i>plus</div><div><i data-i="x" data-size="18"></i>x</div><div><i data-i="arrow" data-size="18"></i>arrow</div><div><i data-i="back" data-size="18"></i>back</div><div><i data-i="chev" data-size="18"></i>chev</div><div><i data-i="bell" data-size="18"></i>bell</div><div><i data-i="menu" data-size="18"></i>menu</div><div><i data-i="user" data-size="18"></i>user</div><div><i data-i="users" data-size="18"></i>users</div><div><i data-i="inbox" data-size="18"></i>inbox</div>
+      <div><i data-i="home" data-size="18"></i>home</div><div><i data-i="globe" data-size="18"></i>globe</div><div><i data-i="pin" data-size="18"></i>pin</div><div><i data-i="lock" data-size="18"></i>lock</div><div><i data-i="eye" data-size="18"></i>eye</div><div><i data-i="upload" data-size="18"></i>upload</div><div><i data-i="file" data-size="18"></i>file</div><div><i data-i="link" data-size="18"></i>link</div><div><i data-i="camera" data-size="18"></i>camera</div><div><i data-i="video" data-size="18"></i>video</div><div><i data-i="trash" data-size="18"></i>trash</div><div><i data-i="sliders" data-size="18"></i>sliders</div><div><i data-i="alert" data-size="18"></i>alert</div><div><i data-i="refresh" data-size="18"></i>refresh</div><div><i data-i="shield" data-size="18"></i>shield</div><div><i data-i="swap" data-size="18"></i>swap</div>
+    </div>
+  </section>
+</main>
+
+<dialog class="dialog role-learner" id="sg-dialog" aria-labelledby="sg-dialog-title">
+  <div class="dialog-head"><h2 id="sg-dialog-title">Withdraw request?</h2><button class="icon-btn" type="button" data-close aria-label="Close"><i data-i="x"></i></button></div>
+  <div class="dialog-body"><p class="muted">Olena won’t see your request anymore, and a slot frees up in your limit.</p></div>
+  <div class="dialog-foot"><button class="btn btn-secondary" type="button" data-close>Cancel</button><button class="btn btn-primary" type="button" data-close data-toast="Request withdrawn." data-undo>Withdraw</button></div>
+</dialog>
+</body>
+</html>

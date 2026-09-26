@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your account · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body class="bg-surface">
+<header class="site-header" data-header="auth"></header>
+
+<main class="auth">
+  <div class="auth-card role-learner" data-role-form>
+    <h1>Create your account</h1>
+    <p class="sub">It’s free. You can switch between learning and teaching later in settings.</p>
+    <div class="fields">
+      <button class="btn btn-secondary btn-lg btn-block" type="button" data-demo><span class="g-mark">G</span> Continue with Google</button>
+      <div class="or-divider">or</div>
+      <div class="field">
+        <span class="label">I want to <span class="req">*</span></span>
+        <div class="role-pick">
+          <button class="role-card is-selected" type="button" data-role-card="learner" data-href="search.html">
+            <strong><i data-i="check" data-size="14"></i>Learn</strong><span>Find a teacher</span>
+          </button>
+          <button class="role-card" type="button" data-role-card="teacher" data-href="wizard.html">
+            <strong><i data-i="check" data-size="14"></i>Teach</strong><span>Create a teacher profile</span>
+          </button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label" for="name">Full name <span class="req">*</span></label>
+        <input class="input" id="name" autocomplete="name" placeholder="e.g. Anna Petrenko">
+      </div>
+      <div class="field">
+        <label class="label" for="email">Email <span class="req">*</span></label>
+        <input class="input" id="email" type="email" autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label class="label" for="password">Password <span class="req">*</span></label>
+        <input class="input" id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+        <p class="helper">Use 8 or more characters.</p>
+      </div>
+      <label class="check" style="--r600:var(--text)"><input type="checkbox" checked><span>Email me when something happens with my requests</span></label>
+      <a class="btn btn-dark btn-lg btn-block" href="search.html" data-role-submit>Create account</a>
+      <p class="auth-foot">Already have an account? <a href="login.html" style="color:var(--text)">Log in</a></p>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teaching · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body data-role="teacher">
+<header class="site-header" data-header="teacher" data-active="home"></header>
+
+<main class="home-layout teacher">
+  <aside class="home-aside">
+    <div class="show-mobile" style="margin-bottom:16px">
+      <p class="eyebrow">Teaching</p>
+      <h1 class="t-h1 page-hello">Hi, Olena</h1>
+    </div>
+    <div class="row-between" style="margin-bottom:20px">
+      <p class="eyebrow">My profile</p>
+      <span class="badge badge-active" data-show-state="default">Active</span>
+      <span class="badge badge-pending" data-show-state="empty" hidden>Under review</span>
+    </div>
+
+    <div data-show-state="default empty">
+      <div class="profile-card">
+        <div class="row hide-mobile" style="align-items:flex-start"><span class="avatar av-56">OK</span><div><h3>Olena Kovalenko</h3><p class="t-small muted">English, Business English · $22 / lesson</p></div></div>
+        <p class="muted hide-mobile" style="margin:20px 0 16px">Conversational English for professionals and travellers</p>
+        <label class="toggle" data-show-state="default"><input type="checkbox" checked><span>Accepting new students<span class="sub">Your profile appears in search.</span></span></label>
+        <label class="toggle" data-show-state="empty" hidden><input type="checkbox" disabled><span>Accepting new students<span class="sub">Available once your profile is published.</span></span></label>
+        <p class="review-note" data-show-state="empty" hidden>We’re reviewing your profile. You’ll get an email once it’s published.</p>
+      </div>
+      <div class="row-between" style="margin-top:24px"><span class="muted">Profile completeness</span><span>85%</span></div>
+      <div class="progress" style="margin-top:12px"><span style="width:85%"></span></div>
+      <p class="t-caption muted hide-mobile" style="font-weight:400;margin-top:16px">Add an intro video to reach 100%.</p>
+    </div>
+    <p class="muted" data-show-state="error" hidden>Profile details are unavailable right now.</p>
+
+    <a class="btn btn-primary btn-lg btn-block" href="wizard.html" style="margin-top:28px"><i data-i="edit"></i>Edit profile</a>
+    <a class="btn btn-secondary btn-lg btn-block hide-mobile" href="teacher.html" style="margin-top:16px"><i data-i="eye"></i>View as learner</a>
+  </aside>
+
+  <section class="home-main">
+    <div class="hide-mobile">
+      <p class="eyebrow">Teaching</p>
+      <h1 class="t-h1 page-hello">Hi, Olena</h1>
+      <p class="lead" style="margin-top:8px" data-show-state="default">3 learners are waiting for your answer.</p>
+      <p class="lead" style="margin-top:8px" data-show-state="empty" hidden>Your profile is under review. Here’s what happens next.</p>
+      <p class="lead" style="margin-top:8px" data-show-state="error" hidden>Some data couldn’t be loaded.</p>
+    </div>
+
+    <div class="section-head" style="margin-top:40px">
+      <h2>Incoming requests · <span data-show-state="default">3</span><span data-show-state="empty" hidden>0</span><span data-show-state="error" hidden>–</span></h2>
+      <span class="t-small muted">Sorted by time left · Reply within 72 hours</span>
+    </div>
+
+    <div class="list" data-show-state="default">
+      <article class="rcard inreq">
+        <div class="rcard-row">
+          <span class="avatar av-44">YT</span>
+          <div class="rcard-info"><div class="rcard-title"><h3>Yuki Tanaka</h3></div><p class="rcard-sub">For herself · Sent Sep 21</p></div>
+          <div class="timer is-urgent"><span class="timer-label"><i data-i="clock" data-size="14"></i>9h left</span><span class="timer-bar"><span style="width:12%"></span></span></div>
+        </div>
+        <div class="tags"><span class="tag">Upper-intermediate (B2)</span><span class="tag">Everyday conversation</span><span class="tag">Online</span><span class="tag">3 × 45 min / week</span><span class="tag">$20–30</span></div>
+        <p class="message">I read a lot in English but freeze when I need to speak. I’m looking for regular conversation practice, ideally in the mornings before work.</p>
+        <div class="inreq-actions"><button class="btn btn-ghost" type="button" data-demo>View full request</button><button class="btn btn-secondary" type="button" data-open="decline">Decline</button><a class="btn btn-primary" href="chat-teacher.html">Accept</a></div>
+      </article>
+      <article class="rcard inreq">
+        <div class="rcard-row">
+          <span class="avatar av-44">MH</span>
+          <div class="rcard-info"><div class="rcard-title"><h3>Max Hoffmann</h3></div><p class="rcard-sub">For himself · Sent Sep 21</p></div>
+          <div class="timer"><span class="timer-label"><i data-i="clock" data-size="14"></i>23h left</span><span class="timer-bar"><span style="width:32%"></span></span></div>
+        </div>
+        <div class="tags"><span class="tag">Elementary (A2)</span><span class="tag">Travel</span><span class="tag">Online</span><span class="tag">1 × 60 min / week</span><span class="tag">$15–25</span></div>
+        <p class="message">Planning a trip to Canada next spring. I’d like to feel comfortable ordering food, asking for directions and making small talk.</p>
+        <div class="inreq-actions"><button class="btn btn-ghost" type="button" data-demo>View full request</button><button class="btn btn-secondary" type="button" data-open="decline">Decline</button><a class="btn btn-primary" href="chat-teacher.html">Accept</a></div>
+      </article>
+      <article class="rcard inreq">
+        <div class="rcard-row">
+          <span class="avatar av-44">AP</span>
+          <div class="rcard-info"><div class="rcard-title"><h3>Anna Petrenko</h3></div><p class="rcard-sub">For herself · Sent Sep 22</p></div>
+          <div class="timer"><span class="timer-label"><i data-i="clock" data-size="14"></i>51h left</span><span class="timer-bar"><span style="width:71%"></span></span></div>
+        </div>
+        <div class="tags"><span class="tag">Intermediate (B1)</span><span class="tag">Job interviews</span><span class="tag">Online</span><span class="tag">2 × 60 min / week</span><span class="tag">$15–35</span></div>
+        <p class="message">Hi Olena! I have job interviews in English next month and want to practise talking about my experience as a data analyst.</p>
+        <div class="inreq-actions"><button class="btn btn-ghost" type="button" data-demo>View full request</button><button class="btn btn-secondary" type="button" data-open="decline">Decline</button><a class="btn btn-primary" href="chat-teacher.html">Accept</a></div>
+      </article>
+    </div>
+    <div class="empty" data-show-state="empty" hidden>
+      <div class="empty-icon"><i data-i="inbox" data-size="20"></i></div>
+      <h3>No requests yet</h3>
+      <p>Requests will appear here once your profile is published. Learners who match your subjects can then find you.</p>
+      <div class="empty-actions"><a class="btn btn-primary" href="wizard.html"><i data-i="edit"></i>Improve my profile</a></div>
+    </div>
+    <div class="empty" data-show-state="error" hidden>
+      <div class="empty-icon"><i data-i="refresh" data-size="20"></i></div>
+      <h3>We couldn’t load your requests</h3>
+      <p>Something went wrong on our side. No requests were lost — please try again.</p>
+      <div class="empty-actions"><a class="btn btn-secondary" href="teacher-home.html"><i data-i="refresh"></i>Try again</a></div>
+    </div>
+
+    <div class="section-head" style="margin-top:40px">
+      <h2>My students · <span data-show-state="default">4</span><span data-show-state="empty" hidden>0</span><span data-show-state="error" hidden>–</span></h2>
+    </div>
+    <div class="list-sm" data-show-state="default">
+      <article class="scard">
+        <span class="avatar av-40">LW</span>
+        <div class="rcard-info"><h3>Liam Walsh</h3><p class="rcard-sub">Job interviews<span class="desk"> · Accepted Sep 23 · Confirm when your first lesson happens</span></p></div>
+        <p class="note-mobile">Accepted Sep 23 · Confirm when your first lesson happens</p>
+        <div class="rcard-actions"><button class="btn btn-secondary btn-sm" type="button" data-toast="Thanks! We’ll ask Liam to confirm too."><i data-i="check"></i>We started lessons</button><a class="btn btn-primary btn-sm" href="chat-teacher.html"><i data-i="chat"></i>Open chat</a></div>
+      </article>
+      <article class="scard">
+        <span class="avatar av-40">SR</span>
+        <div class="rcard-info"><h3>Sofia Ricci</h3><p class="rcard-sub">Business English<span class="desk"> · You confirmed lessons started · Waiting for Sofia</span></p></div>
+        <p class="note-mobile">You confirmed lessons started · Waiting for Sofia</p>
+        <div class="rcard-actions"><a class="btn btn-primary btn-sm" href="chat-teacher.html"><i data-i="chat"></i>Open chat</a></div>
+      </article>
+      <article class="scard">
+        <span class="avatar av-40">CM</span>
+        <div class="rcard-info"><h3>Carlos Mendes</h3><p class="rcard-sub">Speaking, B2<span class="desk"> · Lessons started · You can leave a review</span></p></div>
+        <p class="note-mobile">Lessons started · You can leave a review</p>
+        <div class="rcard-actions"><a class="btn btn-secondary btn-sm" href="chat-teacher.html"><i data-i="chat"></i>Open chat</a><button class="btn btn-primary btn-sm" type="button" data-open="review"><i data-i="edit"></i>Leave review</button></div>
+      </article>
+      <article class="scard">
+        <span class="avatar av-40">EN</span>
+        <div class="rcard-info"><h3>Emma Novak</h3><p class="rcard-sub">Travel<span class="desk"> · Lessons started · Review left</span></p></div>
+        <p class="note-mobile">Lessons started · Review left</p>
+        <div class="rcard-actions"><a class="btn btn-secondary btn-sm" href="chat-teacher.html"><i data-i="chat"></i>Open chat</a></div>
+      </article>
+    </div>
+    <div class="empty" data-show-state="empty" hidden>
+      <div class="empty-icon"><i data-i="users" data-size="20"></i></div>
+      <h3>No students yet</h3>
+      <p>When you accept a request, the learner appears here and you can chat with them.</p>
+    </div>
+    <div class="empty" data-show-state="error" hidden>
+      <div class="empty-icon"><i data-i="refresh" data-size="20"></i></div>
+      <h3>We couldn’t load your students</h3>
+      <p>Please try again in a moment.</p>
+      <div class="empty-actions"><a class="btn btn-secondary" href="teacher-home.html"><i data-i="refresh"></i>Try again</a></div>
+    </div>
+  </section>
+</main>
+
+<dialog class="dialog" id="decline" aria-labelledby="decline-title">
+  <div class="dialog-head">
+    <div><h2 id="decline-title">Decline request</h2><p>Let the learner know why — it helps them find the right teacher.</p></div>
+    <button class="icon-btn" type="button" data-close aria-label="Close"><i data-i="x"></i></button>
+  </div>
+  <div class="dialog-body fields" style="gap:16px">
+    <div class="row"><span class="avatar av-44">MH</span><div><div class="t-small">Max Hoffmann</div><div class="t-caption muted" style="font-weight:400">Elementary (A2) · Travel · 1 × 60 min / week</div></div></div>
+    <div class="field">
+      <span class="label">Reason <span class="req">*</span></span>
+      <div class="options" style="gap:10px">
+        <label class="radio"><input type="radio" name="reason" checked><span>My schedule is full</span></label>
+        <label class="radio"><input type="radio" name="reason"><span>The level isn’t a good fit</span></label>
+        <label class="radio"><input type="radio" name="reason"><span>The goal is outside my expertise</span></label>
+        <label class="radio"><input type="radio" name="reason"><span>Not accepting new students right now</span></label>
+        <label class="radio"><input type="radio" name="reason"><span>Other</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label" for="dc-note">Note to Max <span class="opt">(optional)</span></label>
+      <textarea class="input" id="dc-note" rows="3" data-counter="#dc-count" data-max="300">Thank you for the request! My weekends are fully booked until December — I hope you find a great teacher for your trip.</textarea>
+      <div class="helper"><span></span><span class="count" id="dc-count"></span></div>
+    </div>
+    <p class="helper">Max will see the reason and your note. The request moves to his Declined tab.</p>
+  </div>
+  <div class="dialog-foot"><button class="btn btn-secondary" type="button" data-close>Cancel</button><button class="btn btn-primary" type="button" data-close data-toast="Request declined.">Decline request</button></div>
+</dialog>
+
+<dialog class="dialog" id="review" aria-labelledby="review-title">
+  <div class="dialog-head">
+    <div><h2 id="review-title">Leave a review</h2><p>Reviews can be left once you both confirmed that lessons started.</p></div>
+    <button class="icon-btn" type="button" data-close aria-label="Close"><i data-i="x"></i></button>
+  </div>
+  <div class="dialog-body fields" style="gap:16px">
+    <div class="row"><span class="avatar av-44">CM</span><div><div class="strong" style="font-size:17px">Carlos Mendes</div><div class="t-caption muted" style="font-weight:400">Speaking, B2 · lessons since Aug 2026</div></div></div>
+    <div class="field">
+      <span class="label">Your rating <span class="req">*</span></span>
+      <div class="star-input" data-stars data-value="4">
+        <button type="button" aria-label="1 star"><i data-i="star" data-size="24"></i></button><button type="button" aria-label="2 stars"><i data-i="star" data-size="24"></i></button><button type="button" aria-label="3 stars"><i data-i="star" data-size="24"></i></button><button type="button" aria-label="4 stars"><i data-i="star" data-size="24"></i></button><button type="button" aria-label="5 stars"><i data-i="star" data-size="24"></i></button>
+        <span class="star-label"></span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label" for="rv-text">Your review <span class="req">*</span></label>
+      <textarea class="input" id="rv-text" rows="4" style="min-height:110px" data-counter="#rv-count" data-max="1000" data-min="20">Carlos is motivated and always prepared. He practises between lessons, and his speaking has improved a lot in a month.</textarea>
+      <div class="helper"><span>Visible on Carlos’s profile.</span><span class="count" id="rv-count"></span></div>
+    </div>
+    <p class="helper">You can edit your review within 14 days.</p>
+  </div>
+  <div class="dialog-foot"><button class="btn btn-secondary" type="button" data-close>Cancel</button><button class="btn btn-primary" type="button" data-close data-toast="Review published. Thank you!">Publish review</button></div>
+</dialog>
+</body>
+</html>

@@ -1,12 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LeaLink</title>
-  <meta name="description" content="LeaLink">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LeaLink · Find a teacher or learners</title>
+<meta name="description" content="LeaLink connects learners and teachers. Lessons and payments are arranged directly between you.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
 </head>
 <body>
-  <h1>LeaLink</h1>
+<header class="site-header" data-header="guest"></header>
+
+<main>
+  <section class="hero">
+    <div class="hero-half learner role-learner">
+      <p class="eyebrow">For learners</p>
+      <h1 class="t-display">I want to learn</h1>
+      <ul class="checklist">
+        <li><i data-i="check"></i>Filter by subject, level, goal, format and budget</li>
+        <li><i data-i="check"></i>No sign-up until you send a request</li>
+        <li><i data-i="check"></i>Up to 5 active requests at a time</li>
+      </ul>
+      <a class="btn btn-primary btn-lg" href="search.html">Find a teacher <i data-i="arrow" data-size="14"></i></a>
+    </div>
+    <div class="or-badge">or</div>
+    <div class="hero-half teacher role-teacher">
+      <p class="eyebrow">For teachers</p>
+      <h1 class="t-display">I want to teach</h1>
+      <ul class="checklist">
+        <li><i data-i="check"></i>Create a profile — we review it before publishing</li>
+        <li><i data-i="check"></i>Get requests that match your subjects</li>
+        <li><i data-i="check"></i>Accept the students you want to work with</li>
+      </ul>
+      <a class="btn btn-primary btn-lg" href="wizard.html">Create teacher profile <i data-i="arrow" data-size="14"></i></a>
+    </div>
+  </section>
+
+  <section class="how">
+    <div class="row-between">
+      <h2 class="t-h1">How it works</h2>
+      <p class="muted">Two sides, one simple flow</p>
+    </div>
+    <div class="how-grid">
+      <article class="how-card">
+        <p class="step-no">Step 1</p>
+        <h3>Set up</h3>
+        <ul>
+          <li><b>Learner</b> — choose a subject, level and goal.</li>
+          <li class="teacher"><b>Teacher</b> — fill in your profile and wait for review.</li>
+        </ul>
+      </article>
+      <article class="how-card">
+        <p class="step-no">Step 2</p>
+        <h3>Connect</h3>
+        <ul>
+          <li><b>Learner</b> — send requests to teachers you like.</li>
+          <li class="teacher"><b>Teacher</b> — accept or decline within 72 hours.</li>
+        </ul>
+      </article>
+      <article class="how-card">
+        <p class="step-no">Step 3</p>
+        <h3>Agree</h3>
+        <ul>
+          <li><b>Learner</b> — discuss schedule and price in chat.</li>
+          <li class="teacher"><b>Teacher</b> — chat opens right after you accept.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 LeaLink</span>
+  <span>We connect learners and teachers. Lessons and payments are arranged directly between you.</span>
+</footer>
 </body>
 </html>

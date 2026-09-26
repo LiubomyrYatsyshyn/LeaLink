@@ -8,9 +8,17 @@ Reply to the user in Ukrainian.
 3. The server syncs from GitHub automatically (systemd timer, ~30 s) and rebuilds the Docker container. Test there too; Claude may test on the server.
 4. Never edit files on the server by hand. Local, GitHub and server must always match.
 
-## Local development (Mac, Docker Desktop)
-- Start/rebuild: `docker compose up -d --build` in `~/LeaLink-push`, then open `http://localhost`.
-- Stop: `docker compose down`. Docker Desktop must be running.
+## Local development (Mac)
+- Quick check without Docker: `python3 -m http.server 8090 --directory site`, then open `http://localhost:8090` (also in `.claude/launch.json` as `lealink-site`).
+- Same setup as the server: `docker compose up -d --build` in `~/LeaLink-push`, then `http://localhost`; stop with `docker compose down`. Docker Desktop must be running.
+
+## Frontend (clickable prototype, no backend logic yet)
+- Built from `design-reference/` frames 00-41. Shared styles in `site/assets/css/lealink.css` (tokens from frame 00), behaviour in `site/assets/js/lealink.js` (icons, header, tabs, dialogs, chips, sliders, toasts).
+- Headers are rendered by JS from `<header data-header="guest|auth|learner|teacher|wizard" data-active="...">`. Icons: `<i data-i="name">`.
+- Role colour: `data-role="learner|teacher"` on `<body>` (or `.role-learner` / `.role-teacher` on a block).
+- Screen states via URL: `?state=empty|error|errors`, `?tab=`, `?dialog=`, `?toast=`, `?step=1-6|preview`. `site/screens.html` links every frame to its page/state.
+- Mobile (frames 35-41) is the same pages below 900 px, not separate files.
+- Buttons without a designed destination use `data-demo` (shows a "not connected yet" toast).
 
 ## Infrastructure
 - Site: `site/` (static HTML) served by Caddy in Docker (`Dockerfile`, `docker-compose.yml`).

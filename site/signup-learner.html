@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create an account to send your request · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body class="bg-surface" data-role="learner">
+<header class="site-header" data-header="auth"></header>
+
+<main class="auth">
+  <form class="auth-card" data-href="learner.html?toast=sent" novalidate>
+    <span class="badge badge-role">Last step</span>
+    <h1 style="margin-top:16px">Create an account to send your request</h1>
+    <p class="sub">Your request to Olena is ready. We’ve filled in what we know.</p>
+    <div class="fields">
+      <button class="btn btn-secondary btn-lg btn-block" type="button" data-demo><span class="g-mark">G</span> Continue with Google</button>
+      <div class="or-divider">or</div>
+      <div class="field">
+        <div class="label-row"><label class="label" for="name">Full name <span class="req">*</span></label><span class="from"><i data-i="spark" data-size="12"></i>From your request</span></div>
+        <input class="input" id="name" autocomplete="name" value="Anna Petrenko">
+      </div>
+      <div class="field">
+        <label class="label" for="email">Email <span class="req">*</span></label>
+        <input class="input" id="email" type="email" autocomplete="email" value="anna.petrenko@example.com">
+      </div>
+      <div class="field">
+        <label class="label" for="password">Password <span class="req">*</span></label>
+        <input class="input" id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+        <p class="helper">Use 8 or more characters.</p>
+      </div>
+      <label class="check"><input type="checkbox" checked><span>Email me when Olena replies</span></label>
+      <button class="btn btn-primary btn-lg btn-block" type="submit">Create account and send request</button>
+      <p class="auth-foot">Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+  </form>
+
+  <aside class="summary-card">
+    <h2>Your request</h2>
+    <div class="row" style="margin-top:16px"><span class="avatar av-40">OK</span><div><div class="t-small">Olena Kovalenko</div><div class="t-caption muted" style="font-weight:400">English · Speaking, Job interviews</div></div></div>
+    <hr class="divider" style="margin:16px 0">
+    <div class="summary-grid">
+      <div><small>Level</small>Intermediate (B1)</div>
+      <div><small>Goal</small>Job interviews</div>
+      <div><small>Lessons</small>2 × 60 min / week</div>
+      <div><small>Schedule</small>Weekday evenings</div>
+      <div><small>Start</small>As soon as possible</div>
+      <div><small>Budget</small>$15–$35 USD</div>
+    </div>
+    <hr class="divider" style="margin:16px 0">
+    <p class="quote">“Hi Olena! I have job interviews in English next month and want to practise…”</p>
+  </aside>
+</main>
+</body>
+</html>

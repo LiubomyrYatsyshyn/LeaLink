@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chats · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body data-role="learner" class="chat-page">
+<header class="site-header" data-header="learner" data-active="chats"></header>
+
+<main class="chat">
+  <aside class="chat-list">
+    <div class="chat-list-head">
+      <h2>Chats</h2>
+      <div class="input-icon"><i data-i="search"></i><input class="input" type="search" placeholder="Search conversations" aria-label="Search conversations"></div>
+    </div>
+    <button class="conv is-active" type="button"><span class="avatar av-40">PN</span><span class="conv-body"><span class="conv-top"><b>Priya Nair</b><time>14:41</time></span><span class="conv-bottom"><span>Yes, a 30-minute trial on Thursday…</span></span></span></button>
+    <button class="conv" type="button"><span class="avatar av-40">ML</span><span class="conv-body"><span class="conv-top"><b>Mei Lin</b><time>Sep 18</time></span><span class="conv-bottom"><span>See you on Monday!</span><span class="unread">1</span></span></span></button>
+    <button class="conv" type="button"><span class="avatar av-40">DB</span><span class="conv-body"><span class="conv-top"><b>Daniel Brooks</b><time>Sep 15</time></span><span class="conv-bottom"><span>You: Thanks, that helped a lot.</span></span></span></button>
+  </aside>
+
+  <section class="chat-main">
+    <div class="chat-head">
+      <div class="row">
+        <button class="icon-btn back" type="button" data-chat-back aria-label="Back to chats"><i data-i="back"></i></button>
+        <span class="avatar av-44">PN</span>
+        <div class="grow"><h2>Priya Nair</h2><p class="t-small muted">Python teacher · Accepted Sep 20</p></div>
+        <div class="row head-actions" style="--gap:12px">
+          <button class="btn btn-secondary btn-sm" type="button" data-toast="Thanks! We’ll ask Priya to confirm too."><i data-i="check"></i>We started lessons</button>
+          <a class="btn btn-secondary btn-sm" href="teacher.html">View profile</a>
+          <button class="icon-btn" type="button" aria-label="Report" data-demo><i data-i="flag"></i></button>
+        </div>
+        <button class="icon-btn more" type="button" aria-label="More actions" data-demo><i data-i="more"></i></button>
+      </div>
+      <div class="req-summary"><b>Request</b><span>Python</span><span>Data analysis</span><span>Beginner</span><span>2 × 60 min / week</span><span>Weekday evenings</span><span>Online</span><span>$30–40</span></div>
+      <button class="btn btn-secondary btn-sm btn-block mobile-started" type="button" data-toast="Thanks! We’ll ask Priya to confirm too."><i data-i="check"></i>We started lessons</button>
+      <p class="contact-line"><i data-i="lock" data-size="14"></i>Priya’s contact: Telegram @priya_nair_py</p>
+    </div>
+
+    <div class="thread">
+      <p class="contact-line"><i data-i="lock" data-size="14"></i>Priya’s contact: Telegram @priya_nair_py</p>
+      <p class="sys"><i data-i="check" data-size="14"></i>Priya accepted your request · Sep 20, 14:05</p>
+      <div class="msg"><div class="bubble">Hi Anna! Thanks for the detailed request. I’d love to help you get into data analysis. Do Tuesday and Thursday evenings work for you?</div><time>14:12</time></div>
+      <div class="msg me"><div class="bubble">Hi Priya! Yes — Tuesdays and Thursdays at 19:00 Kyiv time would be perfect.</div><time>14:30</time></div>
+      <div class="msg"><div class="bubble">Great, that’s 17:00 for me. Before our first lesson, please install Python and Jupyter. I’ll send you a short guide.</div><time>14:34</time></div>
+      <div class="msg me"><div class="bubble">Will do. Could we start with the free trial this Thursday?</div><time>14:36</time></div>
+      <div class="msg"><div class="bubble">Yes, a 30-minute trial on Thursday. After that it’s $35 per 60-minute lesson, as in my profile. We can agree on payment directly.</div><time>14:41</time></div>
+    </div>
+
+    <form class="composer" data-composer>
+      <input class="input" placeholder="Write a message…" aria-label="Write a message" autocomplete="off">
+      <button class="btn btn-primary" type="submit" aria-label="Send"><i data-i="send"></i><span class="lbl">Send</span></button>
+    </form>
+  </section>
+</main>
+</body>
+</html>

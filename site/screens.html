@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All screens · LeaLink prototype</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body class="bg-surface">
+<header class="site-header" data-header="auth"></header>
+
+<main class="container page" style="max-width:880px">
+  <h1 class="t-h1">All screens</h1>
+  <p class="lead" style="margin-top:8px">Every frame from the D3 design reference, linked to its page in this prototype. Mobile frames (35–41) are the same pages at phone width.</p>
+
+  <div class="screens-group"><h2>Style guide</h2>
+    <a class="screen-link" href="styleguide.html"><b>00</b><span>Style guide<small>Colour tokens, type, buttons, inputs, controls, badges, cards, feedback, layout parts, icons</small></span><code>styleguide.html</code></a>
+  </div>
+
+  <div class="screens-group"><h2>Guest</h2>
+    <a class="screen-link" href="index.html"><b>01</b><span>Home</span><code>index.html</code></a>
+    <a class="screen-link" href="login.html"><b>02</b><span>Log in</span><code>login.html</code></a>
+    <a class="screen-link" href="signup.html"><b>03</b><span>Sign up</span><code>signup.html</code></a>
+  </div>
+
+  <div class="screens-group"><h2>Learner search flow</h2>
+    <a class="screen-link" href="search.html"><b>04</b><span>Search filters</span><code>search.html</code></a>
+    <a class="screen-link" href="results.html?menu=sort"><b>05</b><span>Results<small>Sort menu shown open</small></span><code>results.html</code></a>
+    <a class="screen-link" href="results.html?state=empty"><b>06</b><span>Results · Empty</span><code>?state=empty</code></a>
+    <a class="screen-link" href="results.html?state=error"><b>07</b><span>Results · Error</span><code>?state=error</code></a>
+    <a class="screen-link" href="teacher.html"><b>08</b><span>Teacher page</span><code>teacher.html</code></a>
+    <a class="screen-link" href="request.html"><b>09</b><span>Request form</span><code>request.html</code></a>
+    <a class="screen-link" href="request.html?state=errors"><b>10</b><span>Request form · Validation errors</span><code>?state=errors</code></a>
+    <a class="screen-link" href="signup-learner.html"><b>11</b><span>Sign up · Learner (prefilled)</span><code>signup-learner.html</code></a>
+  </div>
+
+  <div class="screens-group"><h2>Learner home</h2>
+    <a class="screen-link" href="learner.html?toast=sent"><b>12</b><span>Learner home · Sent<small>With the “request sent” toast</small></span><code>learner.html</code></a>
+    <a class="screen-link" href="learner.html?tab=accepted"><b>13</b><span>Learner home · Accepted</span><code>?tab=accepted</code></a>
+    <a class="screen-link" href="learner.html?tab=declined"><b>14</b><span>Learner home · Declined</span><code>?tab=declined</code></a>
+    <a class="screen-link" href="learner.html?state=empty"><b>15</b><span>Learner home · Empty</span><code>?state=empty</code></a>
+    <a class="screen-link" href="learner.html?state=error"><b>16</b><span>Learner home · Error</span><code>?state=error</code></a>
+    <a class="screen-link" href="learner.html?tab=accepted&amp;dialog=review"><b>17</b><span>Leave review · Learner</span><code>?dialog=review</code></a>
+  </div>
+
+  <div class="screens-group"><h2>Teacher profile wizard</h2>
+    <a class="screen-link" href="wizard.html?step=1"><b>18</b><span>Teacher wizard · 1 Basics</span><code>?step=1</code></a>
+    <a class="screen-link" href="wizard.html?step=2"><b>19</b><span>Teacher wizard · 2 Subjects</span><code>?step=2</code></a>
+    <a class="screen-link" href="wizard.html?step=3"><b>20</b><span>Teacher wizard · 3 Experience</span><code>?step=3</code></a>
+    <a class="screen-link" href="wizard.html?step=4"><b>21</b><span>Teacher wizard · 4 Format</span><code>?step=4</code></a>
+    <a class="screen-link" href="wizard.html?step=5"><b>22</b><span>Teacher wizard · 5 Price &amp; availability</span><code>?step=5</code></a>
+    <a class="screen-link" href="wizard.html?step=6"><b>23</b><span>Teacher wizard · 6 Requests</span><code>?step=6</code></a>
+    <a class="screen-link" href="wizard.html?step=preview"><b>24</b><span>Teacher wizard · Preview</span><code>?step=preview</code></a>
+    <a class="screen-link" href="signup-teacher.html"><b>25</b><span>Sign up · Teacher (prefilled)</span><code>signup-teacher.html</code></a>
+    <a class="screen-link" href="under-review.html"><b>26</b><span>Profile under review</span><code>under-review.html</code></a>
+  </div>
+
+  <div class="screens-group"><h2>Teacher home</h2>
+    <a class="screen-link" href="teacher-home.html"><b>27</b><span>Teacher home</span><code>teacher-home.html</code></a>
+    <a class="screen-link" href="teacher-home.html?dialog=decline"><b>28</b><span>Teacher home · Decline reason</span><code>?dialog=decline</code></a>
+    <a class="screen-link" href="teacher-home.html?state=empty"><b>29</b><span>Teacher home · Empty<small>Profile under review</small></span><code>?state=empty</code></a>
+    <a class="screen-link" href="teacher-home.html?state=error"><b>30</b><span>Teacher home · Error</span><code>?state=error</code></a>
+    <a class="screen-link" href="teacher-home.html?dialog=review"><b>31</b><span>Leave review · Teacher</span><code>?dialog=review</code></a>
+  </div>
+
+  <div class="screens-group"><h2>Chat and settings</h2>
+    <a class="screen-link" href="chat.html"><b>32</b><span>Chat · Learner</span><code>chat.html</code></a>
+    <a class="screen-link" href="chat-teacher.html"><b>33</b><span>Chat · Teacher</span><code>chat-teacher.html</code></a>
+    <a class="screen-link" href="settings.html"><b>34</b><span>Account settings</span><code>settings.html</code></a>
+  </div>
+
+  <div class="screens-group"><h2>Mobile (open at phone width)</h2>
+    <a class="screen-link" href="index.html"><b>35</b><span>Mobile · Home</span><code>index.html</code></a>
+    <a class="screen-link" href="results.html"><b>36</b><span>Mobile · Results</span><code>results.html</code></a>
+    <a class="screen-link" href="teacher.html"><b>37</b><span>Mobile · Teacher page</span><code>teacher.html</code></a>
+    <a class="screen-link" href="request.html"><b>38</b><span>Mobile · Request form</span><code>request.html</code></a>
+    <a class="screen-link" href="learner.html"><b>39</b><span>Mobile · Learner home</span><code>learner.html</code></a>
+    <a class="screen-link" href="teacher-home.html"><b>40</b><span>Mobile · Teacher home</span><code>teacher-home.html</code></a>
+    <a class="screen-link" href="chat.html"><b>41</b><span>Mobile · Chat</span><code>chat.html</code></a>
+  </div>
+</main>
+</body>
+</html>

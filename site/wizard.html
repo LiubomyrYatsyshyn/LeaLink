@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your teacher profile · LeaLink</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+</head>
+<body data-role="teacher">
+<header class="site-header" data-header="wizard"></header>
+
+<section class="wizard-band">
+  <div class="container">
+    <div class="row-between"><span class="t-small" data-wizard-label>Step 1 of 6 · Basics</span><span class="t-caption muted" style="font-weight:400" data-wizard-pct>17% complete</span></div>
+    <div class="progress"><span data-wizard-bar style="width:17%"></span></div>
+  </div>
+</section>
+
+<div class="container wizard" data-wizard>
+  <nav class="steps" aria-label="Profile steps">
+    <button class="step" type="button" data-go="1"><span class="step-num"><span class="n">1</span><i data-i="check" data-size="14"></i></span><span class="lbl">Basics</span></button>
+    <button class="step" type="button" data-go="2"><span class="step-num"><span class="n">2</span><i data-i="check" data-size="14"></i></span><span class="lbl">Subjects</span></button>
+    <button class="step" type="button" data-go="3"><span class="step-num"><span class="n">3</span><i data-i="check" data-size="14"></i></span><span class="lbl">Experience</span></button>
+    <button class="step" type="button" data-go="4"><span class="step-num"><span class="n">4</span><i data-i="check" data-size="14"></i></span><span class="lbl">Format</span></button>
+    <button class="step" type="button" data-go="5"><span class="step-num"><span class="n">5</span><i data-i="check" data-size="14"></i></span><span class="lbl">Price &amp; availability</span></button>
+    <button class="step" type="button" data-go="6"><span class="step-num"><span class="n">6</span><i data-i="check" data-size="14"></i></span><span class="lbl">Requests</span></button>
+    <button class="step preview" type="button" data-go="7"><span class="step-num"><i data-i="eye" data-size="14"></i></span><span class="lbl">Preview</span></button>
+  </nav>
+
+  <main class="wizard-main">
+    <!-- Step 1: Basics -->
+    <section class="wizard-panel" data-step-panel="1">
+      <div>
+        <p class="eyebrow">Step 1 of 6 · Basics</p>
+        <h1 class="t-h1 wizard-title">Tell learners who you are</h1>
+        <p class="lead">These basics appear at the top of your profile.</p>
+      </div>
+      <div class="card fields">
+        <div class="field">
+          <label class="label" for="w-name">Display name <span class="req">*</span></label>
+          <input class="input" id="w-name" value="Olena Kovalenko">
+          <p class="helper">Learners see this name.</p>
+        </div>
+        <div class="field">
+          <span class="label">Photo <span class="req">*</span></span>
+          <div class="row" style="--gap:16px;align-items:flex-start">
+            <span class="avatar av-72">OK</span>
+            <div>
+              <div class="row"><label class="btn btn-secondary btn-sm"><input type="file" accept="image/*" hidden><i data-i="camera"></i>Replace photo</label><button class="btn btn-ghost btn-sm" type="button" data-demo>Remove</button></div>
+              <p class="helper" style="margin-top:8px">JPG or PNG, at least 400 × 400 px. A clear, friendly face works best.</p>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="w-headline">Headline <span class="req">*</span></label>
+          <input class="input" id="w-headline" maxlength="80" value="Conversational English for professionals and travellers" data-counter="#w-headline-count" data-max="80">
+          <p class="helper"><span>One line about what you teach.</span><span class="count" id="w-headline-count"></span></p>
+        </div>
+        <div class="field">
+          <label class="label" for="w-about">About me <span class="req">*</span></label>
+          <textarea class="input" id="w-about" rows="5" style="min-height:130px" data-counter="#w-about-count" data-max="1000" data-min="200">I’m an English teacher from Lviv, now living in Lisbon. For seven years I’ve helped adults speak English with confidence at work and while travelling. My lessons are conversation-first: we practise real situations — interviews, meetings, small talk — and I give clear, kind feedback.</textarea>
+          <p class="helper"><span>Between 200 and 1,000 characters.</span><span class="count" id="w-about-count"></span></p>
+        </div>
+        <div class="grid-2">
+          <div class="field"><label class="label" for="w-country">Country <span class="req">*</span></label><select class="input" id="w-country"><option>Portugal</option><option>Ukraine</option><option>Poland</option></select></div>
+          <div class="field"><label class="label" for="w-city">City <span class="req">*</span></label><select class="input" id="w-city"><option>Lisbon</option><option>Porto</option></select></div>
+        </div>
+        <div class="field">
+          <label class="label" for="w-tz">Time zone <span class="req">*</span></label>
+          <div class="input-icon"><i data-i="globe"></i><select class="input" id="w-tz"><option>Lisbon (UTC+1)</option><option>Kyiv (UTC+3)</option></select></div>
+          <p class="helper">Detected automatically. Learners see your availability in their own time zone.</p>
+        </div>
+        <div class="field">
+          <span class="label">Languages and level <span class="req">*</span></span>
+          <div class="grid-2" style="gap:8px 12px">
+            <select class="input" aria-label="Language"><option>English</option></select><select class="input" aria-label="Level"><option>C2 · Proficient</option><option>Native</option></select>
+            <select class="input" aria-label="Language"><option>Ukrainian</option></select><select class="input" aria-label="Level"><option>Native</option><option>C2 · Proficient</option></select>
+            <select class="input" aria-label="Language"><option>Portuguese</option></select><select class="input" aria-label="Level"><option>B1 · Intermediate</option><option>B2 · Upper-intermediate</option></select>
+          </div>
+          <div><button class="add-chip" type="button" data-demo><i data-i="plus"></i>Add language</button></div>
+        </div>
+      </div>
+      <details class="disclosure" open>
+        <summary><div><strong>Add more details (optional)</strong><span>Intro video link</span></div><i data-i="chev" class="chev"></i></summary>
+        <div class="disclosure-body">
+          <div class="field">
+            <label class="label" for="w-video">Intro video link <span class="opt">(optional)</span></label>
+            <div class="input-icon"><i data-i="video"></i><input class="input" id="w-video" placeholder="https://youtube.com/..."></div>
+            <p class="helper">YouTube or Vimeo link, up to 2 minutes.</p>
+          </div>
+        </div>
+      </details>
+      <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" disabled><i data-i="back"></i>Back</button><button class="btn btn-primary btn-lg" type="button" data-go="2">Continue <i data-i="arrow" data-size="14"></i></button></div>
+    </section>
+
+    <!-- Step 2: Subjects -->
+    <section class="wizard-panel" data-step-panel="2" hidden>
+      <div>
+        <p class="eyebrow">Step 2 of 6 · Subjects</p>
+        <h1 class="t-h1 wizard-title">What do you teach?</h1>
+        <p class="lead">We use this to match you with the right learners. All fields in this step are required.</p>
+      </div>
+      <div class="card fields">
+        <div class="field">
+          <div class="label-row"><span class="label">Subjects <span class="req">*</span></span><span class="t-micro muted">2 / 3</span></div>
+          <div class="chips">
+            <span class="tag-chip">English<button class="x" type="button" aria-label="Remove English"><i data-i="x" data-size="12"></i></button></span>
+            <span class="tag-chip">Business English<button class="x" type="button" aria-label="Remove Business English"><i data-i="x" data-size="12"></i></button></span>
+          </div>
+          <div class="input-icon"><i data-i="plus"></i><select class="input" aria-label="Add a subject"><option>Add a subject</option><option>IELTS</option><option>Spanish</option></select></div>
+          <p class="helper">Up to 3 subjects.</p>
+        </div>
+        <div class="field">
+          <span class="label">Topics <span class="req">*</span></span>
+          <div class="tag-box">
+            <div class="chips">
+              <span class="tag-chip">Speaking<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+              <span class="tag-chip">Job interviews<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+              <span class="tag-chip">Business emails<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+              <span class="tag-chip">Pronunciation<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+              <span class="tag-chip">Travel<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
+            </div>
+            <input data-tag-input placeholder="Type a topic and press Enter" aria-label="Add a topic">
+          </div>
+          <p class="helper">Add at least one topic for each subject.</p>
+        </div>
+        <div class="field">
+          <span class="label">Student levels <span class="req">*</span></span>
+          <div class="chips"><button class="chip" type="button">Beginner (A1)</button><button class="chip is-selected" type="button">Elementary (A2)</button><button class="chip is-selected" type="button">Intermediate (B1)</button><button class="chip is-selected" type="button">Upper-intermediate (B2)</button><button class="chip is-selected" type="button">Advanced (C1)</button><button class="chip" type="button">Proficient (C2)</button></div>
+        </div>
+        <div class="field">
+          <span class="label">Age groups <span class="req">*</span></span>
+          <div class="chips"><button class="chip" type="button">Kids 6–12</button><button class="chip is-selected" type="button">Teens 13–17</button><button class="chip is-selected" type="button">Adults 18+</button></div>
+        </div>
+        <div class="field">
+          <span class="label">Learning goals <span class="req">*</span></span>
+          <div class="chips"><button class="chip is-selected" type="button">Job interviews</button><button class="chip is-selected" type="button">Work</button><button class="chip is-selected" type="button">Travel</button><button class="chip" type="button">Exams</button><button class="chip is-selected" type="button">Everyday conversation</button><button class="chip" type="button">School support</button><button class="chip" type="button">Relocation</button><button class="chip" type="button">Hobby</button></div>
+        </div>
+      </div>
+      <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="1"><i data-i="back"></i>Back</button><button class="btn btn-primary btn-lg" type="button" data-go="3">Continue <i data-i="arrow" data-size="14"></i></button></div>
+    </section>
+
+    <!-- Step 3: Experience -->
+    <section class="wizard-panel" data-step-panel="3" hidden>
+      <div>
+        <p class="eyebrow">Step 3 of 6 · Experience</p>
+        <h1 class="t-h1 wizard-title">Your experience</h1>
+        <p class="lead">Learners trust teachers who show where their experience comes from.</p>
+      </div>
+      <div class="card grid-2">
+        <div class="field"><label class="label" for="w-years">Years of teaching <span class="req">*</span></label><select class="input" id="w-years"><option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option selected>7 years</option><option>10+ years</option></select></div>
+        <div class="field"><label class="label" for="w-occ">Current occupation <span class="req">*</span></label><input class="input" id="w-occ" value="Freelance English teacher"></div>
+      </div>
+      <details class="disclosure" open>
+        <summary><div><strong>Add more details (optional)</strong><span>Practical experience · Education · Certificates · Portfolio / LinkedIn / GitHub</span></div><i data-i="chev" class="chev"></i></summary>
+        <div class="disclosure-body">
+          <div class="field">
+            <label class="label" for="w-practical">Practical experience <span class="opt">(optional)</span></label>
+            <textarea class="input" id="w-practical" rows="2" style="min-height:66px">4 years as an HR specialist at an international IT company — ran over 300 job interviews.</textarea>
+          </div>
+          <div class="field">
+            <span class="label">Education <span class="opt">(optional)</span></span>
+            <div class="grid-2" style="gap:12px"><input class="input" aria-label="University" value="Ivan Franko National University of Lviv"><input class="input" aria-label="Degree and year" value="MA, English Philology · 2015"></div>
+            <div><button class="add-chip" type="button" data-demo><i data-i="plus"></i>Add education</button></div>
+          </div>
+          <div class="field">
+            <span class="label">Certificates <span class="opt">(optional)</span></span>
+            <div class="file-row"><i data-i="file" data-size="18" style="color:var(--text-2)"></i><div class="grow"><strong>CELTA_certificate.pdf</strong><span>PDF · 1.2 MB · Uploaded</span></div><button class="icon-btn" type="button" aria-label="Delete file" data-remove-row><i data-i="trash"></i></button></div>
+            <label class="upload"><input type="file" hidden><span class="upload-icon"><i data-i="upload"></i></span><span><strong>Upload a certificate</strong><span>PDF, JPG or PNG, up to 10 MB. Verified certificates earn a Verified badge.</span></span></label>
+          </div>
+          <div class="field">
+            <span class="label">Portfolio / LinkedIn / GitHub <span class="opt">(optional)</span></span>
+            <div class="input-icon"><i data-i="link"></i><input class="input" aria-label="Link" value="linkedin.com/in/olena-kovalenko"></div>
+            <div class="input-icon"><i data-i="link"></i><input class="input" aria-label="Another link" placeholder="Add another link"></div>
+          </div>
+        </div>
+      </details>
+      <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="2"><i data-i="back"></i>Back</button><button class="btn btn-primary btn-lg" type="button" data-go="4">Continue <i data-i="arrow" data-size="14"></i></button></div>
+    </section>
+
+    <!-- Step 4: Format -->
+    <section class="wizard-panel" data-step-panel="4" hidden>
+      <div>
+        <p class="eyebrow">Step 4 of 6 · Format</p>
+        <h1 class="t-h1 wizard-title">How do you teach?</h1>
+        <p class="lead">Format, lesson type and duration are shown on your card.</p>
+      </div>
+      <div class="card fields">
+        <div class="field">
+          <span class="label">Format <span class="req">*</span></span>
+          <div class="seg" data-controls="#w-offline"><button type="button">Online</button><button type="button" data-reveal>Offline</button><button type="button" class="is-active" data-reveal>Both</button></div>
+        </div>
+        <div class="fields" id="w-offline" style="gap:8px">
+          <p class="helper">Shown because you teach offline.</p>
+          <div class="grid-2">
+            <div class="field"><label class="label" for="w-loc">Offline location <span class="req">*</span></label><div class="input-icon"><i data-i="pin"></i><input class="input" id="w-loc" value="Lisbon, Avenidas Novas"></div></div>
+            <div class="field"><label class="label" for="w-radius">Travel radius <span class="req">*</span></label><select class="input" id="w-radius"><option>Up to 2 km</option><option selected>Up to 5 km</option><option>Up to 10 km</option></select></div>
+          </div>
+        </div>
+        <div class="field">
+          <span class="label">Lesson type <span class="req">*</span></span>
+          <div class="chips"><button class="chip is-selected" type="button">Individual</button><button class="chip is-selected" type="button">Group</button></div>
+          <p class="helper">Select one or both.</p>
+        </div>
+        <div class="field">
+          <span class="label">Lesson duration <span class="req">*</span></span>
+          <div class="chips"><button class="chip" type="button">30 min</button><button class="chip is-selected" type="button">45 min</button><button class="chip is-selected" type="button">60 min</button><button class="chip" type="button">90 min</button></div>
+        </div>
+      </div>
+      <details class="disclosure" open>
+        <summary><div><strong>Add more details (optional)</strong><span>Platforms · Max group size</span></div><i data-i="chev" class="chev"></i></summary>
+        <div class="disclosure-body">
+          <div class="field">
+            <span class="label">Platforms <span class="opt">(optional)</span></span>
+            <div class="chips"><button class="chip is-selected" type="button">Zoom</button><button class="chip is-selected" type="button">Google Meet</button><button class="chip" type="button">Skype</button><button class="chip" type="button">Microsoft Teams</button><button class="chip" type="button">Other</button></div>
+          </div>
+          <div class="field">
+            <label class="label" for="w-group">Max group size <span class="opt">(optional)</span></label>
+            <div class="input-group"><input id="w-group" inputmode="numeric" value="4"><span class="affix">learners</span></div>
+            <p class="helper">Only for group lessons.</p>
+          </div>
+        </div>
+      </details>
+      <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="3"><i data-i="back"></i>Back</button><button class="btn btn-primary btn-lg" type="button" data-go="5">Continue <i data-i="arrow" data-size="14"></i></button></div>
+    </section>
+
+    <!-- Step 5: Price & availability -->
+    <section class="wizard-panel" data-step-panel="5" hidden>
+      <div>
+        <p class="eyebrow">Step 5 of 6 · Price &amp; availability</p>
+        <h1 class="t-h1 wizard-title">Price and availability</h1>
+        <p class="lead">You agree on payment directly with learners — LeaLink never handles money.</p>
+      </div>
+      <div class="card fields">
+        <div class="grid-2">
+          <div class="field"><label class="label" for="w-price">Price per lesson <span class="req">*</span></label><div class="input-group"><span class="affix">$</span><input id="w-price" inputmode="decimal" value="22"><span class="affix">per lesson</span></div></div>
+          <div class="field"><label class="label" for="w-cur">Currency <span class="req">*</span></label><select class="input" id="w-cur"><option>USD</option><option>EUR</option><option>UAH</option></select></div>
+        </div>
+        <div class="field">
+          <span class="label">Free trial <span class="req">*</span></span>
+          <label class="toggle"><input type="checkbox" checked><span>Offer a free trial lesson</span></label>
+          <select class="input" aria-label="Trial length" style="width:240px;max-width:100%"><option>15 min</option><option selected>30 min</option></select>
+        </div>
+        <div class="field">
+          <span class="label">Weekly availability <span class="req">*</span></span>
+          <div class="avail">
+            <span></span>
+            <span class="day"><span class="d-full">Mon</span><span class="d-short">M</span></span><span class="day"><span class="d-full">Tue</span><span class="d-short">T</span></span><span class="day"><span class="d-full">Wed</span><span class="d-short">W</span></span><span class="day"><span class="d-full">Thu</span><span class="d-short">T</span></span><span class="day"><span class="d-full">Fri</span><span class="d-short">F</span></span><span class="day"><span class="d-full">Sat</span><span class="d-short">S</span></span><span class="day"><span class="d-full">Sun</span><span class="d-short">S</span></span>
+            <span class="slot"><span class="d-full">Morning</span><span class="d-short">Mor</span><small>08–12</small></span>
+            <button class="cell" type="button" data-cell aria-label="Monday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Tuesday morning"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Wednesday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Thursday morning"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Friday morning"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Saturday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Sunday morning"><i data-i="check" data-size="14"></i></button>
+            <span class="slot"><span class="d-full">Afternoon</span><span class="d-short">Aft</span><small>12–17</small></span>
+            <button class="cell on" type="button" data-cell aria-label="Monday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Tuesday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Wednesday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Thursday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Friday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Saturday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Sunday afternoon"><i data-i="check" data-size="14"></i></button>
+            <span class="slot"><span class="d-full">Evening</span><span class="d-short">Eve</span><small>17–21</small></span>
+            <button class="cell on" type="button" data-cell aria-label="Monday evening"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Tuesday evening"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Wednesday evening"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Thursday evening"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Friday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Saturday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Sunday evening"><i data-i="check" data-size="14"></i></button>
+          </div>
+          <p class="helper">Shown in your time zone: Lisbon (UTC+1). Learners see it converted to theirs.</p>
+        </div>
+        <div class="field">
+          <span class="label">Accepting new students <span class="req">*</span></span>
+          <label class="toggle"><input type="checkbox" checked><span>Show my profile in search and allow new requests</span></label>
+        </div>
+      </div>
+      <details class="disclosure" open>
+        <summary><div><strong>Add more details (optional)</strong><span>Group price · Package discount · Minimum commitment</span></div><i data-i="chev" class="chev"></i></summary>
+        <div class="disclosure-body">
+          <div class="grid-2">
+            <div class="field"><label class="label" for="w-gprice">Group price <span class="opt">(optional)</span></label><div class="input-group"><span class="affix">$</span><input id="w-gprice" inputmode="decimal" value="12"><span class="affix">per learner</span></div></div>
+            <div class="field"><label class="label" for="w-min">Minimum commitment <span class="opt">(optional)</span></label><select class="input" id="w-min"><option>No minimum</option><option selected>4 lessons</option><option>8 lessons</option></select></div>
+          </div>
+          <div class="field">
+            <span class="label">Package discount <span class="opt">(optional)</span></span>
+            <div class="grid-2" style="gap:12px"><select class="input" aria-label="Package size"><option>5 lessons</option><option selected>10 lessons</option></select><div class="input-group"><input aria-label="Discount" inputmode="numeric" value="10"><span class="affix">% off</span></div></div>
+          </div>
+        </div>
+      </details>
+      <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="4"><i data-i="back"></i>Back</button><button class="btn btn-primary btn-lg" type="button" data-go="6">Continue <i data-i="arrow" data-size="14"></i></button></div>
+    </section>
+
+    <!-- Step 6: Requests -->
+    <section class="wizard-panel" data-step-panel="6" hidden>
+      <div>
+        <p class="eyebrow">Step 6 of 6 · Requests</p>
+        <h1 class="t-h1 wizard-title">How learners reach you</h1>
+        <p class="lead">Decide what learners share with you and how you’ll talk after accepting.</p>
+      </div>
+      <div class="card fields">
+        <div class="field">
+          <span class="label">Contact method <span class="req">*</span></span>
+          <div class="grid-2" style="gap:12px"><select class="input" aria-label="Contact method"><option>Telegram</option><option>WhatsApp</option><option>Email</option><option>Phone</option></select><input class="input" aria-label="Contact" value="@olena_english"></div>
+          <p class="info-strip"><i data-i="lock" data-size="14"></i>Hidden until you accept a request. Only learners you accept can see it.</p>
+        </div>
+      </div>
+      <details class="disclosure" open>
+        <summary><div><strong>Add more details (optional)</strong><span>Questions for learners · Response time</span></div><i data-i="chev" class="chev"></i></summary>
+        <div class="disclosure-body">
+          <div class="field">
+            <div class="label-row"><span class="label">Questions for learners <span class="opt">(optional)</span></span><span class="t-micro muted">2 / 3</span></div>
+            <div class="input-row"><div class="input-group" style="flex:1"><input aria-label="Question 1" value="What would you like to be able to do after 3 months?"><button class="icon-btn" type="button" aria-label="Delete question" data-remove-row style="margin-right:-8px"><i data-i="trash"></i></button></div></div>
+            <div class="input-row"><div class="input-group" style="flex:1"><input aria-label="Question 2" value="Have you taken English lessons before?"><button class="icon-btn" type="button" aria-label="Delete question" data-remove-row style="margin-right:-8px"><i data-i="trash"></i></button></div></div>
+            <div><button class="add-chip" type="button" data-demo><i data-i="plus"></i>Add question</button></div>
+            <p class="helper">Up to 3. Learners answer them in their request.</p>
+          </div>
+          <div class="field">
+            <span class="label">Response time <span class="opt">(optional)</span></span>
+            <div class="seg"><button type="button" class="is-active">Within 24 hours</button><button type="button">Within 48 hours</button></div>
+            <p class="helper">Shown on your card. Requests still expire after 72 hours.</p>
+          </div>
+        </div>
+      </details>
+      <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="5"><i data-i="back"></i>Back</button><button class="btn btn-primary btn-lg" type="button" data-go="7">Preview profile <i data-i="arrow" data-size="14"></i></button></div>
+    </section>
+
+    <!-- Preview -->
+    <section class="wizard-panel" data-step-panel="7" hidden>
+      <div>
+        <p class="eyebrow">Preview</p>
+        <h1 class="t-h1 wizard-title">Preview your profile</h1>
+        <p class="lead">Check everything before you submit it for review.</p>
+      </div>
+      <div class="card">
+        <p class="muted">This is exactly how your card appears in learners’ search results. Match % is calculated for each learner.</p>
+        <div class="preview-box role-learner" style="margin-top:20px">
+          <article class="tcard">
+            <div class="tcard-main">
+              <span class="avatar av-72">OK</span>
+              <div class="tcard-body">
+                <div class="tcard-name"><h3>Olena Kovalenko</h3><span class="badge badge-trial">Free trial</span><span class="badge badge-verified"><i data-i="check" data-size="12"></i>Verified</span></div>
+                <div class="tcard-rest">
+                  <p class="tcard-headline">Conversational English for professionals and travellers</p>
+                  <div class="tags"><span class="tag">English</span><span class="tag">Speaking</span><span class="tag">Business English</span></div>
+                  <div class="meta"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.9</b> (128)</span><span>7 years experience</span><span>Online · In person</span><span>Replies in ~12h</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="tcard-side">
+              <div class="row-between side-top"><span class="badge badge-match">94% match</span><span class="link link-muted" style="font-size:13px"><i data-i="flag" data-size="14"></i>Report</span></div>
+              <div class="price-row"><span class="price">$22<small>/ lesson</small></span><span class="badge badge-match show-mobile">94% match</span></div>
+              <span class="btn btn-primary btn-block">Send request</span>
+              <a class="btn btn-secondary btn-block" href="teacher.html">View profile</a>
+            </div>
+          </article>
+        </div>
+        <hr class="divider" style="margin:24px 0">
+        <div class="review-steps">
+          <div><strong>Basics</strong><p>Name, photo, headline, about, location, languages</p><button class="link" type="button" data-go="1"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Subjects</strong><p>English, Business English · A2–C1 · Teens, Adults</p><button class="link" type="button" data-go="2"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Experience</strong><p>7 years · CELTA · LinkedIn</p><button class="link" type="button" data-go="3"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Format</strong><p>Online and offline · Individual, group · 45/60 min</p><button class="link" type="button" data-go="4"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Price &amp; availability</strong><p>$22 / lesson · Free 30-min trial · 16 slots / week</p><button class="link" type="button" data-go="5"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Requests</strong><p>Telegram · 2 questions · Replies within 24h</p><button class="link" type="button" data-go="6"><i data-i="edit" data-size="14"></i>Edit</button></div>
+        </div>
+        <p class="info-strip role" style="margin-top:20px"><i data-i="shield"></i>We review every profile before it goes live. Next, you’ll create an account to submit it.</p>
+      </div>
+      <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="6"><i data-i="back"></i>Back</button><a class="btn btn-primary btn-lg" href="signup-teacher.html">Submit for review</a></div>
+    </section>
+  </main>
+</div>
+</body>
+</html>
