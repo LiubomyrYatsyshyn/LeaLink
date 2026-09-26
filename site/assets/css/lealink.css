@@ -748,7 +748,7 @@ body.chat-page { height: 100vh; display: flex; flex-direction: column; overflow:
   .home-main > .hide-mobile + .section-head { margin-top: 0 !important; }
 
   /* Wizard */
-  .wizard { grid-template-columns: 1fr; gap: 16px; padding-top: 16px; }
+  .wizard { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-top: 16px; }
   .steps { flex-direction: row; overflow-x: auto; gap: 4px; padding-bottom: 4px; }
   .step { flex: none; }
   .step .lbl { display: none; }
@@ -776,13 +776,19 @@ body.chat-page { height: 100vh; display: flex; flex-direction: column; overflow:
   .composer .btn { width: 40px; padding: 0; }
 
   /* Settings */
-  .settings { grid-template-columns: 1fr; gap: 16px; padding-top: 16px; }
+  .settings { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-top: 16px; }
+  .settings > *, .wizard > * { min-width: 0; }
+  .label-row { flex-wrap: wrap; }
+  .row:has(> .btn) { flex-wrap: wrap; }
   .side-nav { flex-direction: row; overflow-x: auto; position: static; }
   .role-cards { grid-template-columns: 1fr; }
   .status-card { margin: 24px 16px; padding: 24px 16px; }
 
   dialog.dialog { margin: auto auto 0; max-width: 100%; width: 100%; border-radius: 12px 12px 0 0; }
 
+  .auth-card .btn-block { white-space: normal; height: auto; min-height: 48px; padding-top: 10px; padding-bottom: 10px; line-height: 20px; }
+  .sg-grid > *, .sg-grid-4 > * { min-width: 0; }
+  .sg-section .tabs, .sg-section .row { flex-wrap: wrap; }
   .swatches, .swatches.eight { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .type-row { grid-template-columns: 1fr; gap: 4px; }
   .sg-grid, .sg-grid-4 { grid-template-columns: 1fr; }
