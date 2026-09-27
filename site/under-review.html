@@ -10,25 +10,27 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/lealink.css">
 <script src="assets/js/lealink.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/pages/under-review.js" defer></script>
 </head>
 <body data-role="teacher" class="bg-teacher">
 <header class="site-header" data-header="teacher" data-active="home"></header>
 
 <main class="status-card">
   <div class="status-icon"><i data-i="shield" data-size="20"></i></div>
-  <span class="badge badge-pending badge-wide" style="margin-top:28px">Under review</span>
-  <h1 class="t-h1" style="font-size:34px;line-height:42px;margin-top:12px">Your profile is under review</h1>
-  <p class="lead" style="font-size:17px;line-height:26px;margin-top:12px">Thanks, Olena! We check every profile before learners can see it. We’ll email you at olena.kovalenko@example.com as soon as it’s published.</p>
+  <span class="badge badge-pending badge-wide" style="margin-top:28px" data-badge>Under review</span>
+  <h1 class="t-h1" style="font-size:34px;line-height:42px;margin-top:12px" data-heading>Your profile is under review</h1>
+  <p class="lead" style="font-size:17px;line-height:26px;margin-top:12px" data-lead>Loading…</p>
   <ul class="timeline">
-    <li><span class="tl-dot done"><i data-i="check" data-size="14"></i></span><div><strong>Submitted</strong><span>Today, 18:42</span></div></li>
-    <li><span class="tl-dot now"><i data-i="clock" data-size="14"></i></span><div><strong>In review</strong><span>Usually within 1–2 business days</span></div></li>
-    <li><span class="tl-dot"><i data-i="eye" data-size="14"></i></span><div><strong>Published</strong><span>Learners can find you and send requests</span></div></li>
+    <li><span class="tl-dot done"><i data-i="check" data-size="14"></i></span><div><strong>Submitted</strong><span data-submitted></span></div></li>
+    <li><span class="tl-dot now" data-review-dot><i data-i="clock" data-size="14"></i></span><div><strong data-review-title>In review</strong><span data-review-text>Usually within 1–2 business days</span></div></li>
+    <li><span class="tl-dot" data-publish-dot><i data-i="eye" data-size="14"></i></span><div><strong>Published</strong><span data-publish-text>Learners can find you and send requests</span></div></li>
   </ul>
   <div class="row wrap">
-    <a class="btn btn-primary btn-lg" href="teacher-home.html?state=empty">Go to my home</a>
+    <a class="btn btn-primary btn-lg" href="teacher-home.html">Go to my home</a>
     <a class="btn btn-secondary btn-lg" href="wizard.html"><i data-i="edit"></i>Edit profile</a>
   </div>
-  <p class="t-caption muted" style="font-weight:400;margin-top:28px">You can still edit your profile while it’s in review.</p>
+  <p class="t-caption muted" style="font-weight:400;margin-top:28px" data-foot>You can still edit your profile while it’s in review.</p>
 </main>
 </body>
 </html>

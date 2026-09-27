@@ -9,16 +9,23 @@ Reply to the user in Ukrainian.
 4. Never edit files on the server by hand. Local, GitHub and server must always match.
 
 ## Local development (Mac)
-- Quick check without Docker: `python3 -m http.server 8090 --directory site`, then open `http://localhost:8090` (also in `.claude/launch.json` as `lealink-site`).
-- Same setup as the server: `docker compose up -d --build` in `~/LeaLink-push`, then `http://localhost`; stop with `docker compose down`. Docker Desktop must be running.
+- Same setup as the server: `docker compose up -d --build` in `~/LeaLink-push`, then `http://localhost` (site) and `http://localhost/api/docs` (API); stop with `docker compose down`. Docker Desktop must be running.
+- Live editing of `site/`: `docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build` (Caddy serves `site/` from disk).
+- Demo teachers for local search: `docker compose exec api python -m app.cli seed-demo`.
+- `python3 -m http.server 8090 --directory site` (`.claude/launch.json`: `lealink-site`) still opens the pages, but without the API they show error/empty states.
 
-## Frontend (clickable prototype, not wired to the API yet)
+## Frontend (static HTML wired to the API)
 - Built from `design-reference/` frames 00-41. Shared styles in `site/assets/css/lealink.css` (tokens from frame 00), behaviour in `site/assets/js/lealink.js` (icons, header, tabs, dialogs, chips, sliders, toasts).
+- Data: `site/assets/js/api.js` (`window.LL`: fetch wrapper for `/api`, session, formatting, teacher card, report dialog), `filters.js` (search form on search/results), `review.js` (review dialog), and one script per page in `site/assets/js/pages/`. Plain JS, no build step.
+- Session: token and user in localStorage (`ll-token`, `ll-user`; the header reads `ll-user`). Guests keep drafts in localStorage (`ll-draft-search`, `ll-draft-request`, `ll-draft-profile`) and send them after sign-up (`signup-learner.html`, `signup-teacher.html`).
+- Pages render API data into the design markup; hooks are `data-*` attributes. Design sample content was removed from the HTML.
+- `admin.html` (not in the design): moderation of profiles, reports, users; linked from the account menu for moderators.
+- Caddy sends `Cache-Control: no-cache` for the site, so a deploy never mixes old and new JS.
 - Headers are rendered by JS from `<header data-header="guest|auth|learner|teacher|wizard" data-active="...">`. Icons: `<i data-i="name">`.
 - Role colour: `data-role="learner|teacher"` on `<body>` (or `.role-learner` / `.role-teacher` on a block).
-- Screen states via URL: `?state=empty|error|errors`, `?tab=`, `?dialog=`, `?toast=`, `?step=1-6|preview`. `site/screens.html` links every frame to its page/state.
+- Screen states: pages set `data-show-state` blocks from real data; `?tab=` and `?step=1-6|preview` still work. `site/screens.html` links every frame to its page.
 - Mobile (frames 35-41) is the same pages below 900 px, not separate files.
-- Buttons without a designed destination use `data-demo` (shows a "not connected yet" toast).
+- Only "Continue with Google" still uses `data-demo` (not in the MVP).
 
 ## Backend (added 2026-09-27)
 - `backend/`: FastAPI + SQLModel + Alembic + PostgreSQL, see `backend/README.md` (MVP point -> endpoint, page -> endpoint).
@@ -27,7 +34,6 @@ Reply to the user in Ukrainian.
 - Tests: `docker compose run --rm api sh -c "pip install -q --user -r requirements-dev.txt && python -m pytest -q"` (own DB `lealink_test`).
 - New migration: `docker compose run --rm -v "$PWD/backend:/app" api alembic revision --autogenerate -m "..."`.
 - Moderator: `docker compose exec api python -m app.cli make-admin EMAIL`; demo teachers (local only): `... app.cli seed-demo`.
-- Frontend pages are still the static prototype; they are not wired to the API yet.
 
 ## Brand and motion (added 2026-09-26)
 - Logo: vector mark in `site/assets/logo-mark.svg` (recreated from the user's image; swap in the original file if the user provides it). In pages use `data-logo` / `data-mark`; JS injects the SVG and the gradient wordmark. Montserrat is used only for the wordmark and the home hero title; UI stays Inter.

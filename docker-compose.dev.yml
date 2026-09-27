@@ -1,0 +1,7 @@
+# Local development: Caddy serves site/ straight from disk, so edits show up on reload.
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+# The server uses only docker-compose.yml.
+services:
+  web:
+    volumes:
+      - ./site:/srv

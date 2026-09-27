@@ -1,4 +1,4 @@
-/* LeaLink prototype UI behaviour. No data, no backend: only visual interactions. */
+/* LeaLink UI behaviour: icons, header, tabs, dialogs, chips, sliders, toasts. Data comes from pages/*.js via api.js. */
 (function () {
   "use strict";
 
@@ -200,11 +200,29 @@
       '<a class="learning' + (role === "learner" ? " is-active" : "") + '" href="learner.html">Learning</a>' +
       '<a class="teaching' + (role === "teacher" ? " is-active" : "") + '" href="teacher-home.html">Teaching</a></div>';
   }
+  /* The logged-in user is cached by api.js in localStorage ("ll-user"). */
+  function currentUser() {
+    try { return JSON.parse(localStorage.getItem("ll-user")); } catch (e) { return null; }
+  }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function initials(name) {
+    return (name || "").trim().split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0); }).join("").toUpperCase() || "?";
+  }
+  function logout() {
+    try { localStorage.removeItem("ll-token"); localStorage.removeItem("ll-user"); } catch (e) { /* storage unavailable */ }
+  }
+
   function renderHeader() {
     var h = document.querySelector("header[data-header]");
     if (!h) return;
     var v = h.getAttribute("data-header");
     var active = h.getAttribute("data-active") || "";
+    var user = currentUser();
+    if (v === "guest" && user) { v = "learner"; active = active || "find"; }
     var logo = '<a class="logo" href="index.html" aria-label="LeaLink home">' + logoInner() + "</a>";
     var html = logo;
     h.classList.add("site-header");
@@ -215,25 +233,38 @@
       html += '<div class="header-right"><a class="header-link" href="index.html"><i data-i="back"></i> Back to home</a></div>';
     } else if (v === "wizard") {
       html += '<div class="header-center">Create your teacher profile</div>' +
-        '<div class="header-right"><span class="header-link hide-mobile" style="cursor:default"><i data-i="check"></i> Saved as draft · 2 min ago</span>' +
+        '<div class="header-right"><span class="header-link hide-mobile" style="cursor:default"><i data-i="check"></i> <span data-draft-status>Draft</span></span>' +
         '<a class="header-link" href="index.html"><i data-i="x"></i> Exit</a></div>';
     } else {
       var items = NAV[v] || [];
-      var initials = v === "teacher" ? "OK" : "AP";
+      var avatar = user && user.photo_url ? '<img src="' + esc(user.photo_url) + '" alt="">' : esc(initials(user && user.full_name));
+      var extra = user && user.is_admin ? '<a href="admin.html">Moderation</a><a href="screens.html">All screens</a>' : "";
       html += '<nav class="nav">' + items.map(function (it) {
         return '<a href="' + it[2] + '"' + (it[0] === active ? ' class="is-active"' : "") + ">" + it[1] + "</a>";
       }).join("") + "</nav>" + roleSwitch(v) +
         '<div class="header-right">' +
         '<button class="icon-btn" type="button" aria-label="Notifications" data-toast="No new notifications."><i data-i="bell"></i></button>' +
         '<button class="icon-btn menu-btn" type="button" aria-label="Menu" data-drawer><i data-i="menu" data-size="18"></i></button>' +
-        '<div class="account"><button class="account-btn" type="button" data-menu-trigger aria-label="Account menu"><span class="avatar av-32">' + initials + '</span><i data-i="chev" class="chev"></i></button>' +
-        '<div class="menu"><a href="settings.html">Account settings</a><a href="screens.html">All screens</a><div class="menu-sep"></div><a href="index.html">Log out</a></div></div>' +
+        '<div class="account"><button class="account-btn" type="button" data-menu-trigger aria-label="Account menu"><span class="avatar av-32">' + avatar + '</span><i data-i="chev" class="chev"></i></button>' +
+        '<div class="menu"><a href="settings.html">Account settings</a>' + extra + '<div class="menu-sep"></div><a href="index.html" data-logout>Log out</a></div></div>' +
         "</div>" +
         '<div class="drawer">' + items.map(function (it) {
           return '<a class="drawer-link' + (it[0] === active ? " is-active" : "") + '" href="' + it[2] + '">' + it[1] + "</a>";
-        }).join("") + '<a class="drawer-link" href="settings.html">Account settings</a>' + roleSwitch(v) + "</div>";
+        }).join("") + '<a class="drawer-link" href="settings.html">Account settings</a><a class="drawer-link" href="index.html" data-logout>Log out</a>' + roleSwitch(v) + "</div>";
     }
     h.innerHTML = html;
+  }
+  window.LeaLink.refreshHeader = function () {
+    renderHeader();
+    var h = document.querySelector("header[data-header]");
+    if (h) renderIcons(h);
+  };
+
+  /* Elements only for guests or only for logged-in users (e.g. "Log in" vs "My requests" on the home page). */
+  function applyUser() {
+    var user = currentUser();
+    document.querySelectorAll("[data-guest-only]").forEach(function (el) { el.hidden = !!user; });
+    document.querySelectorAll("[data-user-only]").forEach(function (el) { el.hidden = !user; });
   }
 
   /* ---------- URL state: ?state=, ?tab=, ?dialog=, ?toast=, ?step= ---------- */
@@ -289,14 +320,22 @@
     var vals = [+r.dataset.from, +r.dataset.to];
     var thumbs = r.querySelectorAll(".range-thumb"), fill = r.querySelector(".range-fill");
     var out = document.querySelector(r.dataset.output);
-    var suffix = r.dataset.suffix || "";
     function pct(v) { return ((v - min) / (max - min)) * 100; }
-    function fmt(v) { return "$" + v + (v >= max ? "+" : ""); }
+    function fmt(v) { return (r.dataset.symbol || "$") + v + (v >= max ? "+" : ""); }
     function draw() {
       thumbs[0].style.left = pct(vals[0]) + "%"; thumbs[1].style.left = pct(vals[1]) + "%";
       fill.style.left = pct(vals[0]) + "%"; fill.style.width = (pct(vals[1]) - pct(vals[0])) + "%";
-      if (out) out.textContent = fmt(vals[0]) + " – " + fmt(vals[1]) + suffix;
+      if (out) out.textContent = fmt(vals[0]) + " – " + fmt(vals[1]) + (r.dataset.suffix || "");
     }
+    /* For page scripts: read the values, or set them (and optionally new bounds and currency symbol). */
+    r.getRange = function () { return { from: vals[0], to: vals[1], min: min, max: max }; };
+    r.setRange = function (from, to, newMin, newMax, symbol) {
+      if (newMin != null) { min = newMin; max = newMax; }
+      if (symbol) r.dataset.symbol = symbol;
+      vals[0] = Math.max(min, Math.min(from == null ? min : from, max - 1));
+      vals[1] = Math.min(max, Math.max(to == null ? max : to, vals[0] + 1));
+      draw();
+    };
     thumbs.forEach(function (th, i) {
       th.addEventListener("pointerdown", function (e) {
         e.preventDefault(); th.setPointerCapture(e.pointerId);
@@ -305,6 +344,7 @@
           var v = Math.round(min + Math.min(1, Math.max(0, (ev.clientX - rect.left) / rect.width)) * (max - min));
           vals[i] = i === 0 ? Math.min(v, vals[1] - 1) : Math.max(v, vals[0] + 1);
           draw();
+          r.dispatchEvent(new Event("input", { bubbles: true }));
         }
         function up() { th.removeEventListener("pointermove", move); th.removeEventListener("pointerup", up); }
         th.addEventListener("pointermove", move); th.addEventListener("pointerup", up);
@@ -427,6 +467,8 @@
     }
     if (!t.closest(".menu")) closeMenus();
 
+    if ((el = t.closest("[data-logout]"))) { logout(); return; }
+
     if ((el = t.closest("[data-drawer]"))) { document.querySelector(".drawer").classList.toggle("is-open"); return; }
 
     if ((el = t.closest("[data-cell]"))) { el.classList.toggle("on"); return; }
@@ -474,31 +516,18 @@
     }
   });
 
-  /* Chat composer */
+  /* Forms are handled by the page scripts; plain forms with data-href just navigate. */
   document.addEventListener("submit", function (e) {
     var f = e.target;
     e.preventDefault();
-    if (f.matches("[data-composer]")) {
-      var input = f.querySelector("input"), text = input.value.trim();
-      if (!text) return;
-      var thread = document.querySelector(".thread");
-      var msg = document.createElement("div");
-      msg.className = "msg me";
-      var now = new Date();
-      msg.innerHTML = '<div class="bubble"></div><time>' + String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0") + "</time>";
-      msg.querySelector(".bubble").textContent = text;
-      thread.appendChild(msg);
-      input.value = "";
-      thread.scrollTop = thread.scrollHeight;
-    } else if (f.dataset.href) {
-      location.href = f.dataset.href;
-    }
+    if (f.dataset.href) location.href = f.dataset.href;
   });
 
   /* ---------- Boot ---------- */
   document.addEventListener("DOMContentLoaded", function () {
     brandDefs();
     renderHeader();
+    applyUser();
     renderLogos();
     applyState();
     decorateBands();

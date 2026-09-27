@@ -296,6 +296,8 @@ select.input {
 
 /* Avatar, rating, progress */
 .avatar { --s: 48px; width: var(--s); height: var(--s); flex: none; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: grid; place-items: center; color: var(--text-2); font-weight: 700; font-size: calc(var(--s) * .34); letter-spacing: .02em; }
+.avatar { overflow: hidden; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .av-32 { --s: 32px; font-size: 11px; } .av-40 { --s: 40px; font-size: 14px; } .av-44 { --s: 44px; font-size: 15px; }
 .av-48 { --s: 48px; } .av-56 { --s: 56px; } .av-72 { --s: 72px; } .av-112 { --s: 112px; }
 .rating { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; color: var(--text-2); white-space: nowrap; }

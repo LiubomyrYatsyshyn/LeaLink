@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/lealink.css">
 <script src="assets/js/lealink.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/pages/wizard.js" defer></script>
 </head>
 <body data-role="teacher">
 <header class="site-header" data-header="wizard"></header>
@@ -32,7 +34,7 @@
     <button class="step preview" type="button" data-go="7"><span class="step-num"><i data-i="eye" data-size="14"></i></span><span class="lbl">Preview</span></button>
   </nav>
 
-  <main class="wizard-main">
+  <main class="wizard-main" data-wizard-form>
     <!-- Step 1: Basics -->
     <section class="wizard-panel" data-step-panel="1">
       <div>
@@ -40,57 +42,54 @@
         <h1 class="t-h1 wizard-title">Tell learners who you are</h1>
         <p class="lead">These basics appear at the top of your profile.</p>
       </div>
+      <p class="info-strip role" data-w-status hidden></p>
       <div class="card fields">
         <div class="field">
           <label class="label" for="w-name">Display name <span class="req">*</span></label>
-          <input class="input" id="w-name" value="Olena Kovalenko">
+          <input class="input" id="w-name" maxlength="100">
           <p class="helper">Learners see this name.</p>
         </div>
         <div class="field">
           <span class="label">Photo <span class="req">*</span></span>
           <div class="row" style="--gap:16px;align-items:flex-start">
-            <span class="avatar av-72">OK</span>
+            <span data-w-avatar><span class="avatar av-72"></span></span>
             <div>
-              <div class="row"><label class="btn btn-secondary btn-sm"><input type="file" accept="image/*" hidden><i data-i="camera"></i>Replace photo</label><button class="btn btn-ghost btn-sm" type="button" data-demo>Remove</button></div>
+              <div class="row"><label class="btn btn-secondary btn-sm"><input type="file" accept="image/jpeg,image/png,image/webp" hidden data-w-photo><i data-i="camera"></i><span data-w-photo-label>Upload photo</span></label><button class="btn btn-ghost btn-sm" type="button" data-w-photo-remove hidden>Remove</button></div>
               <p class="helper" style="margin-top:8px">JPG or PNG, at least 400 × 400 px. A clear, friendly face works best.</p>
             </div>
           </div>
         </div>
         <div class="field">
           <label class="label" for="w-headline">Headline <span class="req">*</span></label>
-          <input class="input" id="w-headline" maxlength="80" value="Conversational English for professionals and travellers" data-counter="#w-headline-count" data-max="80">
+          <input class="input" id="w-headline" maxlength="80" data-counter="#w-headline-count" data-max="80" placeholder="e.g. Conversational English for professionals">
           <p class="helper"><span>One line about what you teach.</span><span class="count" id="w-headline-count"></span></p>
         </div>
         <div class="field">
           <label class="label" for="w-about">About me <span class="req">*</span></label>
-          <textarea class="input" id="w-about" rows="5" style="min-height:130px" data-counter="#w-about-count" data-max="1000" data-min="200">I’m an English teacher from Lviv, now living in Lisbon. For seven years I’ve helped adults speak English with confidence at work and while travelling. My lessons are conversation-first: we practise real situations — interviews, meetings, small talk — and I give clear, kind feedback.</textarea>
+          <textarea class="input" id="w-about" rows="5" style="min-height:130px" data-counter="#w-about-count" data-max="1000" data-min="200" maxlength="1000" placeholder="Who you are, how you teach, what learners get from your lessons."></textarea>
           <p class="helper"><span>Between 200 and 1,000 characters.</span><span class="count" id="w-about-count"></span></p>
         </div>
         <div class="grid-2">
-          <div class="field"><label class="label" for="w-country">Country <span class="req">*</span></label><select class="input" id="w-country"><option>Portugal</option><option>Ukraine</option><option>Poland</option></select></div>
-          <div class="field"><label class="label" for="w-city">City <span class="req">*</span></label><select class="input" id="w-city"><option>Lisbon</option><option>Porto</option></select></div>
+          <div class="field"><label class="label" for="w-country">Country <span class="req">*</span></label><input class="input" id="w-country" list="ll-countries" maxlength="40" autocomplete="country-name"></div>
+          <div class="field"><label class="label" for="w-city">City <span class="req">*</span></label><input class="input" id="w-city" list="ll-cities" maxlength="40"></div>
         </div>
         <div class="field">
           <label class="label" for="w-tz">Time zone <span class="req">*</span></label>
-          <div class="input-icon"><i data-i="globe"></i><select class="input" id="w-tz"><option>Lisbon (UTC+1)</option><option>Kyiv (UTC+3)</option></select></div>
-          <p class="helper">Detected automatically. Learners see your availability in their own time zone.</p>
+          <div class="input-icon"><i data-i="globe"></i><select class="input" id="w-tz"></select></div>
+          <p class="helper">Detected automatically. Your weekly availability is shown in this time zone.</p>
         </div>
         <div class="field">
           <span class="label">Languages and level <span class="req">*</span></span>
-          <div class="grid-2" style="gap:8px 12px">
-            <select class="input" aria-label="Language"><option>English</option></select><select class="input" aria-label="Level"><option>C2 · Proficient</option><option>Native</option></select>
-            <select class="input" aria-label="Language"><option>Ukrainian</option></select><select class="input" aria-label="Level"><option>Native</option><option>C2 · Proficient</option></select>
-            <select class="input" aria-label="Language"><option>Portuguese</option></select><select class="input" aria-label="Level"><option>B1 · Intermediate</option><option>B2 · Upper-intermediate</option></select>
-          </div>
-          <div><button class="add-chip" type="button" data-demo><i data-i="plus"></i>Add language</button></div>
+          <div class="fields" style="gap:8px" data-w-languages></div>
+          <div><button class="add-chip" type="button" data-w-add="language"><i data-i="plus"></i>Add language</button></div>
         </div>
       </div>
-      <details class="disclosure" open>
+      <details class="disclosure">
         <summary><div><strong>Add more details (optional)</strong><span>Intro video link</span></div><i data-i="chev" class="chev"></i></summary>
         <div class="disclosure-body">
           <div class="field">
             <label class="label" for="w-video">Intro video link <span class="opt">(optional)</span></label>
-            <div class="input-icon"><i data-i="video"></i><input class="input" id="w-video" placeholder="https://youtube.com/..."></div>
+            <div class="input-icon"><i data-i="video"></i><input class="input" id="w-video" placeholder="https://youtube.com/..." maxlength="300"></div>
             <p class="helper">YouTube or Vimeo link, up to 2 minutes.</p>
           </div>
         </div>
@@ -107,39 +106,32 @@
       </div>
       <div class="card fields">
         <div class="field">
-          <div class="label-row"><span class="label">Subjects <span class="req">*</span></span><span class="t-micro muted">2 / 3</span></div>
-          <div class="chips">
-            <span class="tag-chip">English<button class="x" type="button" aria-label="Remove English"><i data-i="x" data-size="12"></i></button></span>
-            <span class="tag-chip">Business English<button class="x" type="button" aria-label="Remove Business English"><i data-i="x" data-size="12"></i></button></span>
+          <div class="label-row"><span class="label">Subjects <span class="req">*</span></span><span class="t-micro muted" data-w-subject-count>0 / 3</span></div>
+          <div class="tag-box" data-w-tags="subjects">
+            <div class="chips"></div>
+            <input data-tag-input list="ll-subjects" placeholder="Type a subject and press Enter" aria-label="Add a subject">
           </div>
-          <div class="input-icon"><i data-i="plus"></i><select class="input" aria-label="Add a subject"><option>Add a subject</option><option>IELTS</option><option>Spanish</option></select></div>
           <p class="helper">Up to 3 subjects.</p>
         </div>
         <div class="field">
           <span class="label">Topics <span class="req">*</span></span>
-          <div class="tag-box">
-            <div class="chips">
-              <span class="tag-chip">Speaking<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
-              <span class="tag-chip">Job interviews<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
-              <span class="tag-chip">Business emails<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
-              <span class="tag-chip">Pronunciation<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
-              <span class="tag-chip">Travel<button class="x" type="button" aria-label="Remove"><i data-i="x" data-size="12"></i></button></span>
-            </div>
+          <div class="tag-box" data-w-tags="topics">
+            <div class="chips"></div>
             <input data-tag-input placeholder="Type a topic and press Enter" aria-label="Add a topic">
           </div>
           <p class="helper">Add at least one topic for each subject.</p>
         </div>
         <div class="field">
           <span class="label">Student levels <span class="req">*</span></span>
-          <div class="chips"><button class="chip" type="button">Beginner (A1)</button><button class="chip is-selected" type="button">Elementary (A2)</button><button class="chip is-selected" type="button">Intermediate (B1)</button><button class="chip is-selected" type="button">Upper-intermediate (B2)</button><button class="chip is-selected" type="button">Advanced (C1)</button><button class="chip" type="button">Proficient (C2)</button></div>
+          <div class="chips" data-w-chips="levels"><button class="chip" type="button" data-v="A1">Beginner (A1)</button><button class="chip" type="button" data-v="A2">Elementary (A2)</button><button class="chip" type="button" data-v="B1">Intermediate (B1)</button><button class="chip" type="button" data-v="B2">Upper-intermediate (B2)</button><button class="chip" type="button" data-v="C1">Advanced (C1)</button><button class="chip" type="button" data-v="C2">Proficient (C2)</button></div>
         </div>
         <div class="field">
           <span class="label">Age groups <span class="req">*</span></span>
-          <div class="chips"><button class="chip" type="button">Kids 6–12</button><button class="chip is-selected" type="button">Teens 13–17</button><button class="chip is-selected" type="button">Adults 18+</button></div>
+          <div class="chips" data-w-chips="age_groups"><button class="chip" type="button" data-v="kids">Kids 6–12</button><button class="chip" type="button" data-v="teens">Teens 13–17</button><button class="chip" type="button" data-v="adults">Adults 18+</button></div>
         </div>
         <div class="field">
           <span class="label">Learning goals <span class="req">*</span></span>
-          <div class="chips"><button class="chip is-selected" type="button">Job interviews</button><button class="chip is-selected" type="button">Work</button><button class="chip is-selected" type="button">Travel</button><button class="chip" type="button">Exams</button><button class="chip is-selected" type="button">Everyday conversation</button><button class="chip" type="button">School support</button><button class="chip" type="button">Relocation</button><button class="chip" type="button">Hobby</button></div>
+          <div class="chips" data-w-chips="goals"><button class="chip" type="button" data-v="Job interviews">Job interviews</button><button class="chip" type="button" data-v="Work">Work</button><button class="chip" type="button" data-v="Travel">Travel</button><button class="chip" type="button" data-v="Exam preparation">Exam preparation</button><button class="chip" type="button" data-v="Everyday conversation">Everyday conversation</button><button class="chip" type="button" data-v="School support">School support</button><button class="chip" type="button" data-v="Relocation">Relocation</button><button class="chip" type="button" data-v="Hobby">Hobby</button></div>
         </div>
       </div>
       <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="1"><i data-i="back"></i>Back</button><button class="btn btn-primary btn-lg" type="button" data-go="3">Continue <i data-i="arrow" data-size="14"></i></button></div>
@@ -153,30 +145,30 @@
         <p class="lead">Learners trust teachers who show where their experience comes from.</p>
       </div>
       <div class="card grid-2">
-        <div class="field"><label class="label" for="w-years">Years of teaching <span class="req">*</span></label><select class="input" id="w-years"><option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option selected>7 years</option><option>10+ years</option></select></div>
-        <div class="field"><label class="label" for="w-occ">Current occupation <span class="req">*</span></label><input class="input" id="w-occ" value="Freelance English teacher"></div>
+        <div class="field"><label class="label" for="w-years">Years of teaching <span class="req">*</span></label><div class="input-group"><input id="w-years" inputmode="numeric" maxlength="2"><span class="affix">years</span></div></div>
+        <div class="field"><label class="label" for="w-occ">Current occupation <span class="req">*</span></label><input class="input" id="w-occ" maxlength="100" placeholder="e.g. Freelance English teacher"></div>
       </div>
-      <details class="disclosure" open>
+      <details class="disclosure">
         <summary><div><strong>Add more details (optional)</strong><span>Practical experience · Education · Certificates · Portfolio / LinkedIn / GitHub</span></div><i data-i="chev" class="chev"></i></summary>
         <div class="disclosure-body">
           <div class="field">
             <label class="label" for="w-practical">Practical experience <span class="opt">(optional)</span></label>
-            <textarea class="input" id="w-practical" rows="2" style="min-height:66px">4 years as an HR specialist at an international IT company — ran over 300 job interviews.</textarea>
+            <textarea class="input" id="w-practical" rows="2" style="min-height:66px" maxlength="500"></textarea>
           </div>
           <div class="field">
             <span class="label">Education <span class="opt">(optional)</span></span>
-            <div class="grid-2" style="gap:12px"><input class="input" aria-label="University" value="Ivan Franko National University of Lviv"><input class="input" aria-label="Degree and year" value="MA, English Philology · 2015"></div>
-            <div><button class="add-chip" type="button" data-demo><i data-i="plus"></i>Add education</button></div>
+            <div class="fields" style="gap:8px" data-w-education></div>
+            <div><button class="add-chip" type="button" data-w-add="education"><i data-i="plus"></i>Add education</button></div>
           </div>
           <div class="field">
             <span class="label">Certificates <span class="opt">(optional)</span></span>
-            <div class="file-row"><i data-i="file" data-size="18" style="color:var(--text-2)"></i><div class="grow"><strong>CELTA_certificate.pdf</strong><span>PDF · 1.2 MB · Uploaded</span></div><button class="icon-btn" type="button" aria-label="Delete file" data-remove-row><i data-i="trash"></i></button></div>
-            <label class="upload"><input type="file" hidden><span class="upload-icon"><i data-i="upload"></i></span><span><strong>Upload a certificate</strong><span>PDF, JPG or PNG, up to 10 MB. Verified certificates earn a Verified badge.</span></span></label>
+            <div class="fields" style="gap:8px" data-w-certs></div>
+            <label class="upload" data-w-cert-upload><input type="file" accept="application/pdf,image/jpeg,image/png" hidden data-w-cert><span class="upload-icon"><i data-i="upload"></i></span><span><strong>Upload a certificate</strong><span data-w-cert-note>PDF, JPG or PNG, up to 10 MB. Verified certificates earn a Verified badge.</span></span></label>
           </div>
           <div class="field">
             <span class="label">Portfolio / LinkedIn / GitHub <span class="opt">(optional)</span></span>
-            <div class="input-icon"><i data-i="link"></i><input class="input" aria-label="Link" value="linkedin.com/in/olena-kovalenko"></div>
-            <div class="input-icon"><i data-i="link"></i><input class="input" aria-label="Another link" placeholder="Add another link"></div>
+            <div class="fields" style="gap:8px" data-w-links></div>
+            <div><button class="add-chip" type="button" data-w-add="link"><i data-i="plus"></i>Add link</button></div>
           </div>
         </div>
       </details>
@@ -193,35 +185,35 @@
       <div class="card fields">
         <div class="field">
           <span class="label">Format <span class="req">*</span></span>
-          <div class="seg" data-controls="#w-offline"><button type="button">Online</button><button type="button" data-reveal>Offline</button><button type="button" class="is-active" data-reveal>Both</button></div>
+          <div class="seg" data-controls="#w-offline" id="w-format"><button type="button" class="is-active" data-v="online">Online</button><button type="button" data-reveal data-v="offline">Offline</button><button type="button" data-reveal data-v="both">Both</button></div>
         </div>
-        <div class="fields" id="w-offline" style="gap:8px">
+        <div class="fields" id="w-offline" style="gap:8px" hidden>
           <p class="helper">Shown because you teach offline.</p>
           <div class="grid-2">
-            <div class="field"><label class="label" for="w-loc">Offline location <span class="req">*</span></label><div class="input-icon"><i data-i="pin"></i><input class="input" id="w-loc" value="Lisbon, Avenidas Novas"></div></div>
-            <div class="field"><label class="label" for="w-radius">Travel radius <span class="req">*</span></label><select class="input" id="w-radius"><option>Up to 2 km</option><option selected>Up to 5 km</option><option>Up to 10 km</option></select></div>
+            <div class="field"><label class="label" for="w-loc">Offline location <span class="req">*</span></label><div class="input-icon"><i data-i="pin"></i><input class="input" id="w-loc" maxlength="100" placeholder="City, district"></div></div>
+            <div class="field"><label class="label" for="w-radius">Travel radius <span class="req">*</span></label><select class="input" id="w-radius"><option value="2">Up to 2 km</option><option value="5" selected>Up to 5 km</option><option value="10">Up to 10 km</option><option value="20">Up to 20 km</option></select></div>
           </div>
         </div>
         <div class="field">
           <span class="label">Lesson type <span class="req">*</span></span>
-          <div class="chips"><button class="chip is-selected" type="button">Individual</button><button class="chip is-selected" type="button">Group</button></div>
+          <div class="chips" data-w-chips="lesson_types"><button class="chip" type="button" data-v="individual">Individual</button><button class="chip" type="button" data-v="group">Group</button></div>
           <p class="helper">Select one or both.</p>
         </div>
         <div class="field">
           <span class="label">Lesson duration <span class="req">*</span></span>
-          <div class="chips"><button class="chip" type="button">30 min</button><button class="chip is-selected" type="button">45 min</button><button class="chip is-selected" type="button">60 min</button><button class="chip" type="button">90 min</button></div>
+          <div class="chips" data-w-chips="durations"><button class="chip" type="button" data-v="30">30 min</button><button class="chip" type="button" data-v="45">45 min</button><button class="chip" type="button" data-v="60">60 min</button><button class="chip" type="button" data-v="90">90 min</button></div>
         </div>
       </div>
-      <details class="disclosure" open>
+      <details class="disclosure">
         <summary><div><strong>Add more details (optional)</strong><span>Platforms · Max group size</span></div><i data-i="chev" class="chev"></i></summary>
         <div class="disclosure-body">
           <div class="field">
             <span class="label">Platforms <span class="opt">(optional)</span></span>
-            <div class="chips"><button class="chip is-selected" type="button">Zoom</button><button class="chip is-selected" type="button">Google Meet</button><button class="chip" type="button">Skype</button><button class="chip" type="button">Microsoft Teams</button><button class="chip" type="button">Other</button></div>
+            <div class="chips" data-w-chips="platforms"><button class="chip" type="button" data-v="Zoom">Zoom</button><button class="chip" type="button" data-v="Google Meet">Google Meet</button><button class="chip" type="button" data-v="Skype">Skype</button><button class="chip" type="button" data-v="Microsoft Teams">Microsoft Teams</button><button class="chip" type="button" data-v="Other">Other</button></div>
           </div>
           <div class="field">
             <label class="label" for="w-group">Max group size <span class="opt">(optional)</span></label>
-            <div class="input-group"><input id="w-group" inputmode="numeric" value="4"><span class="affix">learners</span></div>
+            <div class="input-group"><input id="w-group" inputmode="numeric" maxlength="2"><span class="affix">learners</span></div>
             <p class="helper">Only for group lessons.</p>
           </div>
         </div>
@@ -238,43 +230,39 @@
       </div>
       <div class="card fields">
         <div class="grid-2">
-          <div class="field"><label class="label" for="w-price">Price per lesson <span class="req">*</span></label><div class="input-group"><span class="affix">$</span><input id="w-price" inputmode="decimal" value="22"><span class="affix">per lesson</span></div></div>
+          <div class="field"><label class="label" for="w-price">Price per lesson <span class="req">*</span></label><div class="input-group"><span class="affix" data-w-symbol>$</span><input id="w-price" inputmode="decimal" maxlength="9"><span class="affix">per lesson</span></div></div>
           <div class="field"><label class="label" for="w-cur">Currency <span class="req">*</span></label><select class="input" id="w-cur"><option>USD</option><option>EUR</option><option>UAH</option></select></div>
         </div>
         <div class="field">
-          <span class="label">Free trial <span class="req">*</span></span>
-          <label class="toggle"><input type="checkbox" checked><span>Offer a free trial lesson</span></label>
-          <select class="input" aria-label="Trial length" style="width:240px;max-width:100%"><option>15 min</option><option selected>30 min</option></select>
+          <span class="label">Free trial</span>
+          <label class="toggle"><input type="checkbox" id="w-trial"><span>Offer a free trial lesson</span></label>
+          <select class="input" aria-label="Trial length" style="width:240px;max-width:100%" id="w-trial-min"><option value="15">15 min</option><option value="30" selected>30 min</option></select>
         </div>
         <div class="field">
           <span class="label">Weekly availability <span class="req">*</span></span>
           <div class="avail">
-            <span></span>
-            <span class="day"><span class="d-full">Mon</span><span class="d-short">M</span></span><span class="day"><span class="d-full">Tue</span><span class="d-short">T</span></span><span class="day"><span class="d-full">Wed</span><span class="d-short">W</span></span><span class="day"><span class="d-full">Thu</span><span class="d-short">T</span></span><span class="day"><span class="d-full">Fri</span><span class="d-short">F</span></span><span class="day"><span class="d-full">Sat</span><span class="d-short">S</span></span><span class="day"><span class="d-full">Sun</span><span class="d-short">S</span></span>
-            <span class="slot"><span class="d-full">Morning</span><span class="d-short">Mor</span><small>08–12</small></span>
-            <button class="cell" type="button" data-cell aria-label="Monday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Tuesday morning"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Wednesday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Thursday morning"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Friday morning"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Saturday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Sunday morning"><i data-i="check" data-size="14"></i></button>
-            <span class="slot"><span class="d-full">Afternoon</span><span class="d-short">Aft</span><small>12–17</small></span>
-            <button class="cell on" type="button" data-cell aria-label="Monday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Tuesday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Wednesday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Thursday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Friday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Saturday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Sunday afternoon"><i data-i="check" data-size="14"></i></button>
-            <span class="slot"><span class="d-full">Evening</span><span class="d-short">Eve</span><small>17–21</small></span>
-            <button class="cell on" type="button" data-cell aria-label="Monday evening"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Tuesday evening"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Wednesday evening"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Thursday evening"><i data-i="check" data-size="14"></i></button><button class="cell on" type="button" data-cell aria-label="Friday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Saturday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell aria-label="Sunday evening"><i data-i="check" data-size="14"></i></button>
+            <span></span><span class="day"><span class="d-full">Mon</span><span class="d-short">M</span></span><span class="day"><span class="d-full">Tue</span><span class="d-short">T</span></span><span class="day"><span class="d-full">Wed</span><span class="d-short">W</span></span><span class="day"><span class="d-full">Thu</span><span class="d-short">T</span></span><span class="day"><span class="d-full">Fri</span><span class="d-short">F</span></span><span class="day"><span class="d-full">Sat</span><span class="d-short">S</span></span><span class="day"><span class="d-full">Sun</span><span class="d-short">S</span></span>
+            <span class="slot"><span class="d-full">Morning</span><span class="d-short">Mor</span><small>08–12</small></span><button class="cell" type="button" data-cell data-slot="mon_morning" aria-label="Monday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="tue_morning" aria-label="Tuesday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="wed_morning" aria-label="Wednesday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="thu_morning" aria-label="Thursday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="fri_morning" aria-label="Friday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="sat_morning" aria-label="Saturday morning"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="sun_morning" aria-label="Sunday morning"><i data-i="check" data-size="14"></i></button>
+            <span class="slot"><span class="d-full">Afternoon</span><span class="d-short">Aft</span><small>12–17</small></span><button class="cell" type="button" data-cell data-slot="mon_afternoon" aria-label="Monday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="tue_afternoon" aria-label="Tuesday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="wed_afternoon" aria-label="Wednesday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="thu_afternoon" aria-label="Thursday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="fri_afternoon" aria-label="Friday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="sat_afternoon" aria-label="Saturday afternoon"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="sun_afternoon" aria-label="Sunday afternoon"><i data-i="check" data-size="14"></i></button>
+            <span class="slot"><span class="d-full">Evening</span><span class="d-short">Eve</span><small>17–21</small></span><button class="cell" type="button" data-cell data-slot="mon_evening" aria-label="Monday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="tue_evening" aria-label="Tuesday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="wed_evening" aria-label="Wednesday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="thu_evening" aria-label="Thursday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="fri_evening" aria-label="Friday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="sat_evening" aria-label="Saturday evening"><i data-i="check" data-size="14"></i></button><button class="cell" type="button" data-cell data-slot="sun_evening" aria-label="Sunday evening"><i data-i="check" data-size="14"></i></button>
           </div>
-          <p class="helper">Shown in your time zone: Lisbon (UTC+1). Learners see it converted to theirs.</p>
+          <p class="helper" data-w-tz-note>Shown in your time zone.</p>
         </div>
         <div class="field">
-          <span class="label">Accepting new students <span class="req">*</span></span>
-          <label class="toggle"><input type="checkbox" checked><span>Show my profile in search and allow new requests</span></label>
+          <span class="label">Accepting new students</span>
+          <label class="toggle"><input type="checkbox" id="w-accepting" checked><span>Show my profile in search and allow new requests</span></label>
         </div>
       </div>
-      <details class="disclosure" open>
+      <details class="disclosure">
         <summary><div><strong>Add more details (optional)</strong><span>Group price · Package discount · Minimum commitment</span></div><i data-i="chev" class="chev"></i></summary>
         <div class="disclosure-body">
           <div class="grid-2">
-            <div class="field"><label class="label" for="w-gprice">Group price <span class="opt">(optional)</span></label><div class="input-group"><span class="affix">$</span><input id="w-gprice" inputmode="decimal" value="12"><span class="affix">per learner</span></div></div>
-            <div class="field"><label class="label" for="w-min">Minimum commitment <span class="opt">(optional)</span></label><select class="input" id="w-min"><option>No minimum</option><option selected>4 lessons</option><option>8 lessons</option></select></div>
+            <div class="field"><label class="label" for="w-gprice">Group price <span class="opt">(optional)</span></label><div class="input-group"><span class="affix" data-w-symbol>$</span><input id="w-gprice" inputmode="decimal" maxlength="9"><span class="affix">per learner</span></div></div>
+            <div class="field"><label class="label" for="w-min">Minimum commitment <span class="opt">(optional)</span></label><select class="input" id="w-min"><option value="">No minimum</option><option value="4">4 lessons</option><option value="8">8 lessons</option><option value="12">12 lessons</option></select></div>
           </div>
           <div class="field">
             <span class="label">Package discount <span class="opt">(optional)</span></span>
-            <div class="grid-2" style="gap:12px"><select class="input" aria-label="Package size"><option>5 lessons</option><option selected>10 lessons</option></select><div class="input-group"><input aria-label="Discount" inputmode="numeric" value="10"><span class="affix">% off</span></div></div>
+            <div class="grid-2" style="gap:12px"><select class="input" aria-label="Package size" id="w-pack"><option value="">No package</option><option value="5">5 lessons</option><option value="10">10 lessons</option><option value="20">20 lessons</option></select><div class="input-group"><input aria-label="Discount" inputmode="numeric" id="w-disc" maxlength="2"><span class="affix">% off</span></div></div>
           </div>
         </div>
       </details>
@@ -291,23 +279,22 @@
       <div class="card fields">
         <div class="field">
           <span class="label">Contact method <span class="req">*</span></span>
-          <div class="grid-2" style="gap:12px"><select class="input" aria-label="Contact method"><option>Telegram</option><option>WhatsApp</option><option>Email</option><option>Phone</option></select><input class="input" aria-label="Contact" value="@olena_english"></div>
+          <div class="grid-2" style="gap:12px"><select class="input" aria-label="Contact method" id="w-contact-method"><option value="telegram">Telegram</option><option value="whatsapp">WhatsApp</option><option value="email">Email</option><option value="phone">Phone</option></select><input class="input" aria-label="Contact" id="w-contact" maxlength="100" placeholder="@username"></div>
           <p class="info-strip"><i data-i="lock" data-size="14"></i>Hidden until you accept a request. Only learners you accept can see it.</p>
         </div>
       </div>
-      <details class="disclosure" open>
+      <details class="disclosure">
         <summary><div><strong>Add more details (optional)</strong><span>Questions for learners · Response time</span></div><i data-i="chev" class="chev"></i></summary>
         <div class="disclosure-body">
           <div class="field">
-            <div class="label-row"><span class="label">Questions for learners <span class="opt">(optional)</span></span><span class="t-micro muted">2 / 3</span></div>
-            <div class="input-row"><div class="input-group" style="flex:1"><input aria-label="Question 1" value="What would you like to be able to do after 3 months?"><button class="icon-btn" type="button" aria-label="Delete question" data-remove-row style="margin-right:-8px"><i data-i="trash"></i></button></div></div>
-            <div class="input-row"><div class="input-group" style="flex:1"><input aria-label="Question 2" value="Have you taken English lessons before?"><button class="icon-btn" type="button" aria-label="Delete question" data-remove-row style="margin-right:-8px"><i data-i="trash"></i></button></div></div>
-            <div><button class="add-chip" type="button" data-demo><i data-i="plus"></i>Add question</button></div>
+            <div class="label-row"><span class="label">Questions for learners <span class="opt">(optional)</span></span><span class="t-micro muted" data-w-question-count>0 / 3</span></div>
+            <div class="fields" style="gap:8px" data-w-questions></div>
+            <div><button class="add-chip" type="button" data-w-add="question"><i data-i="plus"></i>Add question</button></div>
             <p class="helper">Up to 3. Learners answer them in their request.</p>
           </div>
           <div class="field">
             <span class="label">Response time <span class="opt">(optional)</span></span>
-            <div class="seg"><button type="button" class="is-active">Within 24 hours</button><button type="button">Within 48 hours</button></div>
+            <div class="seg" id="w-response"><button type="button" class="is-active" data-v="24">Within 24 hours</button><button type="button" data-v="48">Within 48 hours</button></div>
             <p class="helper">Shown on your card. Requests still expire after 72 hours.</p>
           </div>
         </div>
@@ -324,40 +311,24 @@
       </div>
       <div class="card">
         <p class="muted">This is exactly how your card appears in learners’ search results. Match % is calculated for each learner.</p>
-        <div class="preview-box role-learner" style="margin-top:20px">
-          <article class="tcard">
-            <div class="tcard-main">
-              <span class="avatar av-72">OK</span>
-              <div class="tcard-body">
-                <div class="tcard-name"><h3>Olena Kovalenko</h3><span class="badge badge-trial">Free trial</span><span class="badge badge-verified"><i data-i="check" data-size="12"></i>Verified</span></div>
-                <div class="tcard-rest">
-                  <p class="tcard-headline">Conversational English for professionals and travellers</p>
-                  <div class="tags"><span class="tag">English</span><span class="tag">Speaking</span><span class="tag">Business English</span></div>
-                  <div class="meta"><span class="rating"><i data-i="star" data-size="14" class="star"></i><b>4.9</b> (128)</span><span>7 years experience</span><span>Online · In person</span><span>Replies in ~12h</span></div>
-                </div>
-              </div>
-            </div>
-            <div class="tcard-side">
-              <div class="row-between side-top"><span class="badge badge-match">94% match</span><span class="link link-muted" style="font-size:13px"><i data-i="flag" data-size="14"></i>Report</span></div>
-              <div class="price-row"><span class="price">$22<small>/ lesson</small></span><span class="badge badge-match show-mobile">94% match</span></div>
-              <span class="btn btn-primary btn-block">Send request</span>
-              <a class="btn btn-secondary btn-block" href="teacher.html">View profile</a>
-            </div>
-          </article>
-        </div>
+        <div class="preview-box role-learner" style="margin-top:20px" data-w-preview></div>
         <hr class="divider" style="margin:24px 0">
         <div class="review-steps">
-          <div><strong>Basics</strong><p>Name, photo, headline, about, location, languages</p><button class="link" type="button" data-go="1"><i data-i="edit" data-size="14"></i>Edit</button></div>
-          <div><strong>Subjects</strong><p>English, Business English · A2–C1 · Teens, Adults</p><button class="link" type="button" data-go="2"><i data-i="edit" data-size="14"></i>Edit</button></div>
-          <div><strong>Experience</strong><p>7 years · CELTA · LinkedIn</p><button class="link" type="button" data-go="3"><i data-i="edit" data-size="14"></i>Edit</button></div>
-          <div><strong>Format</strong><p>Online and offline · Individual, group · 45/60 min</p><button class="link" type="button" data-go="4"><i data-i="edit" data-size="14"></i>Edit</button></div>
-          <div><strong>Price &amp; availability</strong><p>$22 / lesson · Free 30-min trial · 16 slots / week</p><button class="link" type="button" data-go="5"><i data-i="edit" data-size="14"></i>Edit</button></div>
-          <div><strong>Requests</strong><p>Telegram · 2 questions · Replies within 24h</p><button class="link" type="button" data-go="6"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Basics</strong><p data-w-sum="1"></p><button class="link" type="button" data-go="1"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Subjects</strong><p data-w-sum="2"></p><button class="link" type="button" data-go="2"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Experience</strong><p data-w-sum="3"></p><button class="link" type="button" data-go="3"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Format</strong><p data-w-sum="4"></p><button class="link" type="button" data-go="4"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Price &amp; availability</strong><p data-w-sum="5"></p><button class="link" type="button" data-go="5"><i data-i="edit" data-size="14"></i>Edit</button></div>
+          <div><strong>Requests</strong><p data-w-sum="6"></p><button class="link" type="button" data-go="6"><i data-i="edit" data-size="14"></i>Edit</button></div>
         </div>
-        <p class="info-strip role" style="margin-top:20px"><i data-i="shield"></i>We review every profile before it goes live. Next, you’ll create an account to submit it.</p>
+        <p class="info-strip role" style="margin-top:20px" data-w-submit-note><i data-i="shield"></i>We review every profile before it goes live.</p>
       </div>
-      <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="6"><i data-i="back"></i>Back</button><a class="btn btn-primary btn-lg" href="signup-teacher.html">Submit for review</a></div>
+      <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="6"><i data-i="back"></i>Back</button><button class="btn btn-primary btn-lg" type="button" data-w-submit>Submit for review</button></div>
     </section>
+    <datalist id="ll-countries"><option>Ukraine</option><option>Poland</option><option>Portugal</option><option>Germany</option><option>United Kingdom</option><option>United States</option><option>Spain</option><option>France</option></datalist>
+    <datalist id="ll-cities"><option>Kyiv</option><option>Lviv</option><option>Odesa</option><option>Kharkiv</option><option>Dnipro</option><option>Warsaw</option><option>Lisbon</option><option>Berlin</option></datalist>
+    <datalist id="ll-subjects"></datalist>
+    <datalist id="ll-languages"><option>English</option><option>Ukrainian</option><option>Polish</option><option>German</option><option>Spanish</option><option>French</option><option>Portuguese</option><option>Italian</option></datalist>
   </main>
 </div>
 </body>

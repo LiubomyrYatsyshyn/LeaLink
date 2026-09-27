@@ -24,6 +24,8 @@ Caddy serves the site at `/` and forwards `/api/*` to this app.
 
 ## Screens → endpoints
 
+Each page has its script in `site/assets/js/pages/` (shared client: `site/assets/js/api.js`).
+
 | Page | Endpoints |
 |---|---|
 | `login.html`, `signup*.html` | `POST /api/auth/login`, `POST /api/auth/register` (then send the saved request or profile) |
@@ -35,6 +37,7 @@ Caddy serves the site at `/` and forwards `/api/*` to this app.
 | `teacher-home.html` | `GET /api/teacher/profile`, `GET /api/requests/incoming`, `GET /api/requests/students`, `POST /api/requests/{id}/accept`, `/decline`, `/started`, `/review`, `/close` |
 | `chat.html`, `chat-teacher.html` | `GET /api/chats?as=learner` / `?as=teacher`, `GET /api/chats/{id}`, `POST /api/chats/{id}/messages` |
 | `settings.html` | `GET`/`PATCH /api/auth/me`, `POST`/`DELETE /api/auth/me/photo`, `POST /api/auth/change-password` |
+| `admin.html` (moderators) | `/api/admin/teachers`, `/api/admin/reports`, `/api/admin/users` |
 
 Auth: send `Authorization: Bearer <access_token>` (from login/register). Logging out = forgetting the token.
 Changing the password logs out all other devices.

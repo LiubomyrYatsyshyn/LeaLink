@@ -30,8 +30,9 @@
       <div class="hero-right anim-slide-right" style="animation-delay:600ms">
         <span class="hero-fact"><i data-i="clock" data-size="14"></i>Replies within 72 hours</span>
         <span class="hero-chip">FREE</span>
-        <a class="btn btn-secondary" href="login.html">Log in</a>
-        <a class="btn btn-dark" href="signup.html">Sign up</a>
+        <a class="btn btn-secondary" href="login.html" data-guest-only>Log in</a>
+        <a class="btn btn-dark" href="signup.html" data-guest-only>Sign up</a>
+        <a class="btn btn-dark" href="learner.html" data-user-only hidden>My account</a>
       </div>
       <button class="hamburger anim-fade-in" style="animation-delay:400ms" type="button" aria-label="Toggle menu" aria-expanded="false" data-hero-menu>
         <span class="hb-open"><i data-i="menu" data-size="22"></i></span>
@@ -47,12 +48,13 @@
           <a class="l" style="--i:0" href="search.html"><span class="num">01.</span><span class="lbl">Find a teacher</span></a>
           <a class="t" style="--i:1" href="wizard.html"><span class="num">02.</span><span class="lbl">Teach on LeaLink</span></a>
           <a style="--i:2" href="#how"><span class="num">03.</span><span class="lbl">How it works</span></a>
-          <a style="--i:3" href="login.html"><span class="num">04.</span><span class="lbl">Log in</span></a>
+          <a style="--i:3" href="login.html" data-guest-only><span class="num">04.</span><span class="lbl">Log in</span></a>
+          <a style="--i:3" href="learner.html" data-user-only hidden><span class="num">04.</span><span class="lbl">My account</span></a>
         </nav>
         <div class="hero-menu-foot">
           <div class="row" style="--gap:10px"><i data-i="clock" data-size="14"></i><span class="t-small">Replies within 72 hours</span><span class="hero-chip">FREE</span></div>
           <div class="row" style="--gap:8px"><span class="t-small muted">No payments on LeaLink — you agree directly.</span></div>
-          <a class="btn btn-dark btn-lg btn-block" href="signup.html">Sign up</a>
+          <a class="btn btn-dark btn-lg btn-block" href="signup.html" data-guest-only>Sign up</a>
         </div>
       </div>
     </div>

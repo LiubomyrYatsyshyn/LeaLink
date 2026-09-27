@@ -10,51 +10,47 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/lealink.css">
 <script src="assets/js/lealink.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/pages/auth.js" defer></script>
 </head>
 <body class="bg-surface" data-role="learner">
 <header class="site-header" data-header="auth"></header>
 
 <main class="auth">
-  <form class="auth-card" data-href="learner.html?toast=sent" novalidate>
+  <form class="auth-card" data-form="signup-learner" novalidate>
     <span class="badge badge-role">Last step</span>
     <h1 style="margin-top:16px">Create an account to send your request</h1>
-    <p class="sub">Your request to Olena is ready. We’ve filled in what we know.</p>
+    <p class="sub" data-sub>Your request is ready. We’ve filled in what we know.</p>
     <div class="fields">
       <button class="btn btn-secondary btn-lg btn-block" type="button" data-demo><span class="g-mark">G</span> Continue with Google</button>
       <div class="or-divider">or</div>
       <div class="field">
         <div class="label-row"><label class="label" for="name">Full name <span class="req">*</span></label><span class="from"><i data-i="spark" data-size="12"></i>From your request</span></div>
-        <input class="input" id="name" autocomplete="name" value="Anna Petrenko">
+        <input class="input" id="name" autocomplete="name" maxlength="100" required>
       </div>
       <div class="field">
         <label class="label" for="email">Email <span class="req">*</span></label>
-        <input class="input" id="email" type="email" autocomplete="email" value="anna.petrenko@example.com">
+        <input class="input" id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
       </div>
       <div class="field">
         <label class="label" for="password">Password <span class="req">*</span></label>
-        <input class="input" id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+        <input class="input" id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required>
         <p class="helper">Use 8 or more characters.</p>
       </div>
-      <label class="check"><input type="checkbox" checked><span>Email me when Olena replies</span></label>
+      <label class="check"><input type="checkbox" id="notify" checked><span data-notify-text>Email me when the teacher replies</span></label>
+      <p class="error-msg" data-form-error hidden></p>
       <button class="btn btn-primary btn-lg btn-block" type="submit">Create account and send request</button>
-      <p class="auth-foot">Already have an account? <a href="login.html">Log in</a></p>
+      <p class="auth-foot">Already have an account? <a href="login.html" data-login-back>Log in</a></p>
     </div>
   </form>
 
   <aside class="summary-card">
     <h2>Your request</h2>
-    <div class="row" style="margin-top:16px"><span class="avatar av-40">OK</span><div><div class="t-small">Olena Kovalenko</div><div class="t-caption muted" style="font-weight:400">English · Speaking, Job interviews</div></div></div>
+    <div class="row" style="margin-top:16px"><span data-t-avatar></span><div><div class="t-small" data-t-name></div><div class="t-caption muted" style="font-weight:400" data-t-sub></div></div></div>
     <hr class="divider" style="margin:16px 0">
-    <div class="summary-grid">
-      <div><small>Level</small>Intermediate (B1)</div>
-      <div><small>Goal</small>Job interviews</div>
-      <div><small>Lessons</small>2 × 60 min / week</div>
-      <div><small>Schedule</small>Weekday evenings</div>
-      <div><small>Start</small>As soon as possible</div>
-      <div><small>Budget</small>$15–$35 USD</div>
-    </div>
+    <div class="summary-grid" data-summary></div>
     <hr class="divider" style="margin:16px 0">
-    <p class="quote">“Hi Olena! I have job interviews in English next month and want to practise…”</p>
+    <p class="quote" data-quote></p>
   </aside>
 </main>
 </body>

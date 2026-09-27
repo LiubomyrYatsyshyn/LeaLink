@@ -10,12 +10,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/lealink.css">
 <script src="assets/js/lealink.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/pages/auth.js" defer></script>
 </head>
 <body class="bg-surface">
 <header class="site-header" data-header="auth"></header>
 
 <main class="auth">
-  <div class="auth-card role-learner" data-role-form>
+  <form class="auth-card role-learner" data-role-form data-form="signup" novalidate>
     <h1>Create your account</h1>
     <p class="sub">It’s free. You can switch between learning and teaching later in settings.</p>
     <div class="fields">
@@ -34,22 +36,23 @@
       </div>
       <div class="field">
         <label class="label" for="name">Full name <span class="req">*</span></label>
-        <input class="input" id="name" autocomplete="name" placeholder="e.g. Anna Petrenko">
+        <input class="input" id="name" autocomplete="name" placeholder="e.g. Anna Petrenko" maxlength="100" required>
       </div>
       <div class="field">
         <label class="label" for="email">Email <span class="req">*</span></label>
-        <input class="input" id="email" type="email" autocomplete="email" placeholder="you@example.com">
+        <input class="input" id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
       </div>
       <div class="field">
         <label class="label" for="password">Password <span class="req">*</span></label>
-        <input class="input" id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+        <input class="input" id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required>
         <p class="helper">Use 8 or more characters.</p>
       </div>
-      <label class="check" style="--r600:var(--text)"><input type="checkbox" checked><span>Email me when something happens with my requests</span></label>
-      <a class="btn btn-dark btn-lg btn-block" href="search.html" data-role-submit>Create account</a>
-      <p class="auth-foot">Already have an account? <a href="login.html" style="color:var(--text)">Log in</a></p>
+      <label class="check" style="--r600:var(--text)"><input type="checkbox" id="notify" checked><span>Email me when something happens with my requests</span></label>
+      <p class="error-msg" data-form-error hidden></p>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" data-role-submit>Create account</button>
+      <p class="auth-foot">Already have an account? <a href="login.html" style="color:var(--text)" data-keep-next>Log in</a></p>
     </div>
-  </div>
+  </form>
 </main>
 </body>
 </html>

@@ -10,12 +10,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/lealink.css">
 <script src="assets/js/lealink.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/pages/auth.js" defer></script>
 </head>
 <body class="bg-surface">
 <header class="site-header" data-header="auth"></header>
 
 <main class="auth">
-  <form class="auth-card" data-href="learner.html" novalidate>
+  <form class="auth-card" data-form="login" novalidate>
     <h1>Log in to LeaLink</h1>
     <p class="sub">Welcome back. Log in to see your requests and chats.</p>
     <div class="fields">
@@ -23,14 +25,15 @@
       <div class="or-divider">or</div>
       <div class="field">
         <label class="label" for="email">Email <span class="req">*</span></label>
-        <input class="input" id="email" type="email" autocomplete="email" placeholder="you@example.com" value="anna.petrenko@example.com">
+        <input class="input" id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
       </div>
       <div class="field">
         <label class="label" for="password">Password <span class="req">*</span></label>
-        <input class="input" id="password" type="password" autocomplete="current-password" placeholder="Your password" value="prototype1">
+        <input class="input" id="password" type="password" autocomplete="current-password" placeholder="Your password" required>
       </div>
+      <p class="error-msg" data-form-error hidden></p>
       <button class="btn btn-dark btn-lg btn-block" type="submit">Log in</button>
-      <p class="auth-foot">New to LeaLink? <a href="signup.html">Create an account</a></p>
+      <p class="auth-foot">New to LeaLink? <a href="signup.html" data-keep-next>Create an account</a></p>
     </div>
   </form>
 </main>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moderation · LeaLink</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/lealink.css">
+<script src="assets/js/lealink.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/pages/admin.js" defer></script>
+</head>
+<body class="bg-surface">
+<header class="site-header" data-header="learner"></header>
+
+<section class="band">
+  <div class="container">
+    <p class="eyebrow">Moderators</p>
+    <h1 class="t-h1">Moderation</h1>
+    <p class="lead">Check teacher profiles before they go live, handle reports and block users.</p>
+  </div>
+</section>
+
+<main class="container page" style="max-width:1040px" data-tabs-scope>
+  <div class="tabs" role="tablist" style="margin-bottom:24px">
+    <button class="tab is-active" type="button" data-tab="profiles">Profiles to review <span class="count" data-count="profiles">–</span></button>
+    <button class="tab" type="button" data-tab="reports">Open reports <span class="count" data-count="reports">–</span></button>
+    <button class="tab" type="button" data-tab="users">Users</button>
+  </div>
+
+  <div data-panel="profiles"><div class="list" data-list="profiles"><p class="muted">Loading…</p></div></div>
+  <div data-panel="reports" hidden><div class="list" data-list="reports"><p class="muted">Loading…</p></div></div>
+  <div data-panel="users" hidden>
+    <div class="input-icon" style="max-width:420px;margin-bottom:16px"><i data-i="search"></i><input class="input" type="search" placeholder="Name or email" aria-label="Search users" data-user-search></div>
+    <div class="list-sm" data-list="users"></div>
+  </div>
+</main>
+
+<dialog class="dialog" id="reject" aria-labelledby="reject-title">
+  <div class="dialog-head"><div><h2 id="reject-title">Send back for changes</h2><p>The teacher gets this note by email and in their profile.</p></div><button class="icon-btn" type="button" data-close aria-label="Close"><i data-i="x"></i></button></div>
+  <div class="dialog-body fields">
+    <div class="field" data-field="note"><label class="label" for="reject-note">What should they fix? <span class="req">*</span></label><textarea class="input" id="reject-note" rows="4" maxlength="1000"></textarea></div>
+  </div>
+  <div class="dialog-foot"><button class="btn btn-secondary" type="button" data-close>Cancel</button><button class="btn btn-primary" type="button" data-confirm-reject>Send back</button></div>
+</dialog>
+</body>
+</html>
