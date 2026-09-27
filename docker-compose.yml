@@ -11,8 +11,51 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  # FastAPI backend, reachable only through Caddy at /api (docs: /api/docs).
+  api:
+    build: ./backend
+    container_name: lealink-api
+    environment:
+      DATABASE_URL: postgresql+psycopg://lealink:${POSTGRES_PASSWORD:-lealink}@db:5432/lealink
+      SECRET_KEY: ${SECRET_KEY:-}
+      SITE_ADDRESS: ${SITE_ADDRESS:-}
+      SITE_URL: ${SITE_URL:-}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+    volumes:
+      - api_data:/data
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # PostgreSQL. No published port: only the api container can reach it.
+  db:
+    image: postgres:16-alpine
+    container_name: lealink-db
+    environment:
+      POSTGRES_USER: lealink
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lealink}
+      POSTGRES_DB: lealink
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lealink -d lealink"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
     restart: unless-stopped
 
 volumes:
   caddy_data:
   caddy_config:
+  api_data:
+  pg_data:

@@ -2,7 +2,16 @@
 # Not set   -> ":80": plain HTTP on any address (works by IP).
 # A domain  -> Caddy serves it and gets an HTTPS certificate automatically.
 {$SITE_ADDRESS::80} {
-	root * /srv
 	encode gzip zstd
-	file_server
+
+	# Backend (FastAPI container "api"): /api/..., docs at /api/docs
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+
+	# Static site
+	handle {
+		root * /srv
+		file_server
+	}
 }

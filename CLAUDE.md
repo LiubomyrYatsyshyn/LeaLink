@@ -12,13 +12,22 @@ Reply to the user in Ukrainian.
 - Quick check without Docker: `python3 -m http.server 8090 --directory site`, then open `http://localhost:8090` (also in `.claude/launch.json` as `lealink-site`).
 - Same setup as the server: `docker compose up -d --build` in `~/LeaLink-push`, then `http://localhost`; stop with `docker compose down`. Docker Desktop must be running.
 
-## Frontend (clickable prototype, no backend logic yet)
+## Frontend (clickable prototype, not wired to the API yet)
 - Built from `design-reference/` frames 00-41. Shared styles in `site/assets/css/lealink.css` (tokens from frame 00), behaviour in `site/assets/js/lealink.js` (icons, header, tabs, dialogs, chips, sliders, toasts).
 - Headers are rendered by JS from `<header data-header="guest|auth|learner|teacher|wizard" data-active="...">`. Icons: `<i data-i="name">`.
 - Role colour: `data-role="learner|teacher"` on `<body>` (or `.role-learner` / `.role-teacher` on a block).
 - Screen states via URL: `?state=empty|error|errors`, `?tab=`, `?dialog=`, `?toast=`, `?step=1-6|preview`. `site/screens.html` links every frame to its page/state.
 - Mobile (frames 35-41) is the same pages below 900 px, not separate files.
 - Buttons without a designed destination use `data-demo` (shows a "not connected yet" toast).
+
+## Backend (added 2026-09-27)
+- `backend/`: FastAPI + SQLModel + Alembic + PostgreSQL, see `backend/README.md` (MVP point -> endpoint, page -> endpoint).
+- Keep it simple: sync SQLModel sessions (`expire_on_commit=False`), JSON columns for lists, search filtered in Python, no Celery/Redis/websockets (chat = polling, request expiry = loop inside the API).
+- Containers: `web` (Caddy, `/api/*` -> `api:8000`), `api`, `db` (no public port). Migrations run on API start.
+- Tests: `docker compose run --rm api sh -c "pip install -q --user -r requirements-dev.txt && python -m pytest -q"` (own DB `lealink_test`).
+- New migration: `docker compose run --rm -v "$PWD/backend:/app" api alembic revision --autogenerate -m "..."`.
+- Moderator: `docker compose exec api python -m app.cli make-admin EMAIL`; demo teachers (local only): `... app.cli seed-demo`.
+- Frontend pages are still the static prototype; they are not wired to the API yet.
 
 ## Brand and motion (added 2026-09-26)
 - Logo: vector mark in `site/assets/logo-mark.svg` (recreated from the user's image; swap in the original file if the user provides it). In pages use `data-logo` / `data-mark`; JS injects the SVG and the gradient wordmark. Montserrat is used only for the wordmark and the home hero title; UI stays Inter.
@@ -27,7 +36,7 @@ Reply to the user in Ukrainian.
 - `prefers-reduced-motion` turns animation off. To review motion anyway open any page with `?motion=1` (remembered; `?motion=0` resets).
 
 ## Infrastructure
-- Site: `site/` (static HTML) served by Caddy in Docker (`Dockerfile`, `docker-compose.yml`).
+- Site: `site/` (static HTML) served by Caddy in Docker (`Dockerfile`, `docker-compose.yml`); `/api/*` goes to the backend container.
 - Server: DigitalOcean droplet, Ubuntu 24.04, `root@159.223.18.155`, project in `/opt/lealink`, container `lealink-web`, URL `https://lealink.159.223.18.155.nip.io` (free nip.io name pointing at the server IP; sslip.io also works but the user's home router DNS cannot resolve it; set via `SITE_ADDRESS` in `/opt/lealink/.env`; the bare IP now redirects to https and does not work).
 - HTTPS/domain: set `SITE_ADDRESS` in `/opt/lealink/.env` on the server (see `docs/DEPLOY.md`); without it the site is plain HTTP on the IP.
 - Auto-deploy: `deploy/lealink-deploy.timer` runs `scripts/auto-deploy.sh` every 30 s. Details in `docs/DEPLOY.md`.
