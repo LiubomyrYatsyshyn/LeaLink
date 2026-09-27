@@ -40,9 +40,40 @@ automatically when the API container starts. Details: `backend/README.md`.
 Optional settings in `/opt/lealink/.env` (then `docker compose up -d`):
 
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` - send real
-  emails. Without them emails are only written to `docker compose logs api`.
+  emails (see "Email" below). Without them emails are only written to
+  `docker compose logs api`.
 - `SITE_URL` - the link in emails (by default taken from `SITE_ADDRESS`).
 - `SECRET_KEY` - not needed: generated once and kept in the `api_data` volume.
+
+## Email (SMTP)
+
+DigitalOcean blocks outgoing ports 25, 465 and 587 on Droplets, so Gmail and most
+SMTP servers can't be reached. Use a provider that accepts port 2525:
+Brevo (`smtp-relay.brevo.com:2525`, free 300 emails a day).
+
+1. Sign up at brevo.com (free plan).
+2. Add a sender: Senders, Domains & Dedicated IPs -> Senders -> Add a sender, then
+   enter the 6-digit code Brevo emails to that address. Unverified senders can't send.
+3. Account menu -> Settings -> SMTP & API -> SMTP tab -> "Generate a new SMTP key".
+   Copy the key right away (Brevo shows it only once). The SMTP login is on the same
+   tab (an address like `...@smtp-brevo.com`).
+4. On your computer run (it asks for the login, key and sender; the key is typed hidden):
+
+   ```bash
+   ssh -t root@159.223.18.155 'bash /opt/lealink/scripts/set-smtp.sh'
+   ```
+
+   It writes `SMTP_*` to `/opt/lealink/.env`, restarts the API and sends a test email.
+
+Check again at any time:
+
+```bash
+cd /opt/lealink && docker compose exec api python -m app.cli send-test-email you@example.com
+```
+
+Without an own domain, Brevo replaces a free sender address (@gmail.com) with its own,
+and some emails may land in spam. With a domain, authenticate it in Brevo
+(Senders, Domains -> Domains) and use an address on it as the sender.
 
 Moderator rights (the user signs up on the site first):
 

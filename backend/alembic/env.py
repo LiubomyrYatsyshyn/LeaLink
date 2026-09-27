@@ -11,7 +11,7 @@ from sqlmodel import SQLModel
 from app import config, models  # noqa: F401  (registers the tables)
 
 if context.config.config_file_name is not None:
-    fileConfig(context.config.config_file_name)
+    fileConfig(context.config.config_file_name, disable_existing_loggers=False)
 
 target_metadata = SQLModel.metadata
 

@@ -107,5 +107,5 @@ Set them in `.env` next to `docker-compose.yml` (on the server: `/opt/lealink/.e
 | `SECRET_KEY` | generated once and kept in the `api_data` volume | signs login tokens |
 | `POSTGRES_PASSWORD` | `lealink` | database password. The database has no public port. Set it before the first start; later changes need `ALTER USER lealink PASSWORD '...'` in the database too |
 | `SITE_URL` | from `SITE_ADDRESS`, else `http://localhost` | link in emails |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` | empty | email sending; empty `SMTP_HOST` = emails only in `docker compose logs api` |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` | empty | email sending (port 465 = SSL, others = STARTTLS); empty `SMTP_HOST` = emails only in `docker compose logs api`. On the server: `scripts/set-smtp.sh`, check with `python -m app.cli send-test-email you@example.com` (docs/DEPLOY.md, "Email") |
 | `CORS_ORIGINS` | empty | only if the frontend is served from another domain |

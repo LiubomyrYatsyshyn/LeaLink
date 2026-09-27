@@ -11,26 +11,36 @@ from .models import User
 log = logging.getLogger("lealink.email")
 
 
-def send_email(to: str, subject: str, text: str) -> None:
-    body = f"{text}\n\nOpen LeaLink: {config.site_url()}\n\nYou can change email notifications in Account settings."
-    if not config.SMTP_HOST:
-        log.info("Email (SMTP not configured) to %s: %s\n%s", to, subject, body)
-        return
+def _body(text: str) -> str:
+    return f"{text}\n\nOpen LeaLink: {config.site_url()}\n\nYou can change email notifications in Account settings."
+
+
+def deliver(to: str, subject: str, text: str) -> None:
+    """Send one email through SMTP. Raises on errors (see `python -m app.cli send-test-email`).
+
+    Port 465 uses SSL; any other port (587, 2525...) uses STARTTLS.
+    """
     msg = EmailMessage()
     msg["From"] = config.SMTP_FROM
     msg["To"] = to
     msg["Subject"] = f"LeaLink: {subject}"
-    msg.set_content(body)
-    try:
-        if config.SMTP_PORT == 465:
-            smtp = smtplib.SMTP_SSL(config.SMTP_HOST, config.SMTP_PORT, timeout=20)
-        else:
-            smtp = smtplib.SMTP(config.SMTP_HOST, config.SMTP_PORT, timeout=20)
+    msg.set_content(_body(text))
+    smtp_class = smtplib.SMTP_SSL if config.SMTP_PORT == 465 else smtplib.SMTP
+    with smtp_class(config.SMTP_HOST, config.SMTP_PORT, timeout=20) as smtp:
+        if config.SMTP_PORT != 465:
             smtp.starttls()
-        with smtp:
-            if config.SMTP_USER:
-                smtp.login(config.SMTP_USER, config.SMTP_PASSWORD)
-            smtp.send_message(msg)
+        if config.SMTP_USER:
+            smtp.login(config.SMTP_USER, config.SMTP_PASSWORD)
+        smtp.send_message(msg)
+
+
+def send_email(to: str, subject: str, text: str) -> None:
+    """Send a notification; errors are logged, never raised (the user's action already succeeded)."""
+    if not config.SMTP_HOST:
+        log.info("Email (SMTP not configured) to %s: %s\n%s", to, subject, _body(text))
+        return
+    try:
+        deliver(to, subject, text)
     except (OSError, smtplib.SMTPException):
         log.exception("Could not send email to %s", to)
 

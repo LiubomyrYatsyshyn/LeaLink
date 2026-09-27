@@ -46,6 +46,7 @@ Reply to the user in Ukrainian.
 - Server: DigitalOcean droplet, Ubuntu 24.04, `root@159.223.18.155`, project in `/opt/lealink`, container `lealink-web`, URL `https://lealink.159.223.18.155.nip.io` (free nip.io name pointing at the server IP; sslip.io also works but the user's home router DNS cannot resolve it; set via `SITE_ADDRESS` in `/opt/lealink/.env`; the bare IP now redirects to https and does not work).
 - HTTPS/domain: set `SITE_ADDRESS` in `/opt/lealink/.env` on the server (see `docs/DEPLOY.md`); without it the site is plain HTTP on the IP.
 - Auto-deploy: `deploy/lealink-deploy.timer` runs `scripts/auto-deploy.sh` every 30 s. Details in `docs/DEPLOY.md`.
+- Email: DigitalOcean blocks outgoing SMTP ports 25/465/587; port 2525 works. Provider: Brevo (`smtp-relay.brevo.com:2525`). The user sets the key with `ssh -t root@159.223.18.155 'bash /opt/lealink/scripts/set-smtp.sh'` (writes `SMTP_*` to `/opt/lealink/.env`); check with `docker compose exec api python -m app.cli send-test-email EMAIL`.
 - Design reference: `design-reference/LeaLink-D3-final-screens.pdf` (D3 "Split": green = learner, blue = teacher, Inter, English UI).
 
 ## Safety

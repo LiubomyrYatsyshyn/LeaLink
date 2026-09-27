@@ -1,14 +1,17 @@
 """Admin commands. Run them in the api container:
 
     docker compose exec api python -m app.cli make-admin you@example.com
+    docker compose exec api python -m app.cli send-test-email you@example.com
     docker compose exec api python -m app.cli seed-demo
 """
 import argparse
 import secrets
+import smtplib
 from decimal import Decimal
 
 from sqlmodel import select
 
+from . import config, emails
 from .db import new_session
 from .models import TeacherProfile, User, utcnow
 from .security import hash_password
@@ -22,6 +25,22 @@ def make_admin(email: str, revoke: bool = False) -> None:
         user.is_admin = not revoke
         session.commit()
         print(f"{user.email} is {'no longer' if revoke else 'now'} a moderator")
+
+
+def send_test_email(to: str) -> None:
+    """Send one email right now and report the SMTP error, if any (notifications only log errors)."""
+    if not config.SMTP_HOST:
+        raise SystemExit("SMTP_HOST is not set, so emails only go to the log. See docs/DEPLOY.md (Email).")
+    where = f"{config.SMTP_HOST}:{config.SMTP_PORT}"
+    try:
+        emails.deliver(to, "Test email", "Email sending works. LeaLink will notify people about requests and messages.")
+    except smtplib.SMTPAuthenticationError as e:
+        raise SystemExit(f"{where} rejected the login (SMTP_USER / SMTP_PASSWORD): {e.smtp_code} {e.smtp_error!r}") from None
+    except smtplib.SMTPException as e:
+        raise SystemExit(f"{where} refused the email: {e}") from None
+    except OSError as e:
+        raise SystemExit(f"Can't connect to {where}: {e}. Is the port blocked by the hosting?") from None
+    print(f"Sent a test email to {to} via {where} (from {config.SMTP_FROM}). Check the inbox and the spam folder.")
 
 
 DEMO_TEACHERS = [
@@ -73,10 +92,14 @@ def main() -> None:
     admin = commands.add_parser("make-admin", help="Give a user moderator rights")
     admin.add_argument("email")
     admin.add_argument("--revoke", action="store_true", help="Take the rights away")
+    test = commands.add_parser("send-test-email", help="Check the SMTP settings by sending one email")
+    test.add_argument("email")
     commands.add_parser("seed-demo", help="Add published demo teachers (for local testing)")
     args = parser.parse_args()
     if args.command == "make-admin":
         make_admin(args.email, args.revoke)
+    elif args.command == "send-test-email":
+        send_test_email(args.email)
     else:
         seed_demo()
 
