@@ -52,7 +52,7 @@ English, Business English, IELTS, Math, Python, Guitar, Spanish, Ukrainian
 |---|---|---|---|
 | Математика | Math | уже є; №2 за попитом | є |
 | Українська мова | Ukrainian | уже є; обов'язкова на НМТ | є |
-| Підготовка до НМТ | NMT Preparation | окрема популярна категорія на Buki; щороку сотні тисяч учасників | P1 |
+| Підготовка до НМТ | — (мета, не предмет) | популярна категорія на Buki; щороку сотні тисяч учасників. На LeaLink це **мета «НМТ»** всередині предмета (див. [TOP-50-SUBJECTS-UA.md](TOP-50-SUBJECTS-UA.md#мета-нмт)) | P1 |
 | Історія України | History of Ukraine | обов'язковий предмет НМТ | P1 |
 | Українська література | Ukrainian Literature | предмет на вибір на НМТ | P1 |
 | Географія | Geography | лідер серед предметів на вибір на НМТ-2026 | P1 |
@@ -193,14 +193,14 @@ English, Business English, IELTS, Math, Python, Guitar, Spanish, Ukrainian
 
 ## 4. Готовий список для `vocab.py`
 
-Поточні 8 предметів разом із P1 — 31 предмет:
+Поточні 8 предметів разом із P1 — 30 предметів (НМТ — мета, а не предмет):
 
 ```python
 SUBJECTS = [
     # Мови
     "English", "Business English", "IELTS", "German", "Polish", "French", "Spanish", "Ukrainian",
-    # Школа та НМТ
-    "Math", "NMT Preparation", "History of Ukraine", "Ukrainian Literature", "Geography",
+    # Школа (НМТ — мета всередині предмета)
+    "Math", "History of Ukraine", "Ukrainian Literature", "Geography",
     "Biology", "Chemistry", "Physics", "Primary School", "School Readiness", "Higher Math",
     # IT та навички
     "Python", "JavaScript", "Coding for Kids", "Excel & Google Sheets", "AI Tools", "Data Analytics",
