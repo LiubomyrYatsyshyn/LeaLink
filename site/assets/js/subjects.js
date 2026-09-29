@@ -102,6 +102,7 @@
       <div class="combo-list" role="listbox" id="${id}" hidden></div>`;
     const input = el.querySelector("input");
     const list = el.querySelector(".combo-list");
+    let placeholder = input.placeholder;
     const taken = () => (opts.taken ? opts.taken() : []);
 
     function matches(s, q) {
@@ -151,7 +152,20 @@
     function close() {
       list.hidden = true;
       input.setAttribute("aria-expanded", "false");
-      if (!opts.multiple) input.value = value;
+      if (!opts.multiple) {
+        input.value = value;
+        input.placeholder = placeholder;
+      }
+    }
+
+    /* Clicking a box that already has a subject empties it for typing; the subject stays as the hint
+       and comes back if nothing new is picked. */
+    function begin() {
+      if (!opts.multiple && value && input.value === value) {
+        input.placeholder = value;
+        input.value = "";
+      }
+      open();
     }
 
     function pick(name) {
@@ -163,11 +177,11 @@
       el.dispatchEvent(new Event("change", { bubbles: true }));
     }
 
-    input.addEventListener("focus", () => {
-      if (!opts.multiple) input.select();
-      open();
+    input.addEventListener("focus", begin);
+    input.addEventListener("click", begin);
+    input.addEventListener("blur", () => {
+      if (!list.hidden) close();
     });
-    input.addEventListener("click", open);
     input.addEventListener("input", () => {
       if (list.hidden) open();
       else draw();
@@ -184,15 +198,17 @@
         if (b && !b.hasAttribute("aria-disabled")) pick(b.dataset.name);
       } else if (e.key === "Escape") {
         close();
+        input.select(); // typing replaces the subject again
       } else if (e.key === "Tab") {
         close();
       }
     });
-    el.querySelector(".combo-toggle").addEventListener("click", () => {
-      if (list.hidden) {
-        input.focus();
-        open();
-      } else close();
+    const toggle = el.querySelector(".combo-toggle");
+    toggle.addEventListener("mousedown", (e) => e.preventDefault()); // keep the focus where it is
+    toggle.addEventListener("click", () => {
+      if (!list.hidden) close();
+      else if (document.activeElement === input) begin();
+      else input.focus();
     });
     list.addEventListener("mousedown", (e) => e.preventDefault()); // keep the focus in the input
     list.addEventListener("click", (e) => {
@@ -209,9 +225,9 @@
       value = s ? s.name : "";
       input.value = opts.multiple ? "" : value;
     };
-    el.setDisabled = (off, placeholder) => {
+    el.setDisabled = (off, text) => {
       input.disabled = off;
-      if (placeholder) input.placeholder = placeholder;
+      if (text) input.placeholder = placeholder = text;
     };
     return el;
   }
