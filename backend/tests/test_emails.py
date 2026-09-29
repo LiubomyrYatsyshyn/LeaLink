@@ -31,7 +31,7 @@ class FakeSMTP:
         self.calls.append(("login", user))
 
     def send_message(self, msg):
-        self.calls.append(("send", msg["From"], msg["To"], msg["Subject"], msg.get_content()))
+        self.calls.append(("send", msg))
 
 
 @pytest.fixture
@@ -46,14 +46,22 @@ def smtp(monkeypatch):
     return FakeSMTP
 
 
-def test_deliver_uses_starttls_on_port_2525(smtp):
-    emails.deliver("anna@example.com", "Hello", "Body text")
+def test_deliver_uses_starttls_on_port_2525(smtp, monkeypatch):
+    monkeypatch.setenv("SITE_DOMAIN", "lealink.example")
+    msg = emails.build("anna@example.com", "Hello", "Body <b>text</b>", link="chat.html?id=3", button="Open chat", tag="new-message")
+    emails.deliver(msg)
     calls = smtp.instances[0].calls
     assert calls[0] == ("connect", "smtp-relay.brevo.com", 2525)
     assert calls[1:3] == [("starttls",), ("login", "login@smtp-brevo.com")]
-    _, sender, to, subject, content = calls[3]
-    assert (sender, to, subject) == ("LeaLink <sender@example.com>", "anna@example.com", "LeaLink: Hello")
-    assert "Body text" in content and "Open LeaLink:" in content
+    sent = calls[3][1]
+    assert (sent["From"], sent["To"], sent["Subject"]) == ("LeaLink <sender@example.com>", "anna@example.com", "LeaLink: Hello")
+    assert sent["X-Mailin-tag"] == "new-message"
+    plain = sent.get_body(("plain",)).get_content()
+    page = sent.get_body(("html",)).get_content()
+    assert "Open chat: https://lealink.example/chat.html?id=3" in plain
+    assert 'href="https://lealink.example/chat.html?id=3"' in page
+    assert "Body &lt;b&gt;text&lt;/b&gt;" in page  # user text is escaped in HTML
+    assert "https://lealink.example/settings.html#notifications" in plain
 
 
 def test_send_email_logs_errors_instead_of_raising(smtp, monkeypatch, caplog):

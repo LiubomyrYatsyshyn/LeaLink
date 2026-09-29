@@ -120,5 +120,9 @@ def send_message(
     session.refresh(message)
     if first_unread:
         name = user.full_name if role == "learner" else teacher.display_name
-        notify(background, other, "notify_messages", f"New message from {name}", f"{name} wrote to you:\n\n{data.text}")
+        page = "chat.html" if other_role == "learner" else "chat-teacher.html"
+        notify(
+            background, other, "notify_messages", f"New message from {name}", f"{name} wrote to you:\n\n{data.text}",
+            link=f"{page}?id={request.id}", button="Reply", tag="new-message",
+        )  # fmt: skip
     return message_out(message, user)

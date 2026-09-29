@@ -47,7 +47,7 @@ def send_expiry_warnings(session: Session) -> None:
             outbox.append((learner.email, "Your request expires soon", text))
     session.commit()
     for to, subject, text in outbox:
-        emails.send_email(to, subject, text)
+        emails.send_email(to, subject, text, link="learner.html", button="Open my requests", tag="request-expiring")
 
 
 def run_once() -> None:

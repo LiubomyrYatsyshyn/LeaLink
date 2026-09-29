@@ -42,6 +42,7 @@ def test_request_accept_chat_and_reviews(client, api, outbox):
     r = client.post(f"/api/requests/{req['id']}/accept", headers=th)
     assert r.json()["status"] == "accepted"
     assert outbox[-1][0] == learner["email"] and "accepted" in outbox[-1][1]
+    assert outbox[-1][3] == f"chat.html?id={req['id']}"  # the button opens the chat
     mine = client.get("/api/requests/sent", headers=lh).json()
     assert mine["active"] == 0 and mine["limit"] == 5
     assert mine["items"][0]["teacher_contact"] == {"method": "telegram", "value": "@olena_english"}

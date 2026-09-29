@@ -115,10 +115,10 @@ def clean_tables():
 
 
 @pytest.fixture(autouse=True)
-def outbox(monkeypatch) -> list[tuple[str, str, str]]:
-    """Emails "sent" during the test: (to, subject, text)."""
-    sent: list[tuple[str, str, str]] = []
-    monkeypatch.setattr(emails, "send_email", lambda to, subject, body: sent.append((to, subject, body)))
+def outbox(monkeypatch) -> list[tuple[str, str, str, str]]:
+    """Emails "sent" during the test: (to, subject, text, link of the button)."""
+    sent: list[tuple[str, str, str, str]] = []
+    monkeypatch.setattr(emails, "send_email", lambda to, subject, body, link="", *a, **kw: sent.append((to, subject, body, link)))
     return sent
 
 

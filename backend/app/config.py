@@ -34,9 +34,12 @@ CORS_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o
 
 
 def site_url() -> str:
-    """Public address of the site, used for links in emails."""
+    """Public address of the site, used for links in emails: SITE_URL, else the main domain (SITE_DOMAIN),
+    else the first host in SITE_ADDRESS."""
     if os.getenv("SITE_URL"):
         return os.environ["SITE_URL"].rstrip("/")
+    if os.getenv("SITE_DOMAIN"):
+        return "https://" + os.environ["SITE_DOMAIN"].strip()
     host = os.getenv("SITE_ADDRESS", "").split(",")[0].strip()
     if host and not host.startswith(":"):
         return host if host.startswith("http") else f"https://{host}"

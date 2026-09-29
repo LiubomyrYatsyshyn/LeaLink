@@ -54,6 +54,7 @@ def _notify_alerts(session: Session, background: BackgroundTasks, profile: Teach
             f"A {alert.filters['subject']} teacher for you joined LeaLink",
             f"{profile.display_name} matches your search: {profile.headline}\n"
             "Open LeaLink to see the profile and send a request.",
+            link=f"teacher.html?id={profile.id}", button="View profile", tag="search-alert",
         )  # fmt: skip
     session.commit()
 
@@ -73,6 +74,7 @@ def approve(teacher_id: int, data: ApproveIn, background: BackgroundTasks, sessi
     notify(
         background, session.get(User, profile.user_id), None, "Your teacher profile is published",
         "Good news: your profile passed the review. Learners can now find you and send requests.",
+        link="teacher-home.html", button="Open my teaching page", tag="profile-approved",
     )  # fmt: skip
     if first_time:
         _notify_alerts(session, background, profile)
@@ -92,6 +94,7 @@ def reject(teacher_id: int, data: RejectIn, background: BackgroundTasks, session
         background, session.get(User, profile.user_id), None, "Your teacher profile needs changes",
         f"We couldn't publish your profile yet.\n\nModerator's note: {data.note}\n\n"
         "Edit your profile and submit it again.",
+        link="wizard.html", button="Edit my profile", tag="profile-rejected",
     )  # fmt: skip
     return teacher_profile_out(session, profile)
 

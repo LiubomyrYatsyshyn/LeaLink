@@ -4,6 +4,7 @@ services:
     container_name: lealink-web
     environment:
       SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      SITE_DOMAIN: ${SITE_DOMAIN:-}
     ports:
       - "80:80"
       - "443:443"
@@ -23,6 +24,7 @@ services:
       DATABASE_URL: postgresql+psycopg://lealink:${POSTGRES_PASSWORD:-lealink}@db:5432/lealink
       SECRET_KEY: ${SECRET_KEY:-}
       SITE_ADDRESS: ${SITE_ADDRESS:-}
+      SITE_DOMAIN: ${SITE_DOMAIN:-}
       SITE_URL: ${SITE_URL:-}
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}

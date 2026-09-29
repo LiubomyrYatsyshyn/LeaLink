@@ -1,8 +1,16 @@
-# SITE_ADDRESS comes from the environment (docker-compose.yml).
-# Not set   -> ":80": plain HTTP on any address (works by IP).
-# A domain  -> Caddy serves it and gets an HTTPS certificate automatically.
+# Settings come from the environment (docker-compose.yml, on the server /opt/lealink/.env):
+# SITE_ADDRESS  hosts Caddy serves and gets HTTPS certificates for, e.g. "example.com, www.example.com".
+#               Not set -> ":80": plain HTTP on any address (local development).
+# SITE_DOMAIN   the main domain. Requests to any other host (www, the old nip.io address) are
+#               redirected there. Not set -> no redirects.
 {$SITE_ADDRESS::80} {
 	encode gzip zstd
+
+	@elsewhere expression `"{$SITE_DOMAIN}" != "" && {host} != "{$SITE_DOMAIN}"`
+	redir @elsewhere https://{$SITE_DOMAIN}{uri} 308
+
+	# Browsers remember to use HTTPS only (ignored on plain-HTTP local development).
+	header Strict-Transport-Security "max-age=31536000"
 
 	# Backend (FastAPI container "api"): /api/..., docs at /api/docs
 	handle /api/* {

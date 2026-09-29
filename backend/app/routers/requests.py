@@ -109,6 +109,7 @@ def send_request(data: RequestIn, background: BackgroundTasks, user: CurrentUser
         background, teacher_user, "notify_requests", f"New request from {user.full_name}",
         f"{user.full_name} sent you a request: {', '.join(filter(None, [request.subject, request.goal]))}.\n\n\"{request.message}\"\n\n"
         f"Accept or decline it within {config.REQUEST_TTL_HOURS} hours on your LeaLink home page.",
+        link="teacher-home.html", button="Open my requests", tag="new-request",
     )  # fmt: skip
     return request_out(session, request, user)
 
@@ -187,6 +188,7 @@ def accept(request_id: int, background: BackgroundTasks, user: CurrentUser, sess
         background, session.get(User, request.learner_id), "notify_requests", f"{teacher.display_name} accepted your request",
         f"{teacher.display_name} accepted your {request.subject} request. "
         "The chat is open — agree on the schedule and price there.",
+        link=f"chat.html?id={request.id}", button="Open chat", tag="request-accepted",
     )  # fmt: skip
     return request_out(session, request, user)
 
@@ -208,6 +210,7 @@ def decline(
         background, session.get(User, request.learner_id), "notify_requests", f"{teacher.display_name} declined your request",
         f"{teacher.display_name} declined your {request.subject} request.\nReason: {request.decline_reason}{note}\n\n"
         "This request no longer counts toward your limit — you can send a request to another teacher.",
+        link="search.html", button="Find another teacher", tag="request-declined",
     )  # fmt: skip
     return request_out(session, request, user)
 
@@ -229,6 +232,8 @@ def lessons_started(request_id: int, background: BackgroundTasks, user: CurrentU
                 background, other, "notify_requests", f"{name} confirmed that lessons started",
                 f"{name} confirmed that your {request.subject} lessons started. "
                 "Please confirm it too on LeaLink — then you can both leave a review.",
+                link="teacher-home.html" if role == "learner" else "learner.html?tab=accepted",
+                button="Confirm lessons", tag="lessons-started",
             )  # fmt: skip
     return request_out(session, request, user)
 
@@ -245,6 +250,7 @@ def close(request_id: int, background: BackgroundTasks, user: CurrentUser, sessi
     notify(
         background, session.get(User, request.learner_id), "notify_requests", f"{teacher.display_name} ended the lessons",
         f"{teacher.display_name} ended your {request.subject} lessons on LeaLink. You can find another teacher at any time.",
+        link="search.html", button="Find a teacher", tag="lessons-ended",
     )  # fmt: skip
     return request_out(session, request, user)
 

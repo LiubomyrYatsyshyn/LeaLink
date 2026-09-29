@@ -33,7 +33,9 @@ def send_test_email(to: str) -> None:
         raise SystemExit("SMTP_HOST is not set, so emails only go to the log. See docs/DEPLOY.md (Email).")
     where = f"{config.SMTP_HOST}:{config.SMTP_PORT}"
     try:
-        emails.deliver(to, "Test email", "Email sending works. LeaLink will notify people about requests and messages.")
+        emails.deliver(emails.build(
+            to, "Test email", "Email sending works. LeaLink will notify people about requests and messages.", tag="test",
+        ))  # fmt: skip
     except smtplib.SMTPAuthenticationError as e:
         raise SystemExit(f"{where} rejected the login (SMTP_USER / SMTP_PASSWORD): {e.smtp_code} {e.smtp_error!r}") from None
     except smtplib.SMTPException as e:

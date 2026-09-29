@@ -21,7 +21,8 @@ port=$(ask "SMTP port" "2525")
 user=$(ask "SMTP login (Brevo: Settings -> SMTP & API -> SMTP tab)" "")
 read -r -s -p "SMTP key / password (hidden): " password
 echo
-sender=$(ask "Sender email (a verified sender in Brevo)" "")
+domain=$(grep -E '^SITE_DOMAIN=' .env 2>/dev/null | cut -d= -f2- | tr -d "'\"" || true)
+sender=$(ask "Sender email (an address on your authenticated domain, or a verified sender)" "${domain:+noreply@$domain}")
 to=$(ask "Send a test email to" "$sender")
 
 if [ -z "$user" ] || [ -z "$password" ] || [ -z "$sender" ]; then
