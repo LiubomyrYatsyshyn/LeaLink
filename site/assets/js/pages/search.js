@@ -1,4 +1,4 @@
-/* search.html — "Find a teacher": live count of matching teachers, then results.html. */
+/* search.html — "Find a teacher": pick a subject first, then its fields; live count of matching teachers, then results.html. */
 document.addEventListener("DOMContentLoaded", async () => {
   const F = LL.filters;
   const form = document.querySelector("[data-filters]");
@@ -11,18 +11,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     const query = F.toQuery(f);
     LL.draft.set("search", f);
     document.querySelector("[data-summary]").innerHTML = LL.tags(F.summary(f));
-    document.querySelectorAll("[data-show-results]").forEach((a) => (a.href = "results.html?" + query));
+    document.querySelectorAll("[data-show-results]").forEach((a) => (a.href = f.subject ? "results.html?" + query : "#"));
     if (query === last) return;
     last = query;
     let total = null;
-    try {
-      total = (await LL.api.get(`/teachers/search?${query}&limit=1`)).total;
-    } catch (e) { /* the count is optional; results.html shows the error */ }
+    if (f.subject) {
+      try {
+        total = (await LL.api.get(`/teachers/search?${query}&limit=1`)).total;
+      } catch (e) { /* the count is optional; results.html shows the error */ }
+    }
     document.querySelectorAll("[data-count]").forEach((el) => (el.textContent = total == null ? "–" : total));
     document.querySelectorAll("[data-show-results]").forEach((a) => {
-      a.textContent = total ? `Show ${total} ${total === 1 ? "teacher" : "teachers"}` : "Show results";
+      a.textContent = !f.subject ? "Show teachers" : total ? `Show ${total} ${total === 1 ? "teacher" : "teachers"}` : "Show results";
     });
   }
+
+  document.querySelectorAll("[data-show-results]").forEach((a) =>
+    a.addEventListener("click", (e) => {
+      if (F.read(form).subject) return;
+      e.preventDefault();
+      LL.toast("Choose a subject first.");
+      form.querySelector('[data-f="subject"] input').focus();
+    })
+  );
 
   F.watch(form, update);
   document.querySelector("[data-reset]").addEventListener("click", () => {

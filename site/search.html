@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="assets/css/lealink.css">
 <script src="assets/js/lealink.js" defer></script>
 <script src="assets/js/api.js" defer></script>
+<script src="assets/js/subjects.js" defer></script>
 <script src="assets/js/filters.js" defer></script>
 <script src="assets/js/pages/search.js" defer></script>
 </head>
@@ -31,36 +32,16 @@
       <section class="card">
         <h2 class="card-title">What do you want to learn?</h2>
         <div class="fields">
-          <div class="grid-2">
-            <div class="field">
-              <label class="label" for="subject">Subject <span class="req">*</span></label>
-              <select class="input" id="subject" data-f="subject"><option>English</option><option>Math</option><option>Python</option><option>Guitar</option><option>IELTS</option></select>
-              <p class="helper">The only required filter.</p>
-            </div>
-            <div class="field">
-              <span class="label">Topic <span class="opt">(optional)</span></span>
-              <div class="tag-box" data-f="topics" data-type="tags">
-                <div class="chips"></div>
-                <input data-tag-input placeholder="Type a topic and press Enter" aria-label="Add a topic">
-              </div>
-            </div>
-            <div class="field">
-              <span class="label">Looking for</span>
-              <div class="seg" data-f="for_whom" data-type="seg"><button type="button" class="is-active" data-v="myself">Myself</button><button type="button" data-v="child">My child</button></div>
-            </div>
-            <div class="field">
-              <label class="label" for="level">Level</label>
-              <select class="input" id="level" data-f="level"><option value="">Any level</option><option value="A1">Beginner (A1)</option><option value="A2">Elementary (A2)</option><option value="B1">Intermediate (B1)</option><option value="B2">Upper-intermediate (B2)</option><option value="C1">Advanced (C1)</option><option value="C2">Proficient (C2)</option></select>
-            </div>
-          </div>
           <div class="field">
-            <label class="label" for="goal">Goal</label>
-            <select class="input" id="goal" data-f="goal"><option value="">Any goal</option><option>Job interviews</option><option>Work</option><option>Travel</option><option>Exam preparation</option><option>Everyday conversation</option><option>School support</option><option>Relocation</option><option>Hobby</option></select>
+            <span class="label">Subject <span class="req">*</span></span>
+            <div data-f="subject" data-type="subject"></div>
+            <p class="helper">Type to search or open the list. Questions for your subject appear below.</p>
           </div>
+          <div class="fields" data-subject-fields></div>
         </div>
       </section>
 
-      <section class="card">
+      <section class="card" data-subject-only hidden>
         <h2 class="card-title">How and where</h2>
         <div class="fields">
           <div class="field">
@@ -99,7 +80,7 @@
         </div>
       </section>
 
-      <section class="card">
+      <section class="card" data-subject-only hidden>
         <h2 class="card-title">Budget and schedule</h2>
         <div class="fields">
           <div class="budget">
@@ -120,7 +101,7 @@
         </div>
       </section>
 
-      <section class="card">
+      <section class="card" data-subject-only hidden>
         <h2 class="card-title">Teacher quality</h2>
         <div class="fields">
           <div class="field">

@@ -176,7 +176,6 @@
       A1: "Beginner (A1)", A2: "Elementary (A2)", B1: "Intermediate (B1)", B2: "Upper-intermediate (B2)",
       C1: "Advanced (C1)", C2: "Proficient (C2)", Native: "Native",
     },
-    age: { kids: "Kids 6–12", teens: "Teens 13–17", adults: "Adults 18+" },
     format: { online: "Online", offline: "In person", both: "Online · In person" },
     lessonType: { individual: "Individual", group: "Group" },
     contact: { telegram: "Telegram", whatsapp: "WhatsApp", email: "Email", phone: "Phone" },
@@ -197,11 +196,6 @@
     return text.charAt(0).toUpperCase() + text.slice(1);
   }
   const lessonsText = (r) => `${r.lessons_per_week} × ${r.lesson_duration} min / week`;
-  const levelRange = (levels) => {
-    const order = Object.keys(labels.level);
-    const sorted = (levels || []).slice().sort((a, b) => order.indexOf(a) - order.indexOf(b));
-    return sorted.length > 1 ? `${sorted[0]} – ${sorted[sorted.length - 1]}` : sorted[0] || "";
-  };
 
   /* ---------- Page helpers ---------- */
 
@@ -406,8 +400,8 @@
 
   /* Same rule as the API (views.py): required wizard fields + photo + optional extras. */
   const PROFILE_REQUIRED = [
-    "display_name", "headline", "about", "country", "city", "timezone", "languages", "subjects", "topics", "levels",
-    "age_groups", "goals", "experience_years", "occupation", "format", "lesson_types", "durations", "price", "currency",
+    "display_name", "headline", "about", "country", "city", "timezone", "languages", "offers",
+    "experience_years", "occupation", "format", "lesson_types", "durations", "price", "currency",
     "availability", "contact_method", "contact_value",
   ];
   const PROFILE_OPTIONAL = ["video_url", "practical_experience", "education", "links", "platforms", "questions"];
@@ -433,7 +427,7 @@
   window.LL = {
     api, auth, ApiError, store, draft, params,
     esc, initials, firstName, avatar, icon, money, budget, date, time, dateTime, monthYear, isToday,
-    labels, timesText, lessonsText, levelRange, tags, teacherCard, availabilityGrid,
+    labels, timesText, lessonsText, tags, teacherCard, availabilityGrid,
     setState, toast, fail, flash, debounce, busy, html, report, fieldError, fillTimezones, timezones, profileCompleteness,
   };
 })();

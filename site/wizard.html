@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="assets/css/lealink.css">
 <script src="assets/js/lealink.js" defer></script>
 <script src="assets/js/api.js" defer></script>
+<script src="assets/js/subjects.js" defer></script>
 <script src="assets/js/pages/wizard.js" defer></script>
 </head>
 <body data-role="teacher">
@@ -102,38 +103,16 @@
       <div>
         <p class="eyebrow">Step 2 of 6 · Subjects</p>
         <h1 class="t-h1 wizard-title">What do you teach?</h1>
-        <p class="lead">We use this to match you with the right learners. All fields in this step are required.</p>
+        <p class="lead">We use this to match you with the right learners. Fields marked * are required — the more you answer, the easier learners find you.</p>
       </div>
       <div class="card fields">
         <div class="field">
           <div class="label-row"><span class="label">Subjects <span class="req">*</span></span><span class="t-micro muted" data-w-subject-count>0 / 3</span></div>
-          <div class="tag-box" data-w-tags="subjects">
-            <div class="chips"></div>
-            <input data-tag-input list="ll-subjects" placeholder="Type a subject and press Enter" aria-label="Add a subject">
-          </div>
-          <p class="helper">Up to 3 subjects.</p>
-        </div>
-        <div class="field">
-          <span class="label">Topics <span class="req">*</span></span>
-          <div class="tag-box" data-w-tags="topics">
-            <div class="chips"></div>
-            <input data-tag-input placeholder="Type a topic and press Enter" aria-label="Add a topic">
-          </div>
-          <p class="helper">Add at least one topic for each subject.</p>
-        </div>
-        <div class="field">
-          <span class="label">Student levels <span class="req">*</span></span>
-          <div class="chips" data-w-chips="levels"><button class="chip" type="button" data-v="A1">Beginner (A1)</button><button class="chip" type="button" data-v="A2">Elementary (A2)</button><button class="chip" type="button" data-v="B1">Intermediate (B1)</button><button class="chip" type="button" data-v="B2">Upper-intermediate (B2)</button><button class="chip" type="button" data-v="C1">Advanced (C1)</button><button class="chip" type="button" data-v="C2">Proficient (C2)</button></div>
-        </div>
-        <div class="field">
-          <span class="label">Age groups <span class="req">*</span></span>
-          <div class="chips" data-w-chips="age_groups"><button class="chip" type="button" data-v="kids">Kids 6–12</button><button class="chip" type="button" data-v="teens">Teens 13–17</button><button class="chip" type="button" data-v="adults">Adults 18+</button></div>
-        </div>
-        <div class="field">
-          <span class="label">Learning goals <span class="req">*</span></span>
-          <div class="chips" data-w-chips="goals"><button class="chip" type="button" data-v="Job interviews">Job interviews</button><button class="chip" type="button" data-v="Work">Work</button><button class="chip" type="button" data-v="Travel">Travel</button><button class="chip" type="button" data-v="Exam preparation">Exam preparation</button><button class="chip" type="button" data-v="Everyday conversation">Everyday conversation</button><button class="chip" type="button" data-v="School support">School support</button><button class="chip" type="button" data-v="Relocation">Relocation</button><button class="chip" type="button" data-v="Hobby">Hobby</button></div>
+          <div data-w-picker></div>
+          <p class="helper">Up to 3 subjects. Each subject gets its own questions below — learners filter by your answers.</p>
         </div>
       </div>
+      <div class="cards" data-w-offers></div>
       <div class="wizard-nav"><button class="btn btn-secondary btn-lg" type="button" data-go="1"><i data-i="back"></i>Back</button><button class="btn btn-primary btn-lg" type="button" data-go="3">Continue <i data-i="arrow" data-size="14"></i></button></div>
     </section>
 
@@ -327,7 +306,6 @@
     </section>
     <datalist id="ll-countries"><option>Ukraine</option><option>Poland</option><option>Portugal</option><option>Germany</option><option>United Kingdom</option><option>United States</option><option>Spain</option><option>France</option></datalist>
     <datalist id="ll-cities"><option>Kyiv</option><option>Lviv</option><option>Odesa</option><option>Kharkiv</option><option>Dnipro</option><option>Warsaw</option><option>Lisbon</option><option>Berlin</option></datalist>
-    <datalist id="ll-subjects"></datalist>
     <datalist id="ll-languages"><option>English</option><option>Ukrainian</option><option>Polish</option><option>German</option><option>Spanish</option><option>French</option><option>Portuguese</option><option>Italian</option></datalist>
   </main>
 </div>

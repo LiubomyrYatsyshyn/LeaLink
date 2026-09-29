@@ -1,4 +1,4 @@
-from conftest import PNG, TEACHER
+from conftest import PNG, TEACHER, english
 
 
 def test_profile_moderation_flow(client, api, outbox):
@@ -78,22 +78,25 @@ def test_certificates(client, api):
 
 def test_search_filters_match_and_sort(client, api):
     admin = api.admin()
-    olena = api.teacher(admin)  # $22, online + Lisbon, B1, Job interviews, evenings, trial
+    olena = api.teacher(admin)  # $22, online + Lisbon, B1, job interviews, evenings, trial
     mark = api.teacher(
         admin, name="Mark Stone", price=40, format="online", free_trial=False, trial_minutes=None,
-        topics=["Grammar", "Exams"], goals=["Exam preparation"], experience_years=2,
+        offers=english(topics=["grammar"], goal=["exam"], exams=["ielts"]), experience_years=2,
     )  # fmt: skip
-    api.teacher(admin, name="Priya Nair", subjects=["Python"], topics=["Data analysis"])
+    python = {"level": ["beginner"], "age": ["adults"], "goal": ["switch"], "topics": ["basics"]}
+    api.teacher(admin, name="Priya Nair", offers=[{"subject": "Python", "attrs": python}])
     api.teacher(name="Not Published")
 
     r = client.get("/api/teachers/search", params={"subject": "english"}).json()
     assert r["total"] == 2 and r["relax"] == []
     assert {t["display_name"] for t in r["items"]} == {"Olena Kovalenko", "Mark Stone"}
+    assert client.get("/api/teachers/search", params={"subject": "англійська"}).json()["total"] == 2  # aliases
 
-    params = {"subject": "English", "topics": ["Speaking", "Job interviews"], "goal": "Job interviews", "times": ["evening"]}
+    params = {"subject": "English", "attr": ["topics:speaking", "topics:language_for_your_job", "goal:interviews"], "times": ["evening"]}
     r = client.get("/api/teachers/search", params=params).json()
     assert [t["id"] for t in r["items"]] == [olena["teacher_id"], mark["teacher_id"]]  # best match first
     assert r["items"][0]["match"] == 100 and r["items"][1]["match"] < 100
+    assert r["items"][0]["topics"] == ["Speaking", "Language for your job"]  # tags as labels
 
     r = client.get("/api/teachers/search", params={"subject": "English", "sort": "price_desc"}).json()
     assert r["items"][0]["id"] == mark["teacher_id"]
@@ -109,6 +112,50 @@ def test_search_filters_match_and_sort(client, api):
     assert r["total"] == 1
 
 
+def test_subject_fields_pair_teacher_and_learner(client, api):
+    admin = api.admin()
+    c1 = api.teacher(admin, name="C1 Teacher", offers=english(own_level="C1", level=["B1", "B2", "C1"], teaching_cert=["celta"]))
+    native = api.teacher(
+        admin, name="Native Teacher",
+        offers=english(own_level="native", level=["A1", "A2"], age=["kids"], goal=["nmt"], nmt_best="200", nmt_start=["strong"]),
+    )  # fmt: skip
+    c1, native = c1["teacher_id"], native["teacher_id"]
+
+    def found(*attr, **params):
+        r = client.get("/api/teachers/search", params={"subject": "English", "attr": list(attr), **params}).json()
+        return sorted(t["id"] for t in r["items"])
+
+    assert found() == sorted([c1, native])
+    assert found("level:B2") == [c1]  # "in": the learner's level is among the teacher's levels
+    assert found("own_level:C1") == sorted([c1, native])  # "min": the teacher's own level is at least C1
+    assert found("own_level:native") == [native]
+    assert found("teaching_cert:1") == [c1]  # "has": only teachers with a teaching qualification
+    assert found("goal:nmt", "nmt_best:200") == [native]  # NMT is a goal with its own fields
+    assert found("nmt_best:200") == sorted([c1, native])  # NMT fields count only with the NMT goal
+    assert found(for_whom="myself") == [c1]  # "Myself" is an adult; the native teacher teaches kids
+    assert found("age:kids") == [native]
+    assert found("level:Z9", "unknown:1") == sorted([c1, native])  # unknown answers are ignored
+
+    r = client.get("/api/teachers/search", params={"subject": "English", "attr": ["goal:nmt", "nmt_best:200", "level:B2"]}).json()
+    assert r["total"] == 0
+    assert sorted(x["filter"] for x in r["relax"]) == ["attr:level", "attr:nmt_best"]
+
+    public = client.get(f"/api/teachers/{native}").json()
+    facts = {f["label"]: f["value"] for f in public["offers_view"][0]["facts"]}
+    assert facts["English level"] == "Native speaker" and facts["Best NMT score of students"] == "200"
+
+    # The teacher can't teach above their own level, and subjects come from the catalog.
+    h = api.signup("New Teacher")["headers"]
+    r = client.put("/api/teacher/profile", headers=h, json={"offers": english(own_level="B2", level=["C1"], topics=["nope"])})
+    assert r.status_code == 200
+    assert "topics" not in r.json()["offers"][0]["attrs"]  # unknown values are dropped
+    assert "English: Student levels (not above your own level)" in r.json()["missing"]
+    assert "English: Topics" in r.json()["missing"]
+    r = client.put("/api/teacher/profile", headers=h, json={"offers": [{"subject": "Maths", "attrs": {}}, {"subject": "math"}]})
+    assert r.json()["subjects"] == ["Math"]
+    assert client.put("/api/teacher/profile", headers=h, json={"offers": [{"subject": "Klingon"}]}).status_code == 422
+
+
 def test_empty_search_relax_and_notify(client, api, outbox):
     admin = api.admin()
     api.teacher(admin)  # online + Lisbon, $22, not verified
@@ -122,6 +169,10 @@ def test_empty_search_relax_and_notify(client, api, outbox):
 
     learner = api.signup("Anna Petrenko")
     assert client.post("/api/alerts", json={"subject": "English", "city": "Kyiv"}).status_code == 401
+    # Searches saved before fields per subject still work.
+    old = client.post("/api/alerts", headers=learner["headers"], json={"subject": "English", "level": "B1", "goal": "Travel"})
+    assert old.json()["filters"]["attr"] == ["level:B1", "goal:travel"]
+    client.delete(f"/api/alerts/{old.json()['id']}", headers=learner["headers"])
     r = client.post("/api/alerts", headers=learner["headers"], json={"subject": "English", "format": "offline", "city": "Kyiv"})
     assert r.status_code == 201
     alert_id = r.json()["id"]

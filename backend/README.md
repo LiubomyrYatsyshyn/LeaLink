@@ -11,7 +11,7 @@ Caddy serves the site at `/` and forwards `/api/*` to this app.
 | MVP point | How it works | Endpoints |
 |---|---|---|
 | 1. Learner or teacher | One account can do both. A user becomes a teacher by filling in a teacher profile. | `POST /api/auth/register`, `/login`, `GET /api/auth/me` |
-| 2. Search and requests | Learner filters teachers; strict filters hide teachers, soft ones (topics, level, goal, age, time) give the match %. | `GET /api/teachers/search`, `GET /api/teachers/{id}`, `POST /api/requests` |
+| 2. Search and requests | Every subject has its own fields (`app/catalog.py`), each a pair: the teacher describes themselves, the learner says whom they look for. Strict fields hide teachers, soft ones (topics, goal, time...) give the match %. Learner answers go as `attr=key:value`. | `GET /api/teachers/search`, `GET /api/teachers/{id}`, `POST /api/requests` |
 | 3. Chat for first arrangements | A chat per accepted request. The frontend polls for new messages. | `GET /api/chats`, `GET /api/chats/{id}?after_id=`, `POST /api/chats/{id}/messages` |
 | 6. Statuses and 72 h deadline | `pending → accepted / declined / withdrawn / expired`, `accepted → closed`. Expired requests are closed automatically (checked every minute). The learner gets an email 12 h before expiry. | `POST /api/requests/{id}/accept`, `/decline`, `/withdraw`, `/close` |
 | 7. Chat only after accept | Chat endpoints return 403 until the teacher accepts. The teacher's contact is shown only then. | |
@@ -42,8 +42,11 @@ Each page has its script in `site/assets/js/pages/` (shared client: `site/assets
 Auth: send `Authorization: Bearer <access_token>` (from login/register). Logging out = forgetting the token.
 Changing the password logs out all other devices.
 
-Option values (levels `A1`–`C2`, goals, formats, time slots like `mon_evening`, decline reasons...) are listed by
-`GET /api/meta` and in `app/vocab.py`.
+Option values (formats, time slots like `mon_evening`, decline reasons...) are listed by `GET /api/meta` and in
+`app/vocab.py`. Subjects and their fields (levels, goals, topics, NMT, certificates...) are in `app/catalog.py`,
+sent as `catalog` by `GET /api/meta`. The teacher's answers per subject are stored in `TeacherProfile.offers`,
+the learner's in `LessonRequest.attrs`; values are option keys, the API also returns readable text
+(`offers_view`, `details`). Plan and field list: `docs/TOP-50-SUBJECTS-UA.md`.
 
 ## Code
 
@@ -54,6 +57,7 @@ app/
   models.py        database tables (SQLModel)
   schemas.py       API input/output
   vocab.py         fixed option lists
+  catalog.py       subjects and their fields (the one source for the wizard, search and requests)
   security.py      passwords (argon2), JWT, current user
   matching.py      teacher search and match %
   views.py         database rows -> API responses

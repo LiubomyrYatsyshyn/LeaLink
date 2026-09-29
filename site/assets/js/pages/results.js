@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const list = document.querySelector("[data-list]");
   const PAGE = 20;
   let filters = F.fromQuery(LL.params);
+  if (!filters.subject) return location.replace("search.html");
   let sort = LL.params.get("sort") || "best";
   let items = [];
   let total = 0;
@@ -85,8 +86,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   F.watch(panel, () => {
-    filters = F.read(panel);
-    changed();
+    const next = F.read(panel);
+    if (next.subject) {
+      filters = next;
+      changed();
+    }
   });
 
   document.addEventListener("click", async (e) => {
@@ -111,7 +115,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
       try {
-        await LL.busy(el, () => LL.api.post("/alerts", filters));
+        await LL.busy(el, () => LL.api.post("/alerts", F.toBody(filters)));
         LL.toast("We’ll email you when a matching teacher joins.");
       } catch (err) {
         LL.fail(err);

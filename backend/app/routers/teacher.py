@@ -5,7 +5,7 @@ from fastapi import APIRouter, Form, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse
 from sqlmodel import Session, func, select
 
-from .. import config, files
+from .. import catalog, config, files
 from ..models import Certificate, TeacherProfile, User, utcnow
 from ..schemas import CertificateOut, TeacherProfileIn, TeacherProfileOut
 from ..security import CurrentUser, SessionDep
@@ -23,6 +23,21 @@ def _require_profile(session: Session, user: User) -> TeacherProfile:
     if profile is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "You don't have a teacher profile yet")
     return profile
+
+
+def clean_offers(offers: list[dict]) -> list[dict]:
+    """Subjects from the catalog (each once) with their answers checked against the subject's fields."""
+    cleaned, seen = [], set()
+    for offer in offers:
+        subject = catalog.get(offer["subject"])
+        if subject is None:
+            raise HTTPException(
+                status.HTTP_422_UNPROCESSABLE_CONTENT, f"Unknown subject: {offer['subject']}. Pick one from the list."
+            )
+        if subject.name not in seen:
+            seen.add(subject.name)
+            cleaned.append({"subject": subject.name, "attrs": catalog.clean_teacher(subject, offer["attrs"])})
+    return cleaned
 
 
 def _default(field: str):
@@ -45,8 +60,12 @@ def save_profile(data: TeacherProfileIn, user: CurrentUser, session: SessionDep)
     if profile is None:
         profile = TeacherProfile(user_id=user.id, display_name=user.full_name, timezone=user.timezone)
         session.add(profile)
+    values = data.model_dump(exclude_unset=True)
+    if values.get("offers") is not None:
+        values["offers"] = clean_offers(values["offers"])
+        values["subjects"] = [o["subject"] for o in values["offers"]]
     content_changed = False
-    for field, value in data.model_dump(exclude_unset=True).items():
+    for field, value in values.items():
         if value is None:
             value = user.full_name if field == "display_name" else _default(field)
         if getattr(profile, field) != value:

@@ -1,7 +1,7 @@
 """API input and output shapes."""
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import AfterValidator, BaseModel, EmailStr, Field, StringConstraints, model_validator
@@ -106,6 +106,13 @@ class EducationIn(BaseModel):
     degree: Annotated[str, StringConstraints(strip_whitespace=True, max_length=100)] = ""
 
 
+class OfferIn(BaseModel):
+    """One subject the teacher teaches and the answers to its fields (GET /api/meta: catalog)."""
+
+    subject: Text40
+    attrs: dict[str, Any] = Field({}, description='e.g. {"level": ["B1", "B2"], "own_level": "C1", "goal": ["nmt"]}')
+
+
 class TeacherProfileIn(BaseModel):
     """Wizard data. Drafts may be incomplete: send any subset of fields, the rest stays as it was."""
 
@@ -118,12 +125,8 @@ class TeacherProfileIn(BaseModel):
     timezone: TimeZone | None = None
     languages: list[LanguageIn] | None = Field(None, max_length=10)
     video_url: Annotated[str, StringConstraints(strip_whitespace=True, max_length=300)] | None = None
-    # 2. Subjects
-    subjects: list[Text40] | None = Field(None, max_length=3)
-    topics: list[Text40] | None = Field(None, max_length=20)
-    levels: list[vocab.Level] | None = None
-    age_groups: list[vocab.AgeGroup] | None = None
-    goals: list[vocab.Goal] | None = None
+    # 2. Subjects: up to 3, each with its own fields. Unknown fields and values are dropped.
+    offers: list[OfferIn] | None = Field(None, max_length=3)
     # 3. Experience
     experience_years: int | None = Field(None, ge=0, le=70)
     occupation: Text100 | None = None
@@ -198,9 +201,8 @@ class TeacherPublic(TeacherCard):
     languages: list[dict]
     video_url: str | None
     timezone: str | None
-    levels: list[str]
-    age_groups: list[str]
-    goals: list[str]
+    offers: list[dict] = Field(description="Answers per subject, as stored")
+    offers_view: list[dict] = Field(description="The same as readable facts: [{subject, facts: [{label, value}]}]")
     occupation: str | None
     practical_experience: str | None
     education: list[dict]
@@ -258,10 +260,12 @@ class RequestIn(BaseModel):
     for_whom: vocab.ForWhom = "myself"
     child_age: int | None = Field(None, ge=3, le=17)
     parent_contact: Text100 | None = None
-    subject: Text40
-    topics: list[Text40] = Field([], max_length=10)
-    level: vocab.Level | None = None
-    goal: vocab.Goal
+    subject: Text40 = Field(description="One of the teacher's subjects")
+    attrs: dict[str, Any] = Field({}, description="Answers to the subject's learner fields (GET /api/meta: catalog)")
+    # Before fields per subject: still accepted, folded into `attrs`.
+    topics: list[Text40] = Field([], max_length=10, description="Old form: use attrs")
+    level: Text40 | None = Field(None, description="Old form: use attrs")
+    goal: Text40 | None = Field(None, description="Old form: use attrs")
     goal_details: Annotated[str, StringConstraints(strip_whitespace=True, max_length=500)] | None = None
     lessons_per_week: int = Field(ge=1, le=7)
     lesson_duration: vocab.Duration
@@ -332,6 +336,8 @@ class RequestOut(BaseModel):
     child_age: int | None
     parent_contact: str | None = Field(description="Shown to the teacher after accepting")
     subject: str
+    attrs: dict
+    details: list[dict] = Field(description="The learner's answers as readable facts: [{label, value}]")
     topics: list[str]
     level: str | None
     goal: str

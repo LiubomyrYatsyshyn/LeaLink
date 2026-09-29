@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="assets/css/lealink.css">
 <script src="assets/js/lealink.js" defer></script>
 <script src="assets/js/api.js" defer></script>
+<script src="assets/js/subjects.js" defer></script>
 <script src="assets/js/filters.js" defer></script>
 <script src="assets/js/pages/results.js" defer></script>
 </head>
@@ -55,28 +56,10 @@
       </div>
       <div class="fields" style="margin-top:20px" data-filters>
         <div class="field">
-          <label class="label" for="f-subject">Subject <span class="req">*</span></label>
-          <select class="input" id="f-subject" data-f="subject"><option>English</option><option>Math</option><option>Python</option></select>
+          <span class="label">Subject <span class="req">*</span></span>
+          <div data-f="subject" data-type="subject"></div>
         </div>
-        <div class="field">
-          <span class="label">Topic</span>
-          <div class="tag-box" data-f="topics" data-type="tags">
-            <div class="chips"></div>
-            <input data-tag-input placeholder="Add a topic, press Enter" aria-label="Add a topic">
-          </div>
-        </div>
-        <div class="field">
-          <span class="label">Looking for</span>
-          <div class="seg" data-f="for_whom" data-type="seg"><button type="button" class="is-active" data-v="myself">Myself</button><button type="button" data-v="child">My child</button></div>
-        </div>
-        <div class="field">
-          <label class="label" for="f-level">Level</label>
-          <select class="input" id="f-level" data-f="level"><option value="">Any level</option><option value="A1">Beginner (A1)</option><option value="A2">Elementary (A2)</option><option value="B1">Intermediate (B1)</option><option value="B2">Upper-intermediate (B2)</option><option value="C1">Advanced (C1)</option><option value="C2">Proficient (C2)</option></select>
-        </div>
-        <div class="field">
-          <label class="label" for="f-goal">Goal</label>
-          <select class="input" id="f-goal" data-f="goal"><option value="">Any goal</option><option>Job interviews</option><option>Work</option><option>Travel</option><option>Exam preparation</option><option>Everyday conversation</option><option>School support</option><option>Relocation</option><option>Hobby</option></select>
-        </div>
+        <div class="fields" data-subject-fields></div>
         <div class="field">
           <span class="label">Format</span>
           <div class="seg" data-controls="#f-city" data-f="format" data-type="seg"><button type="button" data-v="online">Online</button><button type="button" data-reveal data-v="offline">Offline</button><button type="button" class="is-active" data-reveal data-v="both">Both</button></div>

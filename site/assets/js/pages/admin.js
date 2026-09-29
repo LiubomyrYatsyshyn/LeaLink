@@ -27,9 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       <p class="message">${esc(p.about)}</p>
       <div class="facts" style="margin-top:16px">
         ${fact("Subjects", esc(p.subjects.join(", ")))}
-        ${fact("Topics", esc(p.topics.join(", ")))}
-        ${fact("Levels", LL.levelRange(p.levels))}
-        ${fact("Age groups", p.age_groups.map((a) => labels.age[a]).join(", "))}
+        ${p.offers_view.map((o) => o.facts.map((x) => fact(`${esc(o.subject)} · ${esc(x.label)}`, esc(x.value))).join("")).join("")}
         ${fact("Location", esc([p.city, p.country].filter(Boolean).join(", ")))}
         ${fact("Languages", esc(p.languages.map((l) => `${l.language} (${l.level})`).join(", ")))}
         ${fact("Experience", p.experience_years != null ? `${p.experience_years} years · ${esc(p.occupation || "")}` : "")}

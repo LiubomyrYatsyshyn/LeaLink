@@ -16,7 +16,7 @@ Reply to the user in Ukrainian.
 
 ## Frontend (static HTML wired to the API)
 - Built from `design-reference/` frames 00-41. Shared styles in `site/assets/css/lealink.css` (tokens from frame 00), behaviour in `site/assets/js/lealink.js` (icons, header, tabs, dialogs, chips, sliders, toasts).
-- Data: `site/assets/js/api.js` (`window.LL`: fetch wrapper for `/api`, session, formatting, teacher card, report dialog), `filters.js` (search form on search/results), `review.js` (review dialog), and one script per page in `site/assets/js/pages/`. Plain JS, no build step.
+- Data: `site/assets/js/api.js` (`window.LL`: fetch wrapper for `/api`, session, formatting, teacher card, report dialog), `subjects.js` (`LL.subjects`: subject picker with search, the chosen subject's fields for teacher/learner/request), `filters.js` (search form on search/results), `review.js` (review dialog), and one script per page in `site/assets/js/pages/`. Plain JS, no build step.
 - Session: token and user in localStorage (`ll-token`, `ll-user`; the header reads `ll-user`). Guests keep drafts in localStorage (`ll-draft-search`, `ll-draft-request`, `ll-draft-profile`) and send them after sign-up (`signup-learner.html`, `signup-teacher.html`).
 - Pages render API data into the design markup; hooks are `data-*` attributes. Design sample content was removed from the HTML.
 - `admin.html` (not in the design): moderation of profiles, reports, users; linked from the account menu for moderators.
@@ -29,6 +29,7 @@ Reply to the user in Ukrainian.
 
 ## Backend (added 2026-09-27)
 - `backend/`: FastAPI + SQLModel + Alembic + PostgreSQL, see `backend/README.md` (MVP point -> endpoint, page -> endpoint).
+- Subjects and their fields: `backend/app/catalog.py` (50 subjects, docs/TOP-50-SUBJECTS-UA.md). Each field is a teacher/learner pair (`in`, `min`, `has`, `overlap`, `info`); NMT is a goal inside a subject, not a subject. Teacher answers: `TeacherProfile.offers`; learner answers: `LessonRequest.attrs`, search `attr=key:value`. Change fields only there; forms and search read it via `/api/meta`.
 - Keep it simple: sync SQLModel sessions (`expire_on_commit=False`), JSON columns for lists, search filtered in Python, no Celery/Redis/websockets (chat = polling, request expiry = loop inside the API).
 - Containers: `web` (Caddy, `/api/*` -> `api:8000`), `api`, `db` (no public port). Migrations run on API start.
 - Tests: `docker compose run --rm api sh -c "pip install -q --user -r requirements-dev.txt && python -m pytest -q"` (own DB `lealink_test`).

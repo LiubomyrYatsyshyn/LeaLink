@@ -29,6 +29,20 @@ from app.models import User  # noqa: E402
 PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 64
 PASSWORD = "test-password-1"
 
+ENGLISH = {
+    "level": ["A2", "B1", "B2"],
+    "age": ["teens", "adults"],
+    "goal": ["interviews", "travel"],
+    "topics": ["speaking", "language_for_your_job"],
+    "own_level": "C2",
+}
+
+
+def english(**changes) -> list[dict]:
+    """The `offers` of an English teacher, with some answers changed."""
+    return [{"subject": "English", "attrs": {**ENGLISH, **changes}}]
+
+
 TEACHER = {
     "display_name": "Olena Kovalenko",
     "headline": "Conversational English for professionals and travellers",
@@ -37,11 +51,7 @@ TEACHER = {
     "city": "Lisbon",
     "timezone": "Europe/Lisbon",
     "languages": [{"language": "English", "level": "C2"}, {"language": "Ukrainian", "level": "Native"}],
-    "subjects": ["English"],
-    "topics": ["Speaking", "Job interviews"],
-    "levels": ["A2", "B1", "B2"],
-    "age_groups": ["teens", "adults"],
-    "goals": ["Job interviews", "Travel"],
+    "offers": english(),
     "experience_years": 7,
     "occupation": "Freelance English teacher",
     "format": "both",
@@ -66,9 +76,7 @@ def request_payload(teacher_id: int, **changes) -> dict:
     return {
         "teacher_id": teacher_id,
         "subject": "English",
-        "topics": ["Speaking"],
-        "level": "B1",
-        "goal": "Job interviews",
+        "attrs": {"level": "B1", "goal": "interviews", "topics": ["speaking"]},
         "lessons_per_week": 2,
         "lesson_duration": 60,
         "preferred_times": ["evening", "weekdays"],

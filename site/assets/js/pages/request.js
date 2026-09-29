@@ -17,6 +17,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  const S = LL.subjects;
+  try {
+    await S.load();
+  } catch (e) {
+    LL.fail(e);
+  }
+
   /* ---------- Teacher details ---------- */
   const first = LL.firstName(t.display_name);
   document.title = `Send a request to ${first} · LeaLink`;
@@ -62,14 +69,36 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("#r-currency").addEventListener("change", (e) => setBudget(null, null, e.target.value));
   const markFrom = () => document.querySelectorAll("[data-from]").forEach((el) => (el.hidden = false));
 
+  /* ---------- Subject and its fields (only the teacher's subjects) ---------- */
+  const subjectSel = $("#r-subject");
+  const fieldsBox = $("[data-subject-fields]");
+  subjectSel.innerHTML = t.subjects.map((s) => `<option>${LL.esc(s)}</option>`).join("");
+  function renderFields(attrs) {
+    S.render(fieldsBox, S.get(subjectSel.value), "request", attrs);
+  }
+  subjectSel.addEventListener("change", () => renderFields(S.read(fieldsBox)));
+
+  /* Requests saved before fields per subject had level, goal and topics. */
+  const LEGACY_GOALS = {
+    "Job interviews": "interviews", Work: "work", Travel: "travel", "Exam preparation": "exam",
+    "Everyday conversation": "conversation", "School support": "school", Relocation: "relocation", Hobby: "hobby",
+  };
+  const slug = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+  function legacyAttrs(p) {
+    const a = {};
+    if (p.level) a.level = p.level;
+    if (p.goal) a.goal = LEGACY_GOALS[p.goal] || p.goal;
+    if ((p.topics || []).length) a.topics = p.topics.map(slug);
+    return a;
+  }
+
   function fill(p) {
     setSeg("r-for", p.for_whom || "myself");
     $("#r-age").value = p.child_age || "";
     $("#r-parent").value = p.parent_contact || "";
-    $("#r-subject").value = p.subject || "";
-    $("#r-topic").value = (p.topics || []).join(", ");
-    $("#r-level").value = p.level || "";
-    $("#r-goal").value = p.goal || "";
+    const subject = S.get(p.subject);
+    subjectSel.value = subject && t.subjects.includes(subject.name) ? subject.name : t.subjects[0] || "";
+    renderFields(p.attrs || legacyAttrs(p));
     $("#r-details").value = p.goal_details || "";
     $("#r-week").value = String(p.lessons_per_week || 1);
     if (p.lesson_duration) $("#r-duration").value = String(p.lesson_duration);
@@ -97,8 +126,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else if (search) {
     fill({
       for_whom: search.for_whom,
-      subject: t.subjects.find((s) => s.toLowerCase() === (search.subject || "").toLowerCase()) || search.subject,
-      topics: search.topics, level: search.level, goal: search.goal,
+      subject: search.subject,
+      attrs: search.attrs || legacyAttrs(search),
       lessons_per_week: search.lessons_per_week, preferred_times: search.times,
       format: search.format === "both" && !search.city ? "online" : search.format,
       budget_min: search.price_min, budget_max: search.price_max, currency: search.currency,
@@ -139,10 +168,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       for_whom: child ? "child" : "myself",
       child_age: child ? parseInt($("#r-age").value, 10) || null : null,
       parent_contact: child ? $("#r-parent").value.trim() || null : null,
-      subject: $("#r-subject").value.trim(),
-      topics: $("#r-topic").value.split(",").map((s) => s.trim().slice(0, 40)).filter(Boolean).slice(0, 10),
-      level: $("#r-level").value || null,
-      goal: $("#r-goal").value,
+      subject: subjectSel.value,
+      attrs: S.read(fieldsBox),
       goal_details: $("#r-details").value.trim() || null,
       lessons_per_week: Number($("#r-week").value),
       lesson_duration: Number($("#r-duration").value),
@@ -158,12 +185,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       answers: t.questions.map((q, i) => ({ question: q, answer: $(`[data-question="${i}"]`).value.trim() })).filter((a) => a.answer),
       message: $("#r-msg").value.trim(),
     };
+    const subject = S.get(payload.subject);
+    const goalField = fieldsBox.querySelector('[data-attr="goal"]');
     const errors = {
       name: !$("#r-name").value.trim() && "Enter your name.",
       child_age: child && !(payload.child_age >= 3 && payload.child_age <= 17) && "Enter an age from 3 to 17.",
       parent_contact: child && !payload.parent_contact && "Add a phone number or email so the teacher can reach a parent.",
-      subject: !payload.subject && "Enter a subject.",
-      goal: !payload.goal && "Choose a goal.",
+      subject: !payload.subject && "Choose a subject.",
+      goal: subject && subject.by.goal && !payload.attrs.goal && "Choose a goal.",
       preferred_times: !payload.preferred_times.some((x) => ["morning", "afternoon", "evening"].includes(x)) && "Choose at least one time of day.",
       start_date: !asap && !payload.start_date && "Pick a start date.",
       message: payload.message.length < 50 && `Write at least 50 characters so ${first} understands your needs.`,
@@ -174,7 +203,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
     const failed = [];
     Object.entries(errors).forEach(([key, msg]) => {
-      LL.fieldError(form.querySelector(`[data-field="${key}"]`), msg || null);
+      LL.fieldError(key === "goal" ? goalField : form.querySelector(`[data-field="${key}"]`), msg || null);
       if (msg) failed.push(names[key]);
     });
     return { payload, name: $("#r-name").value.trim(), failed };
@@ -190,8 +219,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     showErrors(failed);
     if (failed.length) return;
     if (!LL.auth.loggedIn()) {
+      const subject = S.get(payload.subject);
       LL.draft.set("request", {
         payload, name,
+        details: subject ? S.describe(subject, payload.attrs, "request") : [],
         teacher: { id: t.id, name: t.display_name, photo_url: t.photo_url, subjects: t.subjects, questions: t.questions },
       });
       location.href = "signup-learner.html";

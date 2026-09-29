@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       !learner && r.status === "accepted" ? `<button class="menu-item" type="button" data-end>End lessons</button>` : "",
     ].join("");
     const summary = [
-      r.subject, r.goal, LL.labels.level[r.level], LL.lessonsText(r), LL.timesText(r.preferred_times),
+      r.subject, r.goal, r.level, LL.lessonsText(r), LL.timesText(r.preferred_times),
       LL.labels.format[r.format], LL.budget(r.budget_min, r.budget_max, r.currency),
     ].filter(Boolean).map((x) => `<span>${esc(x)}</span>`).join("");
     const contact = contactText(r, first);
@@ -183,8 +183,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const fact = (label, value) => (value ? `<div class="fact"><small>${label}</small><div>${esc(value)}</div></div>` : "");
     document.querySelector("[data-request-details]").innerHTML = `
       <div class="facts">
-        ${fact("Subject", r.subject)}${fact("Topics", r.topics.join(", "))}${fact("Level", LL.labels.level[r.level])}
-        ${fact("Goal", r.goal)}${fact("Goal details", r.goal_details)}${fact("Lessons", LL.lessonsText(r))}
+        ${fact("Subject", r.subject)}${r.details.map((x) => fact(x.label, x.value)).join("")}
+        ${fact("Goal details", r.goal_details)}${fact("Lessons", LL.lessonsText(r))}
         ${fact("Preferred time", LL.timesText(r.preferred_times))}${fact("Start", r.start_asap ? "As soon as possible" : LL.date(r.start_date))}
         ${fact("Planned duration", r.planned_duration)}${fact("Format", LL.labels.format[r.format])}
         ${fact("Budget", LL.budget(r.budget_min, r.budget_max, r.currency))}${fact("Free trial", r.free_trial ? "Asked for a free trial" : "")}

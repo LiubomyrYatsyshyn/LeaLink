@@ -2,27 +2,35 @@
 
 Published teachers of the chosen subject are loaded and filtered in Python.
 That is simple and fast enough for an MVP (thousands of profiles).
-"""
-from collections.abc import Callable
-from typing import Literal
 
-from pydantic import BaseModel, Field
+The learner's answers to the subject's fields (catalog.py) are compared with the teacher's answers
+for the same subject: strict fields hide teachers, the others change the match %.
+"""
+import re
+from collections.abc import Callable
+from typing import Any, Literal
+
+from pydantic import BaseModel, Field, model_validator
 from sqlmodel import Session, col, select
 
-from . import vocab
+from . import catalog, vocab
 from .models import TeacherProfile, User
 from .views import Stats, teacher_card, teacher_stats
+
+ATTR = re.compile(r"^[a-z0-9_]{1,40}:[A-Za-z0-9_.+-]{1,60}$")
 
 
 class SearchFilters(BaseModel):
     """The "Find a teacher" form. Only the subject is required."""
 
     subject: str = Field(min_length=1, max_length=40)
-    # Soft criteria: they change the match %, they don't hide teachers.
-    topics: list[str] = []
     for_whom: vocab.ForWhom | None = None
-    level: vocab.Level | None = None
-    goal: vocab.Goal | None = None
+    attr: list[str] = Field(
+        [], max_length=60,
+        description='Answers to the subject\'s fields as "key:value", repeated for lists: '
+        "`attr=level:B1&attr=topics:speaking&attr=topics:grammar`. Keys and values: GET /api/meta (catalog).",
+    )  # fmt: skip
+    # Soft criterion: it changes the match %, it doesn't hide teachers.
     times: list[vocab.TimePref] = []
     # Strict filters: a teacher must pass all of them.
     format: vocab.Format | None = None
@@ -36,6 +44,41 @@ class SearchFilters(BaseModel):
     min_rating: float | None = Field(None, ge=0, le=5)
     free_trial: bool = False
     verified: bool = False
+
+
+    @model_validator(mode="before")
+    @classmethod
+    def legacy(cls, data: Any) -> Any:
+        """Searches saved before fields per subject had `level`, `goal` and `topics`."""
+        if isinstance(data, dict) and any(k in data for k in ("level", "goal", "topics")):
+            data = dict(data)
+            attr = list(data.get("attr") or [])
+            if data.get("level"):
+                attr.append(f"level:{data['level']}")
+            if data.get("goal") in catalog.LEGACY_GOALS:
+                attr.append(f"goal:{catalog.LEGACY_GOALS[data['goal']]}")
+            topics = data.get("topics") or []
+            attr += [f"topics:{catalog.slug(t)}" for t in ([topics] if isinstance(topics, str) else topics)]
+            data["attr"] = [a for a in attr if ATTR.match(a)]
+        return data
+
+    def answers(self, subject: catalog.Subject) -> dict:
+        """The learner's answers for `subject`, checked against its fields."""
+        raw: dict[str, list[str]] = {}
+        for item in self.attr:
+            if ATTR.match(item):
+                key, value = item.split(":", 1)
+                raw.setdefault(key, []).append(value)
+        if "age" in subject.by and "age" not in raw and self.for_whom == "myself":
+            raw["age"] = [catalog.age_key(subject, 18)]
+        answers = {k: (v if subject.by[k].match == "overlap" else v[0]) for k, v in raw.items() if k in subject.by}
+        return catalog.clean_learner(subject, answers)
+
+
+def offer_of(profile: TeacherProfile, subject: catalog.Subject) -> dict:
+    """The teacher's answers for one subject."""
+    offer = next((o for o in profile.offers if o.get("subject") == subject.name), None)
+    return offer["attrs"] if offer else {}
 
 
 class SearchQuery(SearchFilters):
@@ -102,31 +145,23 @@ def _times_ok(availability: list[str], times: list[str]) -> bool:
     return any(f"{day}_{part}" in availability for day in days or vocab.DAYS for part in parts)
 
 
-def match_percent(p: TeacherProfile, f: SearchFilters) -> int:
-    """Share of the soft criteria the teacher fits: topics, level, goal, age group, time."""
+def match_percent(p: TeacherProfile, f: SearchFilters, subject: catalog.Subject | None = None) -> int:
+    """Share of the soft criteria the teacher fits: the subject's soft fields and the time."""
     points, total = 0.0, 0
-    if f.topics:
-        wanted = _fold(f.topics)
-        total += 1
-        points += len(wanted & _fold(p.topics)) / len(wanted)
-    if f.level:
-        total += 1
-        points += f.level in p.levels
-    if f.goal:
-        total += 1
-        points += f.goal in p.goals
-    if f.for_whom:
-        total += 1
-        groups = {"kids", "teens"} if f.for_whom == "child" else {"adults"}
-        points += bool(groups & set(p.age_groups))
+    if subject is not None:
+        _, points, total = catalog.compare(subject, offer_of(p, subject), f.answers(subject))
     if f.times:
         total += 1
         points += _times_ok(p.availability, f.times)
     return 100 if total == 0 else round(100 * points / total)
 
 
-def _failed_filters(p: TeacherProfile, st: Stats, f: SearchFilters) -> list[str]:
-    return [name for name, (used, passes) in HARD_FILTERS.items() if used(f) and not passes(p, st, f)]
+def _failed_filters(p: TeacherProfile, st: Stats, f: SearchFilters, subject: catalog.Subject | None = None) -> list[str]:
+    """Strict filters the teacher fails; the subject's fields are named "attr:<key>"."""
+    failed = [name for name, (used, passes) in HARD_FILTERS.items() if used(f) and not passes(p, st, f)]
+    if subject is not None:
+        failed += [f"attr:{key}" for key in catalog.compare(subject, offer_of(p, subject), f.answers(subject))[0]]
+    return failed
 
 
 def published_teachers(session: Session, subject: str) -> list[tuple[TeacherProfile, User]]:
@@ -137,7 +172,8 @@ def published_teachers(session: Session, subject: str) -> list[tuple[TeacherProf
         .where(TeacherProfile.status == "approved", col(TeacherProfile.accepting_students).is_(True))
         .where(col(User.is_blocked).is_(False))
     ).all()
-    subject = subject.strip().casefold()
+    known = catalog.get(subject)
+    subject = (known.name if known else subject).strip().casefold()
     return [(p, u) for p, u in rows if subject in _fold(p.subjects)]
 
 
@@ -153,12 +189,13 @@ SORT_KEYS = {
 
 def search(session: Session, q: SearchQuery) -> dict:
     rows = published_teachers(session, q.subject)
+    subject = catalog.get(q.subject)
     stats = teacher_stats(session, [p for p, _ in rows])
     found, almost = [], {}
     for p, user in rows:
-        failed = _failed_filters(p, stats[p.id], q)
+        failed = _failed_filters(p, stats[p.id], q, subject)
         if not failed:
-            found.append((p, user, match_percent(p, q)))
+            found.append((p, user, match_percent(p, q, subject)))
         elif len(failed) == 1:  # would be shown if this one filter were removed
             almost[failed[0]] = almost.get(failed[0], 0) + 1
     found.sort(key=lambda row: SORT_KEYS[q.sort](row[0], stats[row[0].id], row[2]))
@@ -173,7 +210,9 @@ def search(session: Session, q: SearchQuery) -> dict:
 
 def profile_matches(session: Session, profile: TeacherProfile, filters: SearchFilters) -> bool:
     """Would this (just published) teacher appear for the saved search?"""
-    if filters.subject.strip().casefold() not in _fold(profile.subjects) or not profile.accepting_students:
+    subject = catalog.get(filters.subject)
+    name = subject.name if subject else filters.subject
+    if name.strip().casefold() not in _fold(profile.subjects) or not profile.accepting_students:
         return False
     stats = teacher_stats(session, [profile])[profile.id]
-    return not _failed_filters(profile, stats, filters)
+    return not _failed_filters(profile, stats, filters, subject)

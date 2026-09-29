@@ -78,4 +78,7 @@ def test_meta_and_health(client):
     assert client.get("/api/health").json() == {"status": "ok"}
     meta = client.get("/api/meta").json()
     assert meta["request_limit"] == 5 and meta["request_ttl_hours"] == 72
-    assert "English" in meta["subjects"] and "B1" in meta["levels"]
+    assert "English" in meta["subjects"] and len(meta["subjects"]) == 50
+    english = next(s for s in meta["catalog"]["subjects"] if s["name"] == "English")
+    assert english["category"] == "Languages"
+    assert {f["key"] for f in english["fields"]} >= {"level", "age", "goal", "topics", "own_level", "nmt_best"}

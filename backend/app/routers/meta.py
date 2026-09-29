@@ -2,8 +2,7 @@
 from fastapi import APIRouter
 from sqlmodel import select
 
-from .. import config, vocab
-from ..models import TeacherProfile
+from .. import catalog, config, vocab
 from ..security import SessionDep
 
 router = APIRouter(tags=["Meta"])
@@ -16,16 +15,15 @@ def health(session: SessionDep) -> dict:
 
 
 @router.get("/meta")
-def meta(session: SessionDep) -> dict:
-    """Option lists for selects and chips, plus the platform rules (request limit, reply time)."""
-    subjects = set(vocab.SUBJECTS)
-    for profile_subjects in session.exec(
-        select(TeacherProfile.subjects).where(TeacherProfile.status == "approved")
-    ).all():
-        subjects.update(profile_subjects)
+def meta() -> dict:
+    """Option lists for selects and chips, plus the platform rules (request limit, reply time).
+
+    `catalog`: the subjects grouped by category, and the fields each subject asks the teacher and the learner.
+    """
     return {
         **vocab.options(),
-        "subjects": sorted(subjects, key=str.casefold),
+        "subjects": catalog.NAMES,
+        "catalog": catalog.meta(),
         "request_limit": config.REQUEST_LIMIT,
         "request_ttl_hours": config.REQUEST_TTL_HOURS,
         "review_edit_days": config.REVIEW_EDIT_DAYS,

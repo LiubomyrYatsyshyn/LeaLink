@@ -2,6 +2,7 @@
    Logged in: saved to the API as a draft while you type. Guest: kept in this browser until sign-up. */
 document.addEventListener("DOMContentLoaded", async () => {
   const { esc, icon } = LL;
+  const S = LL.subjects;
   const $ = (s) => document.querySelector(s);
   const root = $("[data-wizard-form]");
 
@@ -9,15 +10,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const SYMBOL = { USD: "$", EUR: "€", UAH: "₴" };
   const LABELS = {
     display_name: "Display name", photo: "Photo", headline: "Headline", about: "About me (200+ characters)", country: "Country",
-    city: "City", timezone: "Time zone", languages: "Languages", subjects: "Subjects", topics: "Topics (one per subject)",
-    levels: "Student levels", age_groups: "Age groups", goals: "Learning goals", experience_years: "Years of teaching",
+    city: "City", timezone: "Time zone", languages: "Languages", subjects: "Subjects", experience_years: "Years of teaching",
     occupation: "Current occupation", format: "Format", offline_location: "Offline location", travel_radius_km: "Travel radius",
     lesson_types: "Lesson type", durations: "Lesson duration", price: "Price per lesson", currency: "Currency",
     availability: "Weekly availability", trial_minutes: "Trial length", contact_method: "Contact method", contact_value: "Contact",
   };
   const STEP = {
     display_name: 1, photo: 1, headline: 1, about: 1, country: 1, city: 1, timezone: 1, languages: 1,
-    subjects: 2, topics: 2, levels: 2, age_groups: 2, goals: 2, experience_years: 3, occupation: 3,
+    subjects: 2, experience_years: 3, occupation: 3,
     format: 4, offline_location: 4, travel_radius_km: 4, lesson_types: 4, durations: 4,
     price: 5, currency: 5, availability: 5, trial_minutes: 5, contact_method: 6, contact_value: 6,
   };
@@ -46,9 +46,69 @@ document.addEventListener("DOMContentLoaded", async () => {
     const exit = document.querySelector(".header-right a[href='index.html']");
     if (exit) exit.href = "teacher-home.html";
   }
-  LL.api.get("/meta").then((m) => {
-    $("#ll-subjects").innerHTML = m.subjects.map((s) => `<option>${esc(s)}</option>`).join("");
-  }).catch(() => {});
+  try {
+    await S.load();
+  } catch (e) {
+    LL.fail(e);
+  }
+
+  /* ---------- Subjects: one card per subject with its own fields (catalog from the API) ---------- */
+  const offersBox = $("[data-w-offers]");
+  const offerNames = () => Array.from(offersBox.querySelectorAll("[data-offer]")).map((c) => c.dataset.offer);
+  const OWN = { Native: "native" }; // Basics → Languages level -> the subject's own_level key
+
+  /* A language subject's own level comes from Basics → Languages, so it isn't typed twice. */
+  function prefill(subject) {
+    const own = subject.by.own_level;
+    if (!own) return {};
+    const lang = subject.name === "Business English" ? "English" : subject.name;
+    const row = collectLanguages().find((l) => l.language.toLowerCase() === lang.toLowerCase());
+    const key = row && (OWN[row.level] || row.level);
+    return key && own.options.some((o) => o.key === key) ? { own_level: key } : {};
+  }
+
+  function addOffer(name, attrs) {
+    const subject = S.get(name);
+    if (!subject || offerNames().includes(subject.name)) return null;
+    if (offerNames().length >= 3) {
+      LL.toast("Up to 3 subjects.");
+      return null;
+    }
+    const card = document.createElement("section");
+    card.className = "card fields";
+    card.dataset.offer = subject.name;
+    card.innerHTML = `<div class="subject-card-head"><div><p class="eyebrow">${esc(subject.category)}</p><h2 class="card-title">${esc(subject.name)}</h2></div>
+      <button class="icon-btn" type="button" aria-label="Remove ${esc(subject.name)}" data-offer-remove>${icon("trash")}</button></div>
+      <div class="fields" data-offer-fields></div>`;
+    offersBox.appendChild(card);
+    S.render(card.querySelector("[data-offer-fields]"), subject, "teacher", attrs || prefill(subject));
+    return card;
+  }
+
+  function setOffers(offers) {
+    offersBox.innerHTML = "";
+    (offers || []).forEach((o) => addOffer(o.subject, o.attrs || {}));
+  }
+
+  const readOffers = () => Array.from(offersBox.querySelectorAll("[data-offer]")).map((card) => ({
+    subject: card.dataset.offer,
+    attrs: S.read(card.querySelector("[data-offer-fields]")),
+  }));
+
+  /* Drafts saved before fields per subject had one list of subjects, levels and age groups. */
+  function legacyOffers(d) {
+    return (d.subjects || []).map((name) => ({ subject: name, attrs: { level: d.levels || [], age: d.age_groups || [] } }));
+  }
+
+  const picker = S.picker($("[data-w-picker]"), {
+    multiple: true,
+    placeholder: "Add a subject, e.g. English, Math or Guitar",
+    taken: offerNames,
+    onPick: (name) => {
+      const card = addOffer(name);
+      if (card) card.scrollIntoView({ behavior: "smooth", block: "start" });
+    },
+  });
 
   /* ---------- Rows (languages, education, links, questions) ---------- */
   const trash = (label) => `<button class="icon-btn" type="button" aria-label="${label}" data-remove-row>${icon("trash")}</button>`;
@@ -85,7 +145,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /* ---------- Fill the form ---------- */
-  const tagChip = (text) => `<span class="tag-chip">${esc(text)}<button class="x" type="button" aria-label="Remove ${esc(text)}">${icon("x", 12)}</button></span>`;
   function setSeg(id, value) {
     const btn = $(`#${id} button[data-v="${value}"]`);
     if (btn && !btn.classList.contains("is-active")) btn.click();
@@ -105,7 +164,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     LL.fillTimezones($("#w-tz"), d.timezone);
     setRows("language", d.languages, true);
     setValue("#w-video", d.video_url);
-    ["subjects", "topics"].forEach((key) => ($(`[data-w-tags="${key}"] .chips`).innerHTML = (d[key] || []).map(tagChip).join("")));
+    setOffers(d.offers || legacyOffers(d));
     root.querySelectorAll("[data-w-chips]").forEach((box) => {
       const values = (d[box.dataset.wChips] || []).map(String);
       box.querySelectorAll(".chip").forEach((c) => c.classList.toggle("is-selected", values.includes(c.dataset.v)));
@@ -149,8 +208,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     return Number.isFinite(n) && n > 0 ? n : null;
   };
   const chipsOf = (key) => Array.from(root.querySelectorAll(`[data-w-chips="${key}"] .chip.is-selected`)).map((c) => c.dataset.v);
-  const tagsOf = (key) => Array.from(root.querySelectorAll(`[data-w-tags="${key}"] .tag-chip`)).map((c) => c.textContent.trim());
   const rowsOf = (sel, read) => Array.from(root.querySelectorAll(sel)).map(read).filter(Boolean);
+  const collectLanguages = () => rowsOf("[data-lang-row]", (r) => {
+    const language = r.querySelector("input").value.trim();
+    return language ? { language, level: r.querySelector("select").value } : null;
+  });
 
   function collect() {
     const format = $("#w-format .is-active").dataset.v;
@@ -158,6 +220,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const trial = $("#w-trial").checked;
     const types = chipsOf("lesson_types");
     const pack = int("#w-pack", 2, 100);
+    const offers = readOffers();
     return {
       display_name: val("#w-name") || null,
       headline: val("#w-headline") || null,
@@ -165,16 +228,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       country: val("#w-country") || null,
       city: val("#w-city") || null,
       timezone: $("#w-tz").value,
-      languages: rowsOf("[data-lang-row]", (r) => {
-        const language = r.querySelector("input").value.trim();
-        return language ? { language, level: r.querySelector("select").value } : null;
-      }),
+      languages: collectLanguages(),
       video_url: val("#w-video") || null,
-      subjects: tagsOf("subjects").slice(0, 3),
-      topics: tagsOf("topics").slice(0, 20),
-      levels: chipsOf("levels"),
-      age_groups: chipsOf("age_groups"),
-      goals: chipsOf("goals"),
+      offers,
+      subjects: offers.map((o) => o.subject), // for the preview; the API takes `offers`
       experience_years: int("#w-years", 0, 70),
       occupation: val("#w-occ") || null,
       practical_experience: val("#w-practical") || null,
@@ -215,18 +272,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (d.about && d.about.length < 200 && !missing.includes("about")) missing.push("about");
     if (d.format !== "online") ["offline_location", "travel_radius_km"].forEach((k) => empty(d[k]) && missing.push(k));
     if (d.free_trial && !d.trial_minutes) missing.push("trial_minutes");
-    if (d.subjects.length && d.topics.length < d.subjects.length && !missing.includes("topics")) missing.push("topics");
-    return missing.sort((a, b) => STEP[a] - STEP[b]);
+    d.offers.forEach((o) => {
+      const subject = S.get(o.subject);
+      if (subject) S.teacherMissing(subject, o.attrs).forEach((m) => missing.push(`${o.subject}: ${m}`));
+    });
+    return missing.sort((a, b) => stepOf(a) - stepOf(b));
   }
+
+  /* "English: Student levels" (a subject's field) belongs to step 2. */
+  const stepOf = (name) => (name.includes(": ") ? 2 : STEP[name.split(" ")[0]] || 1);
 
   /* ---------- Small live updates ---------- */
   function refresh() {
-    const subjects = root.querySelectorAll('[data-w-tags="subjects"] .tag-chip');
-    if (subjects.length > 3) {
-      subjects[subjects.length - 1].remove();
-      LL.toast("Up to 3 subjects.");
-    }
-    $("[data-w-subject-count]").textContent = `${Math.min(3, subjects.length)} / 3`;
+    const count = offerNames().length;
+    $("[data-w-subject-count]").textContent = `${count} / 3`;
+    picker.setDisabled(count >= 3, count >= 3 ? "You’ve chosen 3 subjects" : "Add a subject, e.g. English, Math or Guitar");
     $("[data-w-question-count]").textContent = `${root.querySelectorAll("[data-q-row]").length} / 3`;
     document.querySelectorAll("[data-w-symbol]").forEach((el) => (el.textContent = SYMBOL[$("#w-cur").value]));
     $("#w-trial-min").disabled = !$("#w-trial").checked;
@@ -282,7 +342,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   root.addEventListener("change", () => { refresh(); autosave(); });
   root.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.matches("[data-tag-input]")) setTimeout(() => { refresh(); autosave(); }); });
   root.addEventListener("click", (e) => {
-    if (e.target.closest(".chip, [data-cell], .seg button, .x, [data-remove-row]")) setTimeout(() => { refresh(); autosave(); });
+    const remove = e.target.closest("[data-offer-remove]");
+    if (remove) remove.closest("[data-offer]").remove();
+    if (e.target.closest(".chip, [data-cell], .seg button, .x, [data-remove-row], [data-offer-remove]")) setTimeout(() => { refresh(); autosave(); });
     const add = e.target.closest("[data-w-add]");
     if (add) addRow(add.dataset.wAdd);
   });
@@ -407,7 +469,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const d = collect();
     $("[data-w-preview]").innerHTML = LL.teacherCard({
       id: profile ? profile.id : 0, display_name: d.display_name || "Your name", photo_url: photo,
-      headline: d.headline || "Your headline", subjects: d.subjects, topics: d.topics,
+      headline: d.headline || "Your headline", subjects: d.subjects, topics: S.tags(d.offers),
       is_verified: profile ? profile.is_verified : false, free_trial: d.free_trial, rating: null, reviews_count: 0,
       experience_years: d.experience_years, format: d.format, price: d.price, currency: d.currency,
       response_hours: d.response_time_hours, match: null,
@@ -416,7 +478,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const slots = d.availability.length;
     const sums = {
       1: join([d.display_name, [d.city, d.country].filter(Boolean).join(", "), d.languages.map((l) => l.language).join(", ")]),
-      2: join([d.subjects.join(", "), LL.levelRange(d.levels), d.age_groups.map((a) => LL.labels.age[a].split(" ")[0]).join(", ")]),
+      2: join(d.offers.map((o) => {
+        const levels = S.labels(S.get(o.subject), "level", o.attrs.level, "teacher");
+        return levels.length ? `${o.subject} (${levels.length > 2 ? levels[0] + " – " + levels[levels.length - 1] : levels.join(", ")})` : o.subject;
+      })),
       3: join([d.experience_years != null ? `${d.experience_years} years` : "", profile && profile.certificates.length ? `${profile.certificates.length} certificate(s)` : "", d.links.length ? `${d.links.length} link(s)` : ""]),
       4: join([LL.labels.format[d.format], d.lesson_types.map((t) => LL.labels.lessonType[t]).join(", "), d.durations.length ? d.durations.join("/") + " min" : ""]),
       5: join([d.price ? `${LL.money(d.price, d.currency)} / lesson` : "", d.free_trial ? `Free ${d.trial_minutes}-min trial` : "", slots ? `${slots} slots / week` : ""]),
@@ -435,7 +500,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const missing = missingFields(d);
     if (missing.length) {
       LL.toast(`Fill in first: ${missing.map((m) => LABELS[m] || m).join(", ")}.`);
-      goStep(STEP[missing[0]] || 1);
+      goStep(stepOf(missing[0]));
       return;
     }
     if (!user) {
@@ -453,7 +518,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
       const list = err.detail && err.detail.missing;
       LL.toast(list ? `Fill in first: ${list.join(", ")}.` : err.message);
-      if (list) goStep(STEP[list[0].split(" ")[0]] || 1);
+      if (list) goStep(stepOf(list[0]));
     }
   });
 

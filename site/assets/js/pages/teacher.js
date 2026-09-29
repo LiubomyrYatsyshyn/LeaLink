@@ -77,14 +77,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       </section>
 
       <section class="tp-section">
-        <h2>Subjects and topics</h2>
-        <div class="facts">
-          ${fact("Subjects", esc(t.subjects.join(", ")))}
-          ${fact("Student levels", LL.levelRange(t.levels))}
-          ${fact("Age groups", t.age_groups.map((a) => labels.age[a]).join(", "))}
-        </div>
-        ${t.topics.length ? `<p class="label" style="margin-top:20px">Topics</p><div class="tags" style="margin-top:8px">${LL.tags(t.topics)}</div>` : ""}
-        ${t.goals.length ? `<p class="label" style="margin-top:16px">Learning goals</p><div class="tags" style="margin-top:8px">${LL.tags(t.goals)}</div>` : ""}
+        <h2>Subjects</h2>
+        ${t.offers_view.map((o, i) => `<h3 class="t-h3" style="margin-top:${i ? 28 : 20}px">${esc(o.subject)}</h3>
+          <div class="facts" style="margin-top:12px">${o.facts.map((x) => fact(esc(x.label), esc(x.value))).join("")}</div>`).join("")}
       </section>
 
       <section class="tp-section">

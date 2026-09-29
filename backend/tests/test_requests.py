@@ -26,6 +26,10 @@ def test_request_accept_chat_and_reviews(client, api, outbox):
     assert req["status"] == "pending" and req["my_role"] == "learner" and req["hours_left"] == 72
     assert req["teacher_contact"] is None
     assert outbox[-1][0] == teacher["email"] and "Anna Petrenko" in outbox[-1][1]
+    # The learner's answers: stored as keys, shown as text.
+    assert req["attrs"] == {"level": "B1", "age": "adults", "goal": "interviews", "topics": ["speaking"]}
+    assert (req["level"], req["goal"], req["topics"]) == ("Intermediate (B1)", "Job interviews", ["Speaking"])
+    assert {"label": "Level", "value": "Intermediate (B1)"} in req["details"]
 
     # Teacher home: incoming request with the learner's details.
     incoming = client.get("/api/requests/incoming", headers=th).json()
@@ -127,7 +131,8 @@ def test_request_rules(client, api):
     assert api.send_request(learner, teachers[0], message="Too short").status_code == 422
     assert api.send_request(learner, teachers[0], for_whom="child").status_code == 422
     assert api.send_request(learner, teachers[0], preferred_times=["weekdays"]).status_code == 422
-    assert api.send_request(learner, teachers[0], goal="Anything").status_code == 422
+    assert api.send_request(learner, teachers[0], attrs={"level": "B1"}).status_code == 422  # a goal is required
+    assert api.send_request(learner, teachers[0], subject="Python").status_code == 422  # not the teacher's subject
     child = api.send_request(learner, teachers[0], for_whom="child", child_age=14, parent_contact="+380501234567")
     assert child.status_code == 201
     assert client.get(f"/api/requests/{child.json()['id']}", headers=teachers[0]["headers"]).json()["parent_contact"] is None
@@ -197,3 +202,14 @@ def test_reports(client, api):
     r = client.post(f"/api/admin/reports/{reports[0]['id']}/resolve", headers=admin["headers"], json={"note": "Checked"})
     assert r.json()["status"] == "resolved"
     assert len(client.get("/api/admin/reports", headers=admin["headers"]).json()) == 1
+
+
+def test_request_answers_follow_the_subject(api):
+    admin = api.admin()
+    teacher = api.teacher(admin)
+    learner = api.signup()
+    # Requests from the old form (level, goal, topics) are converted; the age group comes from "For whom".
+    r = api.send_request(learner, teacher, attrs={}, level="B2", goal="Travel", topics=["Speaking"],
+                         for_whom="child", child_age=15, parent_contact="+380501234567")  # fmt: skip
+    assert r.status_code == 201, r.text
+    assert r.json()["attrs"] == {"level": "B2", "age": "teens", "goal": "travel", "topics": ["speaking"]}

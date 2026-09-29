@@ -233,6 +233,29 @@ select.input {
 .tag-box { border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; }
 .tag-box input { border: 0; outline: 0; width: 100%; font: 400 15px "Inter", sans-serif; margin-top: 10px; padding: 0 2px; color: var(--text); }
 .tag-box input::placeholder { color: var(--text-3); }
+
+/* Subject picker: a text box with search and a grouped dropdown list (same look as .menu). */
+.combo { position: relative; }
+.combo .input { padding-right: 40px; }
+.combo-toggle { position: absolute; right: 4px; top: 4px; width: 32px; height: 32px; display: grid; place-items: center; border: 0; background: none; border-radius: 6px; color: var(--text-2); cursor: pointer; }
+.combo-toggle:hover { background: var(--surface); color: var(--text); }
+.combo-list { position: absolute; top: calc(100% + 6px); left: 0; right: 0; max-height: 340px; overflow-y: auto; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow-sm); padding: 4px; z-index: 40; }
+.combo-group { padding: 10px 10px 4px; font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
+.combo-option { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 38px; padding: 0 10px; border: 0; background: none; border-radius: 6px; font-size: 15px; color: var(--text); text-align: left; cursor: pointer; }
+.combo-option small { color: var(--text-3); font-size: 13px; }
+.combo-option:hover, .combo-option.is-active { background: var(--surface); }
+.combo-option .check-mark { flex: none; color: var(--r600); }
+.combo-option[aria-disabled="true"] { color: var(--text-2); cursor: default; }
+.combo-empty { padding: 12px 10px; font-size: 14px; color: var(--text-2); }
+
+/* Fields of one subject: grouped extras (NMT preparation, exams) sit in a light box. */
+.subfields { display: grid; gap: 20px; padding: 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.subfields .chip:not(.is-selected), .subfields .input, .subfields .seg { background-color: #fff; }
+.subject-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.subject-card-head .eyebrow { margin-bottom: 4px; }
+.chip:disabled { opacity: .45; cursor: not-allowed; background: #fff; }
+[data-subject-fields]:empty, [data-w-offers]:empty { display: none; }
+.filters-panel [data-subject-fields] .grid-2 { grid-template-columns: minmax(0, 1fr); }
 :root { --mask-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E"); }
 
 /* Toggle, checkbox, radio */

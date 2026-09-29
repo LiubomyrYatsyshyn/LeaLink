@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return `<div data-details-box hidden style="margin-top:16px">
       <div class="facts">
         ${fact("Subject", esc(r.subject))}
-        ${fact("Topics", esc(r.topics.join(", ")))}
+        ${r.details.filter((x) => x.label !== "Level" && x.label !== "Goal").map((x) => fact(esc(x.label), esc(x.value))).join("")}
         ${fact("Goal details", esc(r.goal_details))}
         ${fact("Preferred time", esc(LL.timesText(r.preferred_times)))}
         ${fact("Start", r.start_asap ? "As soon as possible" : LL.date(r.start_date))}
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function requestCard(r) {
     const tags = [
-      LL.labels.level[r.level], r.goal, LL.labels.format[r.format], LL.lessonsText(r),
+      r.level, r.goal, LL.labels.format[r.format], LL.lessonsText(r),
       LL.budget(r.budget_min, r.budget_max, r.currency),
     ].filter(Boolean);
     return `<article class="rcard inreq">
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         current = find(el.dataset.decline);
         const first = LL.firstName(current.learner.name);
         $("[data-decline-who]").innerHTML = `${LL.avatar(current.learner, 44)}<div><div class="t-small">${esc(current.learner.name)}</div>
-          <div class="t-caption muted" style="font-weight:400">${esc([LL.labels.level[current.level], current.goal, LL.lessonsText(current)].filter(Boolean).join(" · "))}</div></div>`;
+          <div class="t-caption muted" style="font-weight:400">${esc([current.level, current.goal, LL.lessonsText(current)].filter(Boolean).join(" · "))}</div></div>`;
         $("[data-note-label]").innerHTML = `Note to ${esc(first)} <span class="opt">(optional)</span>`;
         $("[data-decline-help]").textContent = `${first} will see the reason and your note. The request moves to their Declined tab.`;
         $("#dc-note").value = "";

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from sqlalchemy import extract, func
 from sqlmodel import Session, col, select
 
+from . import catalog
 from .models import Certificate, LessonRequest, Message, Review, TeacherProfile, User, utcnow
 
 OPEN_STATUSES = ("accepted", "closed")  # the chat and the teacher's contact are open
@@ -72,9 +73,20 @@ def certificate_out(cert: Certificate, with_file: bool) -> dict:
     return data
 
 
+def offers_view(offers: list[dict]) -> list[dict]:
+    """The teacher's answers per subject as readable facts."""
+    view = []
+    for offer in offers:
+        subject = catalog.get(offer.get("subject"))
+        if subject:
+            view.append({"subject": subject.name, "facts": catalog.describe_teacher(subject, offer.get("attrs", {}))})
+    return view
+
+
 def teacher_card(profile: TeacherProfile, user: User, stats: Stats, match: int | None = None) -> dict:
     return {
         **profile.model_dump(),
+        "topics": catalog.card_tags(profile.offers),
         "photo_url": photo_url(user.photo),
         "display_name": profile.display_name or user.full_name,
         "rating": stats.rating,
@@ -92,6 +104,7 @@ def teacher_public(session: Session, profile: TeacherProfile, owner_view: bool =
     ).all()
     return {
         **teacher_card(profile, user, stats),
+        "offers_view": offers_view(profile.offers),
         "certificates": [certificate_out(c, with_file=owner_view) for c in certs],
     }
 
@@ -99,7 +112,7 @@ def teacher_public(session: Session, profile: TeacherProfile, owner_view: bool =
 # Wizard fields a profile needs before it can be sent to moderation.
 REQUIRED_FIELDS = [
     "display_name", "headline", "about", "country", "city", "timezone", "languages",
-    "subjects", "topics", "levels", "age_groups", "goals",
+    "subjects",
     "experience_years", "occupation",
     "format", "lesson_types", "durations",
     "price", "currency", "availability",
@@ -122,8 +135,10 @@ def missing_fields(profile: TeacherProfile, user: User) -> list[str]:
         missing += [f for f in ("offline_location", "travel_radius_km") if _empty(getattr(profile, f))]
     if profile.free_trial and not profile.trial_minutes:
         missing.append("trial_minutes")
-    if profile.subjects and profile.topics and len(profile.topics) < len(profile.subjects):
-        missing.append("topics (at least one per subject)")
+    for offer in profile.offers:
+        subject = catalog.get(offer.get("subject"))
+        if subject:
+            missing += [f"{subject.name}: {name}" for name in catalog.teacher_missing(subject, offer.get("attrs", {}))]
     return missing
 
 
@@ -173,8 +188,10 @@ def request_out(session: Session, request: LessonRequest, me: User) -> dict:
     hours_left = None
     if request.status == "pending":
         hours_left = max(0, math.ceil((request.expires_at - utcnow()).total_seconds() / 3600))
+    subject = catalog.get(request.subject)
     data = {
         **request.model_dump(),
+        "details": catalog.describe_learner(subject, request.attrs) if subject else [],
         "my_role": role,
         "teacher": {
             "id": teacher.id,

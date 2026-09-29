@@ -63,11 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
     $("#name").value = request.name || "";
     $("[data-t-avatar]").outerHTML = LL.avatar({ name: t.name, photo_url: t.photo_url }, 40);
     $("[data-t-name]").textContent = t.name;
-    $("[data-t-sub]").textContent = [p.subject, p.topics.join(", ")].filter(Boolean).join(" · ");
+    $("[data-t-sub]").textContent = p.subject || "";
     const cell = (label, value) => (value ? `<div><small>${label}</small>${LL.esc(value)}</div>` : "");
     $("[data-summary]").innerHTML = [
-      cell("Level", LL.labels.level[p.level]),
-      cell("Goal", p.goal),
+      ...(request.details || []).filter((x) => ["Level", "Grade", "Goal"].includes(x.label)).map((x) => cell(x.label, x.value)),
       cell("Lessons", LL.lessonsText(p)),
       cell("Schedule", LL.timesText(p.preferred_times)),
       cell("Start", p.start_asap ? "As soon as possible" : LL.date(p.start_date)),

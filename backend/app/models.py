@@ -20,6 +20,10 @@ def JsonList() -> Any:
     return Field(default_factory=list, sa_type=JSON)
 
 
+def JsonDict() -> Any:
+    return Field(default_factory=dict, sa_type=JSON)
+
+
 def Money() -> Any:
     return Field(default=None, max_digits=10, decimal_places=2)
 
@@ -69,12 +73,9 @@ class TeacherProfile(SQLModel, table=True):
     languages: list[dict] = JsonList()  # [{"language": "English", "level": "C2"}]
     video_url: str | None = Field(default=None, max_length=300)
 
-    # 2. Subjects
-    subjects: list[str] = JsonList()
-    topics: list[str] = JsonList()
-    levels: list[str] = JsonList()
-    age_groups: list[str] = JsonList()
-    goals: list[str] = JsonList()
+    # 2. Subjects: one block of answers per subject (fields from catalog.py).
+    offers: list[dict] = JsonList()  # [{"subject": "English", "attrs": {"level": ["B1", "B2"], "own_level": "C1", ...}}]
+    subjects: list[str] = JsonList()  # the offers' subjects, kept for quick lookups
 
     # 3. Experience
     experience_years: int | None = None
@@ -142,9 +143,11 @@ class LessonRequest(SQLModel, table=True):
     child_age: int | None = None
     parent_contact: str | None = Field(default=None, max_length=100)
     subject: str = Field(max_length=40)
+    attrs: dict = JsonDict()  # the learner's answers to the subject's fields (catalog.py)
+    # Readable copies of the main answers, for lists, emails and chats.
     topics: list[str] = JsonList()
-    level: str | None = Field(default=None, max_length=2)
-    goal: str = Field(max_length=40)
+    level: str | None = Field(default=None, max_length=60)
+    goal: str = Field(max_length=80)
     goal_details: str | None = Field(default=None, max_length=500)
     lessons_per_week: int
     lesson_duration: int

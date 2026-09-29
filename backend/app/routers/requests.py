@@ -4,7 +4,7 @@ from datetime import timedelta
 from fastapi import APIRouter, BackgroundTasks, HTTPException, status
 from sqlmodel import Session, col, func, select
 
-from .. import config
+from .. import catalog, config
 from ..emails import notify
 from ..housekeeping import expire_overdue
 from ..models import LessonRequest, Review, TeacherProfile, User, utcnow
@@ -48,6 +48,22 @@ def active_count(session: Session, learner_id: int) -> int:
     ).one()
 
 
+def request_answers(data: RequestIn, subject: catalog.Subject) -> dict:
+    """The learner's answers for the request; the age group comes from "For whom" and the child's age."""
+    raw = dict(data.attrs)
+    if data.level and "level" not in raw:
+        raw["level"] = data.level
+    if data.goal and "goal" not in raw:
+        raw["goal"] = catalog.LEGACY_GOALS.get(data.goal, data.goal)
+    if data.topics and "topics" not in raw:
+        raw["topics"] = [catalog.slug(t) for t in data.topics]
+    raw.pop("age", None)
+    age = catalog.age_key(subject, data.child_age if data.for_whom == "child" else 18)
+    if age:
+        raw["age"] = age
+    return catalog.clean_learner(subject, raw, request=True)
+
+
 @router.post("", response_model=RequestOut, status_code=status.HTTP_201_CREATED)
 def send_request(data: RequestIn, background: BackgroundTasks, user: CurrentUser, session: SessionDep):
     """Send a request to a teacher. Up to 5 pending requests at a time; the teacher has 72 hours to reply."""
@@ -70,8 +86,17 @@ def send_request(data: RequestIn, background: BackgroundTasks, user: CurrentUser
         409,
         f"You already have {config.REQUEST_LIMIT} active requests. Wait for replies or withdraw one.",
     )
+    subject = catalog.get(data.subject)
+    _require(subject is not None and subject.name in teacher.subjects, 422, "Choose one of the teacher's subjects")
+    attrs = request_answers(data, subject)
+    _require("goal" not in subject.by or bool(attrs.get("goal")), 422, "Choose a goal")
     request = LessonRequest(
-        **data.model_dump(exclude={"teacher_id"}),
+        **data.model_dump(exclude={"teacher_id", "subject", "attrs", "topics", "level", "goal"}),
+        subject=subject.name,
+        attrs=attrs,
+        topics=catalog.labels(subject, "topics", attrs.get("topics")),
+        level=catalog.label(subject, "level", attrs.get("level")) or None,
+        goal=catalog.label(subject, "goal", attrs.get("goal")),
         learner_id=user.id,
         teacher_id=teacher.id,
         expires_at=utcnow() + timedelta(hours=config.REQUEST_TTL_HOURS),
@@ -82,7 +107,7 @@ def send_request(data: RequestIn, background: BackgroundTasks, user: CurrentUser
     session.refresh(request)
     notify(
         background, teacher_user, "notify_requests", f"New request from {user.full_name}",
-        f"{user.full_name} sent you a request: {request.subject}, {request.goal}.\n\n\"{request.message}\"\n\n"
+        f"{user.full_name} sent you a request: {', '.join(filter(None, [request.subject, request.goal]))}.\n\n\"{request.message}\"\n\n"
         f"Accept or decline it within {config.REQUEST_TTL_HOURS} hours on your LeaLink home page.",
     )  # fmt: skip
     return request_out(session, request, user)
