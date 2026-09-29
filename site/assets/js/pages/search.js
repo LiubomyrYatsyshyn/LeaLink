@@ -26,12 +26,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  /* "Show teachers" opens the results only when the required fields are filled in. */
   document.querySelectorAll("[data-show-results]").forEach((a) =>
     a.addEventListener("click", (e) => {
-      if (F.read(form).subject) return;
+      const missing = F.validate(form);
+      if (!missing.length) return;
       e.preventDefault();
-      LL.toast("Choose a subject first.");
-      form.querySelector('[data-f="subject"] input').focus();
+      LL.toast(`Fill in the required fields: ${missing.join(", ")}.`);
+      const first = form.querySelector(".field.is-error");
+      if (first) {
+        first.scrollIntoView({ behavior: "smooth", block: "center" });
+        const control = first.querySelector("input, select");
+        if (control && control.type !== "checkbox") setTimeout(() => control.focus({ preventScroll: true }), 300);
+      }
     })
   );
 

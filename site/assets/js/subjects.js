@@ -65,19 +65,6 @@
     });
   }
 
-  /* Required answers the teacher hasn't given yet (the same rule as catalog.teacher_missing). */
-  function teacherMissing(subject, attrs) {
-    const missing = subject.fields
-      .filter((f) => f.teacher && f.required && shown(f, attrs) && !asList(attrs[f.key]).length)
-      .map((f) => f.teacher);
-    subject.fields.forEach((f) => {
-      if (!f.cap || !attrs[f.key] || !attrs[f.cap]) return;
-      const top = rank(subject.by[f.cap].options, attrs[f.cap]);
-      if (asList(attrs[f.key]).some((v) => rank(f.options, v) > top)) missing.push(`${f.teacher} (not above your own level)`);
-    });
-    return missing;
-  }
-
   /* Tags for the teacher card: labels of the topic-like fields. */
   function tags(offers) {
     const out = [];
@@ -234,12 +221,18 @@
 
   /* ---------- Fields of one subject ---------- */
 
+  /* The learner's "Not sure" level: a real answer for the form, ignored by the search (not an option key). */
+  const UNSURE = "unsure";
+  /* Required for the learner: the level and the goal (catalog `learner_required`); the child's age when "My child". */
+  const isRequired = (f) => !!f.learner_required || f.key === "age";
+
   const chip = (o, sel) => `<button class="chip${sel ? " is-selected" : ""}" type="button" data-v="${esc(o.key)}">${esc(o.label)}</button>`;
 
   function control(subject, f, side) {
     const teacher = side === "teacher";
     const label = teacher ? f.teacher : f.learner;
-    const mark = teacher ? (f.required ? ' <span class="req">*</span>' : ' <span class="opt">(optional)</span>') : "";
+    const required = teacher ? f.required : isRequired(f);
+    const mark = required ? ' <span class="req">*</span>' : teacher ? ' <span class="opt">(optional)</span>' : "";
     const opts = choices(f, side);
     const id = `sf-${side}-${subject.name.replace(/\W+/g, "")}-${f.key}`;
     const attrs = `data-attr="${f.key}"${f.when ? ` data-when="${f.when.join(":")}"` : ""}`;
@@ -251,9 +244,11 @@
     if (many) {
       return { full: true, html: `<div class="field" ${attrs} data-kind="chips"><span class="label">${esc(label)}${mark}</span><div class="chips">${opts.map((o) => chip(o)).join("")}</div>${hint}</div>` };
     }
-    const empty = teacher ? "Choose…" : side === "request" ? "Not sure" : ["Level", "Grade", "Goal"].includes(label) ? `Any ${label.toLowerCase()}` : f.key === "age" ? "Any age" : "Any";
+    // A required choice starts at "Choose…" and can't go back to it; the learner's level also offers "Not sure".
+    const empty = required ? `<option value="" disabled>Choose…</option>${!teacher && f.key === "level" ? `<option value="${UNSURE}">Not sure</option>` : ""}`
+      : `<option value="">${teacher ? "Choose…" : side === "request" ? "Not sure" : ["Level", "Grade", "Goal"].includes(label) ? `Any ${label.toLowerCase()}` : f.key === "age" ? "Any age" : "Any"}</option>`;
     return { full: false, html: `<div class="field" ${attrs} data-kind="select"><label class="label" for="${id}">${esc(label)}${mark}</label>
-      <select class="input" id="${id}"><option value="">${empty}</option>${opts.map((o) => `<option value="${esc(o.key)}">${esc(o.label)}</option>`).join("")}</select>${hint}</div>` };
+      <select class="input" id="${id}">${empty}${opts.map((o) => `<option value="${esc(o.key)}">${esc(o.label)}</option>`).join("")}</select>${hint}</div>` };
   }
 
   /* Half-width controls (selects) share a row; chips and checkboxes take the full width. */
@@ -372,6 +367,7 @@
         const sel = el.querySelector("select");
         const one = asList(v)[0];
         sel.value = one != null && Array.from(sel.options).some((o) => o.value === String(one)) ? String(one) : "";
+        if (sel.selectedIndex < 0) sel.selectedIndex = 0;
       }
     });
     sync(container);
@@ -405,6 +401,28 @@
     }
   }
 
+  /* Mark empty required fields of one subject (LL.fieldError) and return their labels. */
+  function validate(container) {
+    const subject = container._subject;
+    const side = container._side;
+    if (!subject) return [];
+    const answers = read(container, true);
+    const missing = [];
+    container.querySelectorAll("[data-attr]").forEach((el) => {
+      const f = subject.by[el.dataset.attr];
+      const hidden = hiddenIn(el, container);
+      const need = side === "teacher" ? f.required : isRequired(f);
+      const empty = !asList(answers[f.key]).length;
+      let msg = null;
+      if (!hidden && need && empty) {
+        msg = el.dataset.kind === "chips" ? "Choose at least one." : el.dataset.kind === "check" ? "Tick this to continue." : "Choose an option.";
+        missing.push(el.dataset.attr === "age" && side !== "teacher" ? "Child’s age" : side === "teacher" ? f.teacher : f.learner);
+      }
+      LL.fieldError(el, msg);
+    });
+    return missing;
+  }
+
   /* Readable facts for a set of answers (used before the API has saved them, e.g. in a draft). */
   function describe(subject, attrs, side) {
     return fieldsFor(subject, side)
@@ -418,5 +436,5 @@
     return (list || []).map((x) => `<div class="fact"><small>${esc(x.label)}</small><div>${esc(x.value)}</div></div>`).join("");
   }
 
-  LL.subjects = { load, get, all, labels, picker, render, read, write, sync, teacherMissing, tags, describe, facts, fieldsFor, rank };
+  LL.subjects = { load, get, all, labels, picker, render, read, write, sync, validate, tags, describe, facts, fieldsFor, rank, UNSURE };
 })();

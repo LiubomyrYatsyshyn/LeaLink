@@ -185,26 +185,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       answers: t.questions.map((q, i) => ({ question: q, answer: $(`[data-question="${i}"]`).value.trim() })).filter((a) => a.answer),
       message: $("#r-msg").value.trim(),
     };
-    const subject = S.get(payload.subject);
-    const goalField = fieldsBox.querySelector('[data-attr="goal"]');
     const errors = {
       name: !$("#r-name").value.trim() && "Enter your name.",
       child_age: child && !(payload.child_age >= 3 && payload.child_age <= 17) && "Enter an age from 3 to 17.",
       parent_contact: child && !payload.parent_contact && "Add a phone number or email so the teacher can reach a parent.",
       subject: !payload.subject && "Choose a subject.",
-      goal: subject && subject.by.goal && !payload.attrs.goal && "Choose a goal.",
       preferred_times: !payload.preferred_times.some((x) => ["morning", "afternoon", "evening"].includes(x)) && "Choose at least one time of day.",
       start_date: !asap && !payload.start_date && "Pick a start date.",
       message: payload.message.length < 50 && `Write at least 50 characters so ${first} understands your needs.`,
     };
     const names = {
-      name: "Your name", child_age: "Child’s age", parent_contact: "Parent contact", subject: "Subject", goal: "Goal",
+      name: "Your name", child_age: "Child’s age", parent_contact: "Parent contact", subject: "Subject",
       preferred_times: "Preferred schedule", start_date: "Start date", message: `Message to ${first}`,
     };
     const failed = [];
     Object.entries(errors).forEach(([key, msg]) => {
-      LL.fieldError(key === "goal" ? goalField : form.querySelector(`[data-field="${key}"]`), msg || null);
+      LL.fieldError(form.querySelector(`[data-field="${key}"]`), msg || null);
       if (msg) failed.push(names[key]);
+      if (key === "subject") failed.push(...S.validate(fieldsBox)); // the subject's required fields (level, goal)
     });
     return { payload, name: $("#r-name").value.trim(), failed };
   }

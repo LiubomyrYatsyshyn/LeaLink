@@ -383,6 +383,15 @@
     p.innerHTML = icon("alert", 12) + esc(msg);
   }
 
+  /* Editing a field clears its error message. */
+  function clearOwnError(e) {
+    const field = e.target.closest && e.target.closest(".field.is-error");
+    if (!field) return;
+    if (e.type === "click" && !e.target.closest(".chip, .seg button, [data-cell], .combo-option")) return;
+    fieldError(field, null);
+  }
+  ["input", "change", "click"].forEach((type) => document.addEventListener(type, clearOwnError));
+
   /* Timezone names for <select>s, with the browser's own zone first. */
   function timezones() {
     const own = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";

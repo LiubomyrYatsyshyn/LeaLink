@@ -1,5 +1,6 @@
 """Turning database rows into API responses."""
 import math
+import re
 from dataclasses import dataclass
 
 from sqlalchemy import extract, func
@@ -125,6 +126,32 @@ def _empty(value) -> bool:
     return value is None or value == "" or value == []
 
 
+# Formats checked before a profile goes to moderation (the wizard checks the same, see wizard.js).
+PHONE = r"\+?\d[\d ()-]{5,18}\d"
+CONTACT_FORMATS = {
+    "telegram": (rf"@[A-Za-z0-9_]{{5,32}}|(https?://)?t\.me/[A-Za-z0-9_]{{5,32}}|{PHONE}", "@username, a t.me link or a phone number"),
+    "whatsapp": (PHONE, "a phone number like +380501234567"),
+    "phone": (PHONE, "a phone number like +380501234567"),
+    "email": (r"[^@\s]+@[^@\s]+\.[^@\s]+", "an email like name@example.com"),
+}
+LINK = re.compile(r"(https?://)?[\w-]+(\.[\w-]+)+(:\d+)?(/\S*)?", re.IGNORECASE)
+VIDEO = re.compile(r"(https?://)?(www\.|m\.)?(youtube\.com|youtu\.be|vimeo\.com)/\S+", re.IGNORECASE)
+
+
+def format_problems(profile: TeacherProfile) -> list[str]:
+    problems = []
+    rule = CONTACT_FORMATS.get(profile.contact_method or "")
+    if rule and profile.contact_value and not re.fullmatch(rule[0], profile.contact_value.strip()):
+        problems.append(f"contact_value (use {rule[1]})")
+    if profile.video_url and not VIDEO.fullmatch(profile.video_url):
+        problems.append("video_url (use a YouTube or Vimeo link)")
+    if any(not LINK.fullmatch(link) for link in profile.links):
+        problems.append("links (use addresses like linkedin.com/in/name)")
+    if profile.headline and len(profile.headline) < 10:
+        problems.append("headline (at least 10 characters)")
+    return problems
+
+
 def missing_fields(profile: TeacherProfile, user: User) -> list[str]:
     missing = [name for name in REQUIRED_FIELDS if _empty(getattr(profile, name))]
     if not user.photo:
@@ -135,6 +162,7 @@ def missing_fields(profile: TeacherProfile, user: User) -> list[str]:
         missing += [f for f in ("offline_location", "travel_radius_km") if _empty(getattr(profile, f))]
     if profile.free_trial and not profile.trial_minutes:
         missing.append("trial_minutes")
+    missing += format_problems(profile)
     for offer in profile.offers:
         subject = catalog.get(offer.get("subject"))
         if subject:

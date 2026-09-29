@@ -10,17 +10,40 @@ document.addEventListener("DOMContentLoaded", async () => {
   const SYMBOL = { USD: "$", EUR: "€", UAH: "₴" };
   const LABELS = {
     display_name: "Display name", photo: "Photo", headline: "Headline", about: "About me (200+ characters)", country: "Country",
-    city: "City", timezone: "Time zone", languages: "Languages", subjects: "Subjects", experience_years: "Years of teaching",
-    occupation: "Current occupation", format: "Format", offline_location: "Offline location", travel_radius_km: "Travel radius",
-    lesson_types: "Lesson type", durations: "Lesson duration", price: "Price per lesson", currency: "Currency",
-    availability: "Weekly availability", trial_minutes: "Trial length", contact_method: "Contact method", contact_value: "Contact",
+    city: "City", timezone: "Time zone", languages: "Languages", video_url: "Intro video link", subjects: "Subjects",
+    experience_years: "Years of teaching", occupation: "Current occupation", education: "Education", links: "Links",
+    format: "Format", offline_location: "Offline location", travel_radius_km: "Travel radius", lesson_types: "Lesson type",
+    durations: "Lesson duration", max_group_size: "Max group size", price: "Price per lesson", currency: "Currency",
+    availability: "Weekly availability", trial_minutes: "Trial length", group_price: "Group price",
+    package_discount: "Package discount", contact_method: "Contact method", contact_value: "Contact",
   };
   const STEP = {
-    display_name: 1, photo: 1, headline: 1, about: 1, country: 1, city: 1, timezone: 1, languages: 1,
-    subjects: 2, experience_years: 3, occupation: 3,
-    format: 4, offline_location: 4, travel_radius_km: 4, lesson_types: 4, durations: 4,
-    price: 5, currency: 5, availability: 5, trial_minutes: 5, contact_method: 6, contact_value: 6,
+    display_name: 1, photo: 1, headline: 1, about: 1, country: 1, city: 1, timezone: 1, languages: 1, video_url: 1,
+    subjects: 2, experience_years: 3, occupation: 3, education: 3, links: 3,
+    format: 4, offline_location: 4, travel_radius_km: 4, lesson_types: 4, durations: 4, max_group_size: 4,
+    price: 5, currency: 5, availability: 5, trial_minutes: 5, group_price: 5, package_discount: 5,
+    contact_method: 6, contact_value: 6,
   };
+  // The element inside each field's .field block (for the error message under it).
+  const FIELD = {
+    display_name: "#w-name", photo: "[data-w-avatar]", headline: "#w-headline", about: "#w-about", country: "#w-country",
+    city: "#w-city", timezone: "#w-tz", languages: "[data-w-languages]", video_url: "#w-video", subjects: "[data-w-picker]",
+    experience_years: "#w-years", occupation: "#w-occ", education: "[data-w-education]", links: "[data-w-links]",
+    format: "#w-format", offline_location: "#w-loc", travel_radius_km: "#w-radius", lesson_types: '[data-w-chips="lesson_types"]',
+    durations: '[data-w-chips="durations"]', max_group_size: "#w-group", price: "#w-price", currency: "#w-cur",
+    availability: "[data-cell]", trial_minutes: "#w-trial-min", group_price: "#w-gprice", package_discount: "#w-disc",
+    contact_method: "#w-contact-method", contact_value: "#w-contact",
+  };
+  // The same formats as the API (views.format_problems).
+  const PHONE = /^\+?\d[\d ()-]{5,18}\d$/;
+  const CONTACT = {
+    telegram: [/^(@[A-Za-z0-9_]{5,32}|(https?:\/\/)?t\.me\/[A-Za-z0-9_]{5,32}|\+?\d[\d ()-]{5,18}\d)$/, "Enter @username, a t.me link or a phone number."],
+    whatsapp: [PHONE, "Enter a phone number like +380501234567."],
+    phone: [PHONE, "Enter a phone number like +380501234567."],
+    email: [/^[^@\s]+@[^@\s]+\.[^@\s]+$/, "Enter an email like name@example.com."],
+  };
+  const LINK = /^(https?:\/\/)?[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/i;
+  const VIDEO = /^(https?:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.be|vimeo\.com)\/\S+$/i;
 
   /* ---------- Load: API profile (logged in) or browser draft (guest) ---------- */
   let user = null;
@@ -265,19 +288,88 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /* Same rules as the API (views.missing_fields). */
-  function missingFields(d) {
-    const empty = (v) => v == null || v === "" || (Array.isArray(v) && !v.length);
-    const missing = Object.keys(STEP).filter((k) => !["photo", "offline_location", "travel_radius_km", "trial_minutes"].includes(k) && empty(d[k]));
-    if (!photo) missing.push("photo");
-    if (d.about && d.about.length < 200 && !missing.includes("about")) missing.push("about");
-    if (d.format !== "online") ["offline_location", "travel_radius_km"].forEach((k) => empty(d[k]) && missing.push(k));
-    if (d.free_trial && !d.trial_minutes) missing.push("trial_minutes");
-    d.offers.forEach((o) => {
-      const subject = S.get(o.subject);
-      if (subject) S.teacherMissing(subject, o.attrs).forEach((m) => missing.push(`${o.subject}: ${m}`));
-    });
-    return missing.sort((a, b) => stepOf(a) - stepOf(b));
+  /* ---------- Validation: required fields (*) and formats ---------- */
+
+  /* {field: message} for every problem in the profile, the same rules as the API (views.missing_fields). */
+  function problems(d) {
+    const out = {};
+    const need = (key, ok, msg) => {
+      if (!ok && !out[key]) out[key] = msg;
+    };
+    const typed = (sel) => $(sel).value.trim() !== "";
+    const len = (v) => (v || "").length;
+    const group = d.lesson_types.includes("group");
+    need("display_name", len(d.display_name) >= 2, "Enter the name learners will see.");
+    need("photo", !!photo, "Upload a photo.");
+    need("headline", len(d.headline) >= 10, d.headline ? "Write at least 10 characters." : "Write one line about what you teach.");
+    need("about", len(d.about) >= 200, d.about ? `Write at least 200 characters (now ${len(d.about)}).` : "Tell learners about yourself.");
+    need("country", !!d.country, "Enter your country.");
+    need("city", !!d.city, "Enter your city.");
+    need("languages", d.languages.length > 0, "Add at least one language you speak.");
+    const langs = d.languages.map((l) => l.language.toLowerCase());
+    need("languages", new Set(langs).size === langs.length, "Add each language only once.");
+    need("video_url", !d.video_url || VIDEO.test(d.video_url), "Use a YouTube or Vimeo link.");
+    need("subjects", d.offers.length > 0, "Add at least one subject.");
+    need("experience_years", d.experience_years != null, typed("#w-years") ? "Enter a number from 0 to 70." : "Enter your years of teaching.");
+    need("occupation", len(d.occupation) >= 2, "Enter your current occupation.");
+    need("education", !Array.from(root.querySelectorAll("[data-edu-row]")).some((r) => {
+      const [a, b] = r.querySelectorAll("input");
+      return !a.value.trim() && b.value.trim();
+    }), "Add the university or school for each degree.");
+    need("links", d.links.every((l) => LINK.test(l)), "Use addresses like linkedin.com/in/name.");
+    need("offline_location", d.format === "online" || !!d.offline_location, "Enter where you give offline lessons.");
+    need("lesson_types", d.lesson_types.length > 0, "Choose at least one lesson type.");
+    need("durations", d.durations.length > 0, "Choose at least one lesson duration.");
+    need("max_group_size", !group || !typed("#w-group") || d.max_group_size != null, "Enter a number from 2 to 50.");
+    need("price", d.price != null && d.price <= 100000, typed("#w-price") ? "Enter a price from 0.01 to 100,000." : "Enter your price per lesson.");
+    need("availability", d.availability.length > 0, "Choose at least one time slot.");
+    need("group_price", !group || !typed("#w-gprice") || d.group_price != null, "Enter a price greater than 0.");
+    need("package_discount", !d.package_size || !typed("#w-disc") || d.package_discount != null, "Enter a discount from 1 to 90%.");
+    const rule = CONTACT[d.contact_method];
+    need("contact_value", !!d.contact_value, "Enter how learners can reach you.");
+    need("contact_value", !d.contact_value || !rule || rule[0].test(d.contact_value), rule && rule[1]);
+    return out;
   }
+
+  /* Mark the fields of one step; returns the names of the problems found there. */
+  function showErrors(step, found) {
+    const names = [];
+    const fields = new Map();
+    Object.keys(STEP).filter((k) => STEP[k] === step).forEach((key) => {
+      const el = $(FIELD[key]);
+      const field = el && el.closest(".field");
+      if (field && !fields.has(field)) fields.set(field, null);
+      if (field && found[key]) {
+        fields.set(field, found[key]);
+        names.push(LABELS[key]);
+        const box = field.closest("details");
+        if (box) box.open = true;
+      }
+    });
+    fields.forEach((msg, field) => LL.fieldError(field, msg));
+    if (step === 2) {
+      offersBox.querySelectorAll("[data-offer]").forEach((card) => {
+        S.validate(card.querySelector("[data-offer-fields]")).forEach((m) => names.push(`${card.dataset.offer}: ${m}`));
+      });
+    }
+    return names;
+  }
+
+  /* Checks one step (or all of them) and shows the errors; returns the first step with problems, or 0. */
+  function validate(steps) {
+    const found = problems(collect());
+    let first = 0;
+    const names = [];
+    steps.forEach((step) => {
+      const list = showErrors(step, found);
+      if (list.length && !first) first = step;
+      names.push(...list);
+    });
+    if (first) LL.toast(`Fill in the required fields: ${names.join(", ")}.`);
+    return first;
+  }
+
+  const currentStep = () => +($("[data-step-panel]:not([hidden])") || { dataset: { stepPanel: 1 } }).dataset.stepPanel;
 
   /* "English: Student levels" (a subject's field) belongs to step 2. */
   const stepOf = (name) => (name.includes(": ") ? 2 : STEP[name.split(" ")[0]] || 1);
@@ -348,6 +440,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const add = e.target.closest("[data-w-add]");
     if (add) addRow(add.dataset.wAdd);
   });
+  /* "Continue" moves on only when this step is filled in (the step list on the left and "Back" don't check). */
+  document.addEventListener("click", (e) => {
+    const go = e.target.closest(".wizard-nav [data-go]");
+    if (!go || !ready) return;
+    const step = currentStep();
+    if (+go.dataset.go <= step || step > 6) return;
+    if (validate([step])) {
+      e.preventDefault();
+      e.stopPropagation(); // lealink.js would switch the step
+      const bad = $(`[data-step-panel="${step}"] .field.is-error`);
+      if (bad) bad.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, true);
+
   document.addEventListener("click", (e) => {
     const go = e.target.closest("[data-go]");
     if (!go || !ready) return;
@@ -497,10 +603,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   $("[data-w-submit]").addEventListener("click", async (e) => {
     const d = collect();
-    const missing = missingFields(d);
-    if (missing.length) {
-      LL.toast(`Fill in first: ${missing.map((m) => LABELS[m] || m).join(", ")}.`);
-      goStep(stepOf(missing[0]));
+    const first = validate([1, 2, 3, 4, 5, 6]);
+    if (first) {
+      goStep(first);
+      setTimeout(() => {
+        const bad = $(`[data-step-panel="${first}"] .field.is-error`);
+        if (bad) bad.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 50);
       return;
     }
     if (!user) {
@@ -517,7 +626,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       location.href = "under-review.html";
     } catch (err) {
       const list = err.detail && err.detail.missing;
-      LL.toast(list ? `Fill in first: ${list.join(", ")}.` : err.message);
+      const name = (m) => (LABELS[m.split(" ")[0]] ? LABELS[m.split(" ")[0]] + m.slice(m.split(" ")[0].length) : m);
+      LL.toast(list ? `Fill in the required fields: ${list.map(name).join(", ")}.` : err.message);
       if (list) goStep(stepOf(list[0]));
     }
   });

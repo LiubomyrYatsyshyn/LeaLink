@@ -192,3 +192,27 @@ def test_blocked_teacher_hidden(client, api):
     client.post(f"/api/admin/users/{teacher['id']}/block", headers=admin["headers"])
     assert client.get("/api/teachers/search?subject=English").json()["total"] == 0
     assert client.get(f"/api/teachers/{teacher['teacher_id']}").status_code == 404
+
+
+def test_submit_checks_required_fields_and_formats(client, api):
+    user = api.signup("Format Teacher")
+    h = user["headers"]
+    client.post("/api/auth/me/photo", headers=h, files={"file": ("me.png", PNG, "image/png")})
+    bad = {
+        **TEACHER, "contact_method": "email", "contact_value": "not-an-email", "video_url": "https://example.com/video",
+        "links": ["not a link"], "offers": english(own_level=None),
+    }  # fmt: skip
+    r = client.put("/api/teacher/profile", headers=h, json=bad)
+    assert r.status_code == 200  # drafts are saved as they are
+    missing = r.json()["missing"]
+    assert "contact_value (use an email like name@example.com)" in missing
+    assert "video_url (use a YouTube or Vimeo link)" in missing
+    assert "links (use addresses like linkedin.com/in/name)" in missing
+    assert "English: Your English level" in missing
+    r = client.post("/api/teacher/profile/submit", headers=h)
+    assert r.status_code == 422 and "contact_value (use an email like name@example.com)" in r.json()["detail"]["missing"]
+
+    fixed = {**bad, "contact_value": "olena@example.com", "video_url": "https://youtu.be/abc123", "links": ["linkedin.com/in/olena"],
+             "offers": english()}  # fmt: skip
+    assert client.put("/api/teacher/profile", headers=h, json=fixed).json()["missing"] == []
+    assert client.post("/api/teacher/profile/submit", headers=h).json()["status"] == "pending"

@@ -54,6 +54,7 @@ class Field:
     learner_options: tuple[dict, ...] | None = None  # "min": the thresholds a learner can pick
     strict: bool = False
     required: bool = False  # the teacher must answer before submitting the profile
+    learner_required: bool = False  # the learner must answer before searching (level has a "Not sure" choice)
     when: tuple[str, str] | None = None  # shown only when field when[0] has the value when[1]
     against: str | None = None  # compare with this teacher field instead of `key`
     request: bool | None = None  # asked in the request form (default: in/overlap/info)
@@ -76,7 +77,7 @@ class Field:
         data = {
             "key": self.key, "match": self.match, "teacher": self.teacher, "learner": self.learner,
             "options": list(self.options), "strict": self.strict, "required": self.required,
-            "request": self.in_request,
+            "learner_required": self.learner_required, "request": self.in_request,
         }  # fmt: skip
         if self.learner_options is not None:
             data["learner_options"] = list(self.learner_options)
@@ -124,11 +125,11 @@ def age(options=AGES) -> Field:
 
 
 def level(options, teacher="Student levels", learner="Level", strict=True, cap=None) -> Field:
-    return Field("level", "in", teacher, learner, options, strict=strict, required=True, cap=cap)
+    return Field("level", "in", teacher, learner, options, strict=strict, required=True, learner_required=True, cap=cap)
 
 
 def goals(*items) -> Field:
-    return Field("goal", "in", "Learning goals", "Goal", opts(*items), required=True)
+    return Field("goal", "in", "Learning goals", "Goal", opts(*items), required=True, learner_required=True)
 
 
 def topics(*items, teacher="Topics", learner="Topics") -> Field:

@@ -154,7 +154,7 @@
     const subject = S.get(f.subject);
     if (!subject) return [];
     return S.fieldsFor(subject, "learner")
-      .filter((fd) => asList(f.attrs[fd.key]).length && (!onlyStrict || fd.strict))
+      .filter((fd) => S.labels(subject, fd.key, f.attrs[fd.key], "learner").length && (!onlyStrict || fd.strict))
       .map((fd) => {
         const value = S.labels(subject, fd.key, f.attrs[fd.key], "learner").join(", ");
         if (fd.match === "has") return { key: "attr:" + fd.key, text: fd.learner, value: fd.learner };
@@ -208,6 +208,25 @@
     ].filter(Boolean);
   }
 
+  /* Required before showing results: the subject, its required fields (level, goal, child's age),
+     and the city for offline-only lessons. Marks the fields and returns the names of the empty ones. */
+  function validate(root) {
+    const f = read(root);
+    const missing = [];
+    const subjectField = root.querySelector('[data-f="subject"]').closest(".field");
+    LL.fieldError(subjectField, f.subject ? null : "Choose a subject.");
+    if (!f.subject) missing.push("Subject");
+    const box = root.querySelector("[data-subject-fields]");
+    if (box && box._subject) missing.push(...S.validate(box));
+    const city = root.querySelector('[data-f="city"]');
+    if (city) {
+      const need = f.format === "offline" && !f.city;
+      LL.fieldError(city.closest(".field"), need ? "Enter a city for offline lessons." : null);
+      if (need) missing.push("City");
+    }
+    return missing;
+  }
+
   /* Call `fn` after any change in the form. */
   function watch(root, fn) {
     const later = LL.debounce(fn, 300);
@@ -239,5 +258,5 @@
     return true;
   }
 
-  window.LL.filters = { DEFAULTS, read, write, toQuery, toBody, fromQuery, strict, without, summary, watch, loadOptions };
+  window.LL.filters = { DEFAULTS, read, write, toQuery, toBody, fromQuery, strict, without, summary, watch, loadOptions, validate };
 })();

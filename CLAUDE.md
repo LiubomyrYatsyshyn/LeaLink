@@ -23,6 +23,7 @@ Reply to the user in Ukrainian.
 - Caddy sends `Cache-Control: no-cache` for the site, so a deploy never mixes old and new JS.
 - Headers are rendered by JS from `<header data-header="guest|auth|learner|teacher|wizard" data-active="...">`. Icons: `<i data-i="name">`.
 - Role colour: `data-role="learner|teacher"` on `<body>` (or `.role-learner` / `.role-teacher` on a block).
+- Validation: fields marked `*` are required; a form isn't sent while one is empty or invalid (`LL.fieldError` under the field + a toast). Wizard: "Continue" checks the step, "Submit" checks all (`wizard.js` `problems`, the same rules as `views.missing_fields`). Search: subject, level ("Not sure" allowed), goal, child's age for "My child", city for offline-only (`filters.js` `validate`). List: docs/TOP-50-SUBJECTS-UA.md, section 15.
 - Screen states: pages set `data-show-state` blocks from real data; `?tab=` and `?step=1-6|preview` still work. `site/screens.html` links every frame to its page.
 - Mobile (frames 35-41) is the same pages below 900 px, not separate files.
 - Only "Continue with Google" still uses `data-demo` (not in the MVP).
