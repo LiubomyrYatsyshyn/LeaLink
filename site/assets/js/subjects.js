@@ -401,8 +401,8 @@
     }
   }
 
-  /* Mark empty required fields of one subject (LL.fieldError) and return their labels. */
-  function validate(container) {
+  /* Mark empty required fields of one subject (LL.fieldError) and return their labels; `quiet` only returns them. */
+  function validate(container, quiet) {
     const subject = container._subject;
     const side = container._side;
     if (!subject) return [];
@@ -418,7 +418,7 @@
         msg = el.dataset.kind === "chips" ? "Choose at least one." : el.dataset.kind === "check" ? "Tick this to continue." : "Choose an option.";
         missing.push(el.dataset.attr === "age" && side !== "teacher" ? "Child’s age" : side === "teacher" ? f.teacher : f.learner);
       }
-      LL.fieldError(el, msg);
+      if (!quiet) LL.fieldError(el, msg);
     });
     return missing;
   }

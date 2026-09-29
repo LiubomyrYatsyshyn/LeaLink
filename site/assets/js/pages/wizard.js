@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /* Mark the fields of one step; returns the names of the problems found there. */
-  function showErrors(step, found) {
+  function showErrors(step, found, quiet) {
     const names = [];
     const fields = new Map();
     Object.keys(STEP).filter((k) => STEP[k] === step).forEach((key) => {
@@ -343,16 +343,42 @@ document.addEventListener("DOMContentLoaded", async () => {
         fields.set(field, found[key]);
         names.push(LABELS[key]);
         const box = field.closest("details");
-        if (box) box.open = true;
+        if (box && !quiet) box.open = true;
       }
     });
-    fields.forEach((msg, field) => LL.fieldError(field, msg));
+    if (!quiet) fields.forEach((msg, field) => LL.fieldError(field, msg));
     if (step === 2) {
       offersBox.querySelectorAll("[data-offer]").forEach((card) => {
-        S.validate(card.querySelector("[data-offer-fields]")).forEach((m) => names.push(`${card.dataset.offer}: ${m}`));
+        S.validate(card.querySelector("[data-offer-fields]"), quiet).forEach((m) => names.push(`${card.dataset.offer}: ${m}`));
       });
     }
     return names;
+  }
+
+  /* The first of steps 1..upTo that isn't filled in, or 0 (nothing is marked). */
+  function firstInvalid(upTo) {
+    const found = problems(collect());
+    for (let step = 1; step <= Math.min(upTo, 6); step++) if (showErrors(step, found, true).length) return step;
+    return 0;
+  }
+
+  /* Ticks in the step list and the "% complete" count only the steps that are filled in. */
+  function markSteps() {
+    const found = problems(collect());
+    const current = currentStep();
+    let done = 0;
+    document.querySelectorAll(".step[data-go]").forEach((el) => {
+      const step = +el.dataset.go;
+      if (step > 6) return;
+      const ok = !showErrors(step, found, true).length;
+      done += ok;
+      el.classList.toggle("is-done", ok && step !== current);
+    });
+    const pct = Math.round((done / 6) * 100);
+    const label = $("[data-wizard-pct]");
+    if (label) label.textContent = `${pct}% complete`;
+    const bar = $("[data-wizard-bar]");
+    if (bar) bar.style.width = `${pct}%`;
   }
 
   /* Checks one step (or all of them) and shows the errors; returns the first step with problems, or 0. */
@@ -383,6 +409,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll("[data-w-symbol]").forEach((el) => (el.textContent = SYMBOL[$("#w-cur").value]));
     $("#w-trial-min").disabled = !$("#w-trial").checked;
     $("[data-w-tz-note]").textContent = `Shown in your time zone: ${$("#w-tz").value.replace(/_/g, " ")}.`;
+    markSteps();
   }
 
   function renderPhoto() {
@@ -440,18 +467,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     const add = e.target.closest("[data-w-add]");
     if (add) addRow(add.dataset.wAdd);
   });
-  /* "Continue" moves on only when this step is filled in (the step list on the left and "Back" don't check). */
+  /* Moving forward ("Continue", the step list, the preview) needs every step before the target filled in;
+     otherwise the first unfinished step opens with its errors marked. Going back is always allowed. */
+  function openFirstUnfinished(first) {
+    if (first !== currentStep()) goStep(first);
+    validate([first]);
+    const bad = $(`[data-step-panel="${first}"] .field.is-error`);
+    if (bad) setTimeout(() => bad.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+  }
+
   document.addEventListener("click", (e) => {
-    const go = e.target.closest(".wizard-nav [data-go]");
+    const go = e.target.closest("[data-go]");
     if (!go || !ready) return;
-    const step = currentStep();
-    if (+go.dataset.go <= step || step > 6) return;
-    if (validate([step])) {
-      e.preventDefault();
-      e.stopPropagation(); // lealink.js would switch the step
-      const bad = $(`[data-step-panel="${step}"] .field.is-error`);
-      if (bad) bad.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
+    const target = +go.dataset.go;
+    if (target <= currentStep()) return;
+    const first = firstInvalid(target - 1);
+    if (!first) return;
+    e.preventDefault();
+    e.stopPropagation(); // lealink.js would switch the step
+    openFirstUnfinished(first);
   }, true);
 
   document.addEventListener("click", (e) => {
@@ -459,6 +493,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!go || !ready) return;
     save().catch(LL.fail);
     if (go.dataset.go === "7") renderPreview();
+    setTimeout(markSteps); // after lealink.js has switched the step
   });
 
   /* ---------- Photo ---------- */
@@ -654,4 +689,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   if (LL.params.get("step") === "preview") renderPreview();
   ready = true;
+  // A link to a later step (?step=4) opens the first unfinished step before it instead.
+  const unfinished = firstInvalid(currentStep() - 1);
+  if (unfinished && unfinished < currentStep()) openFirstUnfinished(unfinished);
+  markSteps();
 });
