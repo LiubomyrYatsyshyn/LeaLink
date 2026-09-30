@@ -17,6 +17,12 @@
 		reverse_proxy api:8000
 	}
 
+	# Sitemap for search engines, built by the API from published teachers.
+	handle /sitemap.xml {
+		rewrite * /api/sitemap.xml
+		reverse_proxy api:8000
+	}
+
 	# Static site. no-cache: browsers re-check files (cheap 304) so a deploy never mixes old and new JS.
 	handle {
 		root * /srv

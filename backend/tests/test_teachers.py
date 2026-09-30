@@ -216,3 +216,14 @@ def test_submit_checks_required_fields_and_formats(client, api):
              "offers": english()}  # fmt: skip
     assert client.put("/api/teacher/profile", headers=h, json=fixed).json()["missing"] == []
     assert client.post("/api/teacher/profile/submit", headers=h).json()["status"] == "pending"
+
+
+def test_sitemap_lists_published_teachers(client, api):
+    admin = api.admin()
+    published = api.teacher(admin)
+    draft = api.teacher(name="Draft Teacher")
+    r = client.get("/api/sitemap.xml")
+    assert r.status_code == 200 and r.headers["content-type"].startswith("application/xml")
+    assert f"/teacher.html?id={published['teacher_id']}</loc>" in r.text
+    assert f"/teacher.html?id={draft['teacher_id']}</loc>" not in r.text
+    assert "/search.html</loc>" in r.text

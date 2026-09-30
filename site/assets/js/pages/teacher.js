@@ -20,6 +20,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const first = LL.firstName(t.display_name);
   document.title = `${t.display_name} · ${t.subjects[0] || ""} teacher · LeaLink`;
+  // For search engines: a description and one canonical address per teacher.
+  document.querySelector('meta[name="description"]').content = `${t.display_name}: ${t.headline || t.subjects.join(", ")}. ${t.subjects.join(", ")} lessons on LeaLink.`;
+  const canonical = document.createElement("link");
+  canonical.rel = "canonical";
+  canonical.href = `${location.origin}/teacher.html?id=${t.id}`;
+  document.head.appendChild(canonical);
   const price = `${LL.money(t.price, t.currency)}<small>/ lesson</small>`;
   const sendUrl = `request.html?teacher=${t.id}`;
   const matchBadge = match ? `<span class="badge badge-match">${esc(match)}% match</span>` : "";
