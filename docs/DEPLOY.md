@@ -94,6 +94,9 @@ port 2525 (`smtp-relay.brevo.com:2525`, free 300 emails a day).
    ```
 
    It writes `SMTP_*` to `/opt/lealink/.env`, restarts the API and sends a test email.
+5. If the test says `Unauthorized IP address`: Brevo -> Settings -> Security ->
+   Authorized IPs -> add the server IP `159.223.18.155` (or press "Authorize" in the
+   "new IP" email from Brevo).
 
 Check again at any time:
 

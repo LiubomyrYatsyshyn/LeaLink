@@ -18,6 +18,10 @@ ask() { # ask "Question" "default" -> answer on stdout
 echo "Email settings for LeaLink (press Enter to keep the value in brackets)."
 host=$(ask "SMTP server" "smtp-relay.brevo.com")
 port=$(ask "SMTP port" "2525")
+if [[ "$port" =~ ^(25|465|587)$ ]]; then
+  echo "Port $port is blocked on DigitalOcean servers, so emails can't be sent through it. Using 2525."
+  port=2525
+fi
 user=$(ask "SMTP login (Brevo: Settings -> SMTP & API -> SMTP tab)" "")
 read -r -s -p "SMTP key / password (hidden): " password
 echo
@@ -49,4 +53,7 @@ chmod 600 .env
 echo "Saved to /opt/lealink/.env. Restarting the API..."
 
 docker compose up -d api
-docker compose exec -T api python -m app.cli send-test-email "$to"
+if ! docker compose exec -T api python -m app.cli send-test-email "$to"; then
+  echo "If Brevo says 'Unauthorized IP address': Brevo -> Settings -> Security -> Authorized IPs -> add this server's IP." >&2
+  exit 1
+fi
