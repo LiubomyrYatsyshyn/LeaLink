@@ -37,7 +37,14 @@ Reply to the user in Ukrainian.
 - New migration: `docker compose run --rm -v "$PWD/backend:/app" api alembic revision --autogenerate -m "..."`.
 - Moderator: `docker compose exec api python -m app.cli make-admin EMAIL`; demo teachers (local only): `... app.cli seed-demo`.
 
-## Brand and motion (added 2026-09-26)
+## Redesign 2026-10-09 (replaces the design-reference look)
+- The user dropped the colours and the grid/nodes style of `design-reference/`. New look: warm cream, ink-indigo text (`--text`), learner = coral (`--l*`), teacher = indigo (`--t*`), accents sun/mint/sky/pink; display font Fredoka, UI font Inter; pill buttons, rounded cards. Tokens are in `:root` of `site/assets/css/lealink.css`; change colours there.
+- Home (`index.html`): hero with two smiling 3D characters (learner + teacher) on a floating island, subject strip, how it works (tilt cards), why LeaLink, learn/teach CTAs. Goal: attract people who want to learn.
+- 3D: `site/assets/js/scene.js` (Three.js, vendored and tree-shaken in `site/assets/vendor/three/`, see its README). `lealink.js` loads it lazily only if WebGL works and motion is allowed. The hero keeps a static SVG illustration (`.hero-art`) for first paint, no WebGL, reduced motion and slow devices; the canvas fades in over it (`.hero.gl-on`). Other pages get floating study props: `data-scene="field"` on `<body>` (auth, under-review) or `data-scene="band"` on `.band` (search, results). Click a character to make it jump.
+- Debug query params: `?gl=0` (no 3D), `?glguard=0` (no slow-device fallback), `?gltime=6` (skip the intro), `?motion=1`.
+- Old grid decorations (`.deco`, plus marks) are hidden by CSS; the old CSS-3D network in the hero is gone.
+
+## Brand and motion (added 2026-09-26, partly superseded by the redesign above)
 - Logo: vector mark in `site/assets/logo-mark.svg` (recreated from the user's image; swap in the original file if the user provides it). In pages use `data-logo` / `data-mark`; JS injects the SVG and the gradient wordmark. Montserrat is used only for the wordmark and the home hero title; UI stays Inter.
 - Home hero follows the "grid + nodes" brief: 20/35 px gutter, grid lines with plus marks, numbered nav, staggered entrance (expo-out), chamfered info card, 3D network (spinning hub cube, pointer parallax, request dots). No video; light palette only.
 - Other pages get band grid lines + plus marks and staggered reveal automatically from `lealink.js`.

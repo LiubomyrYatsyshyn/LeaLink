@@ -1,6 +1,7 @@
 /* LeaLink UI behaviour: icons, header, tabs, dialogs, chips, sliders, toasts. Data comes from pages/*.js via api.js. */
 (function () {
   "use strict";
+  var SELF = document.currentScript && document.currentScript.src;
 
   /* ---------- Icons (stroke 1.75, 24px grid; Lucide shapes, ISC licence) ---------- */
   var ICONS = {
@@ -165,7 +166,7 @@
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
 
-    var net = hero.querySelector(".network-3d");
+    var net = hero.querySelector(".network-3d"); /* old CSS network removed; kept for pages that still have it */
     if (!net || reduceMotion) return;
     var tx = 0, ty = 0, cx = 0, cy = 0, pointer = false, visible = true, raf = 0;
     hero.addEventListener("pointermove", function (e) {
@@ -188,6 +189,47 @@
         if (visible && !raf) raf = requestAnimationFrame(loop);
       }).observe(hero);
     } else raf = requestAnimationFrame(loop);
+  }
+
+
+  /* ---------- Home motion: scroll reveal + 3D card tilt ---------- */
+  function initHomeMotion() {
+    var els = Array.prototype.slice.call(document.querySelectorAll("[data-rv]"));
+    if (els.length && !reduceMotion && "IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        var batch = 0;
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          en.target.style.setProperty("--rd", Math.min(batch * 90, 360) + "ms");
+          en.target.classList.add("is-in");
+          batch++;
+          io.unobserve(en.target);
+        });
+      }, { rootMargin: "0px 0px -8% 0px" });
+      els.forEach(function (el) { el.classList.add("rv"); io.observe(el); });
+    }
+    if (reduceMotion || !window.matchMedia || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    document.querySelectorAll("[data-tilt]").forEach(function (card) {
+      card.addEventListener("pointermove", function (e) {
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        card.style.transform = "rotateX(" + (-y * 9).toFixed(2) + "deg) rotateY(" + (x * 11).toFixed(2) + "deg) translateY(-6px)";
+      });
+      card.addEventListener("pointerleave", function () { card.style.transform = ""; });
+    });
+  }
+
+  /* ---------- 3D scenes (Three.js, loaded lazily; static illustration stays if anything fails) ---------- */
+  function webglOk() {
+    try { var c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (e) { return false; }
+  }
+  function initScene() {
+    if (reduceMotion || !SELF || /[?&]gl=0/.test(location.search)) return;
+    if (!document.querySelector("[data-scene]") || !webglOk()) return;
+    var go = function () {
+      import(new URL("scene.js", SELF).href).then(function (m) { m.start(); }).catch(function (e) { if (window.console) console.warn("3D scene unavailable", e); });
+    };
+    if ("requestIdleCallback" in window) requestIdleCallback(go, { timeout: 1200 }); else setTimeout(go, 200);
   }
 
   /* ---------- Header ---------- */
@@ -534,6 +576,8 @@
     renderIcons();
     initHero();
     initReveal();
+    initHomeMotion();
+    initScene();
 
     document.querySelectorAll("[data-range]").forEach(initRange);
     document.querySelectorAll("[data-counter]").forEach(initCounter);
